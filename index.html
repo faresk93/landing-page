@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fares KHIARY | Space VPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; touch-action: none; }
+        
+        /* UI Animations */
+        .fade-out { opacity: 0; pointer-events: none; transform: scale(0.95); filter: blur(10px); }
+        .ui-transition { transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        
+        /* Glitch Text */
+        .glitch { position: relative; color: white; mix-blend-mode: lighten; }
+        .glitch::before, .glitch::after {
+            content: attr(data-text); position: absolute; top: 0; width: 100%; height: 100%; opacity: 0.8;
+        }
+        .glitch::before {
+            left: 2px; color: #0ff; clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+            animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px; color: #f0f; clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim-1 { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 100% { transform: translate(1px, -1px); } }
+        @keyframes glitch-anim-2 { 0% { transform: translate(0); } 20% { transform: translate(2px, -2px); } 100% { transform: translate(-1px, 1px); } }
+
+        /* Scanning Line */
+        .scanline {
+            width: 100%; height: 2px; background: rgba(0, 255, 255, 0.3);
+            position: absolute; top: 0; left: 0;
+            animation: scan 3s infinite linear;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        @keyframes scan { 0% { top: 0%; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+
+        #interactive-hint { opacity: 0; transition: opacity 1s; }
+        .show-hint { opacity: 1 !important; }
+    </style>
+</head>
+<body class="antialiased text-white selection:bg-cyan-500 selection:text-black">
+
+    <div id="canvas-container" class="absolute inset-0 z-0 bg-black cursor-move"></div>
+
+    <main id="ui-layer" class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-6 pointer-events-none">
+        
+        <div class="pointer-events-auto bg-black/60 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-sm max-w-2xl w-full text-center shadow-2xl relative overflow-hidden group">
+            
+            <div class="scanline"></div>
+            
+            <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                <span class="font-['Rajdhani'] text-cyan-400 tracking-[0.2em] text-xs font-bold uppercase">System: Online</span>
+                <div class="flex gap-1">
+                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    <div class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse delay-75"></div>
+                    <div class="w-2 h-2 rounded-full bg-purple-500 animate-pulse delay-150"></div>
+                </div>
+            </div>
+
+            <h1 class="glitch text-5xl md:text-7xl font-black tracking-tighter font-['Orbitron'] mb-4" data-text="FARES KHIARY">
+                FARES KHIARY
+            </h1>
+            
+            <p class="font-['Rajdhani'] text-gray-200 text-lg md:text-2xl font-medium mb-8 leading-relaxed">
+                Hello World from my first hosted VPS <span class="inline-block animate-bounce">🚀</span>
+            </p>
+
+            <button id="start-btn" 
+               class="relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-cyan-900/40 border border-cyan-500/50 hover:bg-cyan-500 hover:border-cyan-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] cursor-pointer group uppercase font-['Orbitron'] text-sm tracking-widest rounded">
+                <span>INITIALIZE SYSTEM</span>
+                <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+            </button>
+            
+        </div>
+    </main>
+
+    <div id="interactive-hint" class="fixed bottom-8 w-full text-center pointer-events-none z-20">
+        <p class="font-['Rajdhani'] text-cyan-300 text-sm tracking-[0.3em] uppercase drop-shadow-md bg-black/50 inline-block px-4 py-1 rounded-full border border-cyan-500/30">
+            Swipe to Rotate Universe
+        </p>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+
+        // --- SETUP ---
+        const scene = new THREE.Scene();
+        // Deep space fog
+        scene.fog = new THREE.FogExp2(0x000000, 0.002);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(0, 20, 100);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // --- ASSETS ---
+        
+        // 1. Procedural Texture Generator (Avoids loading external images)
+        const createTexture = (type) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512; canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+            
+            if(type === 'sun') {
+                const grd = ctx.createRadialGradient(256,256,0, 256,256,256);
+                grd.addColorStop(0, "white");
+                grd.addColorStop(0.2, "#00ffff"); // Cyan Core
+                grd.addColorStop(1, "#000033");
+                ctx.fillStyle = grd; ctx.fillRect(0,0,512,512);
+            } else if (type === 'planet') {
+                ctx.fillStyle = "#1a1a1a"; ctx.fillRect(0,0,512,512);
+                for(let i=0; i<100; i++) {
+                    ctx.fillStyle = Math.random()>0.5 ? "#2244ff" : "#aa00ff";
+                    ctx.globalAlpha = 0.1;
+                    ctx.beginPath(); ctx.arc(Math.random()*512, Math.random()*512, Math.random()*50, 0, Math.PI*2); ctx.fill();
+                }
+            } else if (type === 'particle') {
+                const grd = ctx.createRadialGradient(256,256,0, 256,256,256);
+                grd.addColorStop(0, "rgba(255,255,255,1)");
+                grd.addColorStop(1, "rgba(0,0,0,0)");
+                ctx.fillStyle = grd; ctx.fillRect(0,0,512,512);
+            }
+            return new THREE.CanvasTexture(canvas);
+        };
+
+        // --- OBJECTS ---
+        
+        const solarSystem = new THREE.Group();
+        scene.add(solarSystem);
+
+        // 1. The Central Star (VPS Core)
+        const sunGeo = new THREE.SphereGeometry(10, 64, 64);
+        const sunMat = new THREE.MeshBasicMaterial({ map: createTexture('sun') });
+        const sun = new THREE.Mesh(sunGeo, sunMat);
+        solarSystem.add(sun);
+
+        // Sun Glow (Sprite)
+        const spriteMat = new THREE.SpriteMaterial({ 
+            map: createTexture('particle'), 
+            color: 0x00ffff, 
+            transparent: true, 
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+        const sunGlow = new THREE.Sprite(spriteMat);
+        sunGlow.scale.set(60, 60, 1);
+        solarSystem.add(sunGlow);
+
+        // Light
+        const pointLight = new THREE.PointLight(0x00ffff, 2, 300);
+        solarSystem.add(pointLight);
+        scene.add(new THREE.AmbientLight(0x222222));
+
+        // 2. Orbiting Planets
+        const planets = [];
+        const createPlanet = (size, dist, speed, color) => {
+            const mesh = new THREE.Mesh(
+                new THREE.SphereGeometry(size, 32, 32),
+                new THREE.MeshStandardMaterial({ 
+                    color: color, 
+                    roughness: 0.7,
+                    map: createTexture('planet')
+                })
+            );
+            // Random start angle
+            const angle = Math.random() * Math.PI * 2;
+            mesh.position.set(Math.cos(angle) * dist, 0, Math.sin(angle) * dist);
+            
+            // Orbit Ring
+            const ringGeo = new THREE.RingGeometry(dist-0.2, dist+0.2, 64);
+            const ringMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true, opacity: 0.1 });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.rotation.x = Math.PI/2;
+            solarSystem.add(ring);
+            
+            solarSystem.add(mesh);
+            return { mesh, dist, speed, angle };
+        };
+
+        planets.push(createPlanet(2, 30, 0.5, 0xff0055)); // Red Planet
+        planets.push(createPlanet(3, 50, 0.3, 0x00ffaa)); // Green Planet
+        planets.push(createPlanet(4, 80, 0.15, 0x5500ff)); // Purple Planet
+
+        // 3. Asteroid Belt
+        const asteroidGeo = new THREE.TetrahedronGeometry(0.5, 0);
+        const asteroidMat = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.8 });
+        const asteroids = new THREE.InstancedMesh(asteroidGeo, asteroidMat, 1000);
+        const dummy = new THREE.Object3D();
+        
+        for(let i=0; i<1000; i++) {
+            const r = 90 + Math.random() * 40; // Belt distance
+            const theta = Math.random() * Math.PI * 2;
+            const y = (Math.random() - 0.5) * 10;
+            
+            dummy.position.set(r * Math.cos(theta), y, r * Math.sin(theta));
+            dummy.rotation.set(Math.random(), Math.random(), Math.random());
+            dummy.scale.setScalar(Math.random() * 2);
+            dummy.updateMatrix();
+            asteroids.setMatrixAt(i, dummy.matrix);
+        }
+        solarSystem.add(asteroids);
+
+        // 4. Starfield
+        const starsGeo = new THREE.BufferGeometry();
+        const starsPos = [];
+        for(let i=0; i<3000; i++) {
+            starsPos.push((Math.random()-0.5)*1000, (Math.random()-0.5)*1000, (Math.random()-0.5)*1000);
+        }
+        starsGeo.setAttribute('position', new THREE.Float32BufferAttribute(starsPos, 3));
+        const stars = new THREE.Points(
+            starsGeo, 
+            new THREE.PointsMaterial({color: 0xffffff, size: 0.7, transparent: true, opacity: 0.8})
+        );
+        scene.add(stars);
+
+
+        // --- INTERACTION LOGIC ---
+        let targetRotationX = 0;
+        let targetRotationY = 0;
+        let mouseX = 0;
+        let mouseY = 0;
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let state = 'MENU'; // MENU or UNLOCKED
+
+        // Unified Input Handling (Touch & Mouse)
+        const handleStart = (x, y) => {
+            isDragging = true;
+            previousMousePosition = { x, y };
+        };
+
+        const handleMove = (x, y) => {
+            if (isDragging) {
+                const deltaMove = {
+                    x: x - previousMousePosition.x,
+                    y: y - previousMousePosition.y
+                };
+
+                // Rotate the Solar System Group
+                const rotateSpeed = 0.005;
+                solarSystem.rotation.y += deltaMove.x * rotateSpeed;
+                solarSystem.rotation.x += deltaMove.y * rotateSpeed;
+
+                previousMousePosition = { x, y };
+            }
+            // Parallax for stars
+            mouseX = (x / window.innerWidth) * 2 - 1;
+            mouseY = -(y / window.innerHeight) * 2 + 1;
+        };
+
+        const handleEnd = () => {
+            isDragging = false;
+        };
+
+        // Listeners
+        document.addEventListener('mousedown', e => handleStart(e.clientX, e.clientY));
+        document.addEventListener('touchstart', e => handleStart(e.touches[0].clientX, e.touches[0].clientY), {passive: false});
+
+        document.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
+        document.addEventListener('touchmove', e => {
+            e.preventDefault(); // Stop scrolling on mobile
+            handleMove(e.touches[0].clientX, e.touches[0].clientY);
+        }, {passive: false});
+
+        document.addEventListener('mouseup', handleEnd);
+        document.addEventListener('touchend', handleEnd);
+
+        // Button Logic
+        document.getElementById('start-btn').addEventListener('click', () => {
+            state = 'UNLOCKED';
+            document.getElementById('ui-layer').classList.add('fade-out');
+            document.getElementById('interactive-hint').classList.add('show-hint');
+        });
+
+        // Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+
+        // --- ANIMATION LOOP ---
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const delta = clock.getDelta();
+            const time = clock.getElapsedTime();
+
+            // 1. Rotate Planets
+            planets.forEach(p => {
+                p.angle += p.speed * delta;
+                p.mesh.position.x = Math.cos(p.angle) * p.dist;
+                p.mesh.position.z = Math.sin(p.angle) * p.dist;
+                p.mesh.rotation.y += delta; // Self rotation
+            });
+
+            // 2. Rotate Asteroid Belt slowly
+            asteroids.rotation.y += 0.02 * delta;
+
+            // 3. Pulse Sun
+            const pulse = 1 + Math.sin(time * 2) * 0.05;
+            sun.scale.setScalar(pulse);
+            sunGlow.scale.set(60 * pulse, 60 * pulse, 1);
+
+            // 4. Camera Logic
+            if (state === 'MENU') {
+                // Gentle idle movement
+                camera.position.x = Math.sin(time * 0.2) * 20;
+                camera.position.y = 20 + Math.cos(time * 0.2) * 10;
+                camera.lookAt(0, 0, 0);
+            } else {
+                // UNLOCKED: Camera moves closer, user controls rotation of system
+                // Smooth transition to center
+                camera.position.lerp(new THREE.Vector3(0, 30, 90), 0.05);
+                camera.lookAt(0, 0, 0);
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
