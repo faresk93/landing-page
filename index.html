@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fares KHIARY | Space VPS</title>
+    <title>🚧 Under Construction | Fares KHIARY</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
@@ -40,6 +40,77 @@
 
         #interactive-hint { opacity: 0; transition: opacity 1s; }
         .show-hint { opacity: 1 !important; }
+
+        /* Under Construction Banner */
+        .construction-banner {
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.15) 0%, rgba(255, 100, 0, 0.15) 100%);
+            border: 2px solid rgba(255, 165, 0, 0.5);
+            animation: banner-glow 2s ease-in-out infinite alternate, banner-float 3s ease-in-out infinite;
+        }
+        @keyframes banner-glow {
+            0% { box-shadow: 0 0 10px rgba(255, 165, 0, 0.3), inset 0 0 20px rgba(255, 165, 0, 0.1); }
+            100% { box-shadow: 0 0 25px rgba(255, 165, 0, 0.6), inset 0 0 30px rgba(255, 165, 0, 0.2); }
+        }
+        @keyframes banner-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Construction Icon Animations */
+        .construction-icon {
+            display: inline-block;
+            animation: icon-bounce 1s ease-in-out infinite;
+        }
+        .construction-icon:nth-child(2) { animation-delay: 0.1s; }
+        .construction-icon:nth-child(3) { animation-delay: 0.2s; }
+        .construction-icon:nth-child(4) { animation-delay: 0.3s; }
+
+        @keyframes icon-bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.1); }
+        }
+
+        /* Rotating Gear */
+        .gear-spin {
+            display: inline-block;
+            animation: gear-rotate 3s linear infinite;
+        }
+        @keyframes gear-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Blinking Warning Light */
+        .blink-warning {
+            animation: warning-blink 1s ease-in-out infinite;
+        }
+        @keyframes warning-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Progress Bar Animation */
+        .progress-bar {
+            background: linear-gradient(90deg,
+                rgba(255, 165, 0, 0) 0%,
+                rgba(255, 165, 0, 0.8) 50%,
+                rgba(255, 165, 0, 0) 100%
+            );
+            animation: progress-sweep 2s ease-in-out infinite;
+        }
+        @keyframes progress-sweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+
+        /* Typing cursor */
+        .typing-cursor {
+            animation: cursor-blink 0.8s step-end infinite;
+        }
+        @keyframes cursor-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
     </style>
 </head>
 <body class="antialiased text-white selection:bg-cyan-500 selection:text-black">
@@ -53,30 +124,67 @@
             <div class="scanline"></div>
             
             <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-                <span class="font-['Rajdhani'] text-cyan-400 tracking-[0.2em] text-xs font-bold uppercase">System: Online</span>
+                <span class="font-['Rajdhani'] text-orange-400 tracking-[0.2em] text-xs font-bold uppercase blink-warning">⚠️ Under Construction</span>
                 <div class="flex gap-1">
-                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                    <div class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse delay-75"></div>
-                    <div class="w-2 h-2 rounded-full bg-purple-500 animate-pulse delay-150"></div>
+                    <div class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></div>
+                    <div class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse delay-75"></div>
+                    <div class="w-2 h-2 rounded-full bg-orange-500 animate-pulse delay-150"></div>
+                </div>
+            </div>
+
+            <!-- Under Construction Banner -->
+            <div class="construction-banner rounded-lg p-4 mb-6 backdrop-blur-sm relative overflow-hidden">
+                <div class="absolute inset-0 overflow-hidden">
+                    <div class="progress-bar absolute inset-0 h-full w-1/3"></div>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-center gap-2 mb-2">
+                        <span class="construction-icon text-2xl">🚧</span>
+                        <span class="construction-icon text-2xl">👷</span>
+                        <span class="gear-spin text-2xl">⚙️</span>
+                        <span class="construction-icon text-2xl">🔨</span>
+                        <span class="construction-icon text-2xl">🚧</span>
+                    </div>
+                    <p class="font-['Orbitron'] text-orange-300 text-sm md:text-base font-bold tracking-wider uppercase">
+                        Website Under Construction
+                    </p>
+                    <p class="font-['Rajdhani'] text-orange-200/80 text-xs md:text-sm mt-1">
+                        Something amazing is being built<span class="typing-cursor">|</span>
+                    </p>
                 </div>
             </div>
 
             <h1 class="glitch text-5xl md:text-7xl font-black tracking-tighter font-['Orbitron'] mb-4" data-text="FARES KHIARY">
                 FARES KHIARY
             </h1>
-            
+
             <p class="font-['Rajdhani'] text-gray-200 text-lg md:text-2xl font-medium mb-8 leading-relaxed">
-                Hello World from my first hosted VPS <span class="inline-block animate-bounce">🚀</span>
+                🌟 Coming Soon 🌟<br>
+                <span class="text-base text-gray-400">Stay tuned for something stellar!</span> <span class="inline-block animate-bounce">🚀</span>
             </p>
 
-            <button id="start-btn" 
-               class="relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-cyan-900/40 border border-cyan-500/50 hover:bg-cyan-500 hover:border-cyan-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] cursor-pointer group uppercase font-['Orbitron'] text-sm tracking-widest rounded">
-                <span>INITIALIZE SYSTEM</span>
+            <button id="start-btn"
+               class="relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-900/40 border border-orange-500/50 hover:bg-orange-500 hover:border-orange-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] cursor-pointer group uppercase font-['Orbitron'] text-sm tracking-widest rounded">
+                <span class="mr-2">🔮</span>
+                <span>PREVIEW UNIVERSE</span>
                 <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </button>
             
         </div>
     </main>
+
+    <!-- Floating Construction Badge -->
+    <div class="fixed top-4 right-4 z-30 pointer-events-none">
+        <div class="construction-banner rounded-full px-4 py-2 backdrop-blur-md flex items-center gap-2">
+            <span class="gear-spin text-lg">⚙️</span>
+            <span class="font-['Rajdhani'] text-orange-300 text-xs font-bold uppercase tracking-wider">Building...</span>
+        </div>
+    </div>
+
+    <!-- Animated Construction Tape -->
+    <div class="fixed top-0 left-0 right-0 h-1 z-30 overflow-hidden bg-gradient-to-r from-orange-500/20 via-yellow-500/40 to-orange-500/20">
+        <div class="h-full w-full bg-[repeating-linear-gradient(90deg,transparent,transparent_10px,rgba(255,165,0,0.3)_10px,rgba(255,165,0,0.3)_20px)] animate-[progress-sweep_3s_linear_infinite]"></div>
+    </div>
 
     <div id="interactive-hint" class="fixed bottom-8 w-full text-center pointer-events-none z-20">
         <p class="font-['Rajdhani'] text-cyan-300 text-sm tracking-[0.3em] uppercase drop-shadow-md bg-black/50 inline-block px-4 py-1 rounded-full border border-cyan-500/30">
