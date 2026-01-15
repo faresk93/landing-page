@@ -112,6 +112,61 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
+
+        /* Subdomain Button Animations */
+        .subdomain-btn {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .subdomain-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.6);
+        }
+        .subdomain-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .subdomain-btn.clicked::before {
+            width: 300%;
+            height: 300%;
+        }
+        @keyframes ripple-out {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+        }
+
+        /* Mute Button */
+        .mute-btn {
+            transition: all 0.3s ease;
+        }
+        .mute-btn:hover {
+            transform: rotate(180deg) scale(1.1);
+        }
+        .mute-btn.muted {
+            opacity: 0.5;
+        }
+
+        /* Back Button */
+        .back-btn {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .back-btn:hover {
+            transform: translateX(-5px);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
     </style>
 </head>
 <body class="antialiased text-white selection:bg-cyan-500 selection:text-black">
@@ -148,7 +203,7 @@
                         <span class="construction-icon text-2xl">🚧</span>
                     </div>
                     <p class="font-['Orbitron'] text-orange-300 text-sm md:text-base font-bold tracking-wider uppercase">
-                        Version 1.2 — Under Construction
+                        Version 1.3 — Under Construction
                     </p>
                     <p class="font-['Rajdhani'] text-orange-200/80 text-xs md:text-sm mt-1">
                         Something amazing is being built<span class="typing-cursor">|</span>
@@ -165,6 +220,37 @@
                 <span class="text-base text-gray-400">Stay tuned for something stellar!</span> <span class="inline-block animate-bounce">🚀</span>
             </p>
 
+            <!-- Subdomain Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 mb-8 w-full max-w-md mx-auto">
+                <button id="n8n-btn" class="subdomain-btn flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/50 hover:border-cyan-300 rounded-lg font-['Orbitron'] text-sm font-bold tracking-wide cursor-pointer group">
+                    <svg class="w-8 h-8" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
+                        <rect x="120" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
+                        <rect x="20" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
+                        <rect x="120" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
+                        <path d="M80 50 L120 50 M50 80 L50 120 M150 80 L150 120 M80 150 L120 150" stroke="#EA4B71" stroke-width="8" stroke-linecap="round"/>
+                    </svg>
+                    <span class="group-hover:text-cyan-300 transition-colors">n8n</span>
+                </button>
+
+                <button id="chicha-btn" class="subdomain-btn flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-900/40 to-pink-900/40 border border-purple-500/50 hover:border-purple-300 rounded-lg font-['Orbitron'] text-sm font-bold tracking-wide cursor-pointer group">
+                    <svg class="w-8 h-8" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Hookah base -->
+                        <ellipse cx="100" cy="170" rx="40" ry="15" fill="#9333EA"/>
+                        <rect x="85" y="120" width="30" height="50" rx="5" fill="#A855F7"/>
+                        <!-- Stem -->
+                        <rect x="95" y="60" width="10" height="60" fill="#C084FC"/>
+                        <!-- Bowl -->
+                        <ellipse cx="100" cy="50" rx="25" ry="12" fill="#E9D5FF"/>
+                        <path d="M 75 50 Q 100 70, 125 50" fill="#DDD6FE"/>
+                        <!-- Hose -->
+                        <path d="M 70 140 Q 40 130, 30 120" stroke="#A855F7" stroke-width="6" fill="none" stroke-linecap="round"/>
+                        <circle cx="30" cy="120" r="8" fill="#C084FC"/>
+                    </svg>
+                    <span class="group-hover:text-purple-300 transition-colors">Chicha</span>
+                </button>
+            </div>
+
             <button id="start-btn"
                class="relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-900/40 border border-orange-500/50 hover:bg-orange-500 hover:border-orange-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] cursor-pointer group uppercase font-['Orbitron'] text-sm tracking-widest rounded">
                 <span class="mr-2">🔮</span>
@@ -180,7 +266,7 @@
         <div class="construction-banner rounded-full px-4 py-2 backdrop-blur-md flex items-center gap-2">
             <span class="construction-icon text-lg">⛑️</span>
             <span class="gear-spin text-lg">⚙️</span>
-            <span class="font-['Rajdhani'] text-orange-300 text-xs font-bold uppercase tracking-wider">v1.2 Building...</span>
+            <span class="font-['Rajdhani'] text-orange-300 text-xs font-bold uppercase tracking-wider">v1.3 Building...</span>
         </div>
     </div>
 
@@ -188,6 +274,34 @@
     <div class="fixed top-0 left-0 right-0 h-1 z-30 overflow-hidden bg-gradient-to-r from-orange-500/20 via-yellow-500/40 to-orange-500/20">
         <div class="h-full w-full bg-[repeating-linear-gradient(90deg,transparent,transparent_10px,rgba(255,165,0,0.3)_10px,rgba(255,165,0,0.3)_20px)] animate-[progress-sweep_3s_linear_infinite]"></div>
     </div>
+
+    <!-- Mute Button (Black Hole Icon) -->
+    <button id="mute-btn" class="mute-btn fixed top-4 left-4 z-30 w-12 h-12 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center cursor-pointer hover:bg-black/80 pointer-events-auto">
+        <svg class="w-6 h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Black hole -->
+            <circle cx="50" cy="50" r="45" fill="url(#blackhole-gradient)"/>
+            <circle cx="50" cy="50" r="15" fill="#000000"/>
+            <circle cx="50" cy="50" r="25" fill="none" stroke="#9333EA" stroke-width="2" opacity="0.6"/>
+            <circle cx="50" cy="50" r="35" fill="none" stroke="#A855F7" stroke-width="1.5" opacity="0.4"/>
+            <defs>
+                <radialGradient id="blackhole-gradient">
+                    <stop offset="0%" stop-color="#000000"/>
+                    <stop offset="40%" stop-color="#1a1a2e"/>
+                    <stop offset="70%" stop-color="#6B21A8"/>
+                    <stop offset="100%" stop-color="#C084FC"/>
+                </radialGradient>
+            </defs>
+        </svg>
+    </button>
+
+    <!-- Back Button (Hidden by default) -->
+    <button id="back-btn" class="back-btn fixed top-4 left-20 z-30 hidden px-4 py-2 rounded-lg bg-black/60 backdrop-blur-md border border-white/20 flex items-center gap-2 cursor-pointer hover:bg-black/80 pointer-events-auto font-['Orbitron'] text-xs font-bold tracking-wider">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span>BACK</span>
+    </button>
+
 
     <div id="interactive-hint" class="fixed bottom-8 w-full text-center pointer-events-none z-20">
         <div class="flex flex-col gap-2 items-center">
@@ -479,12 +593,141 @@
             if (state === 'UNLOCKED') e.preventDefault();
         });
 
+        // Background Audio Logic - Web Audio API for Space Ambient Sound
+        let audioContext;
+        let masterGain;
+        let oscillators = [];
+        let isMuted = false;
+        let isAudioInitialized = false;
+
+        const muteBtn = document.getElementById('mute-btn');
+
+        // Create ambient space sound using Web Audio API
+        const initAudio = () => {
+            if (isAudioInitialized) return;
+
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            masterGain = audioContext.createGain();
+            masterGain.connect(audioContext.destination);
+            masterGain.gain.value = 0.15; // Low volume for ambient effect
+
+            // Create multiple oscillators for layered ambient sound
+            const frequencies = [60, 80, 120, 180, 240]; // Low frequencies for deep space feel
+
+            frequencies.forEach((freq, index) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+
+                // Vary volumes for depth
+                gain.gain.value = 0.1 / (index + 1);
+
+                osc.connect(gain);
+                gain.connect(masterGain);
+
+                osc.start();
+                oscillators.push({ osc, gain });
+
+                // Add slight frequency modulation for movement
+                const lfo = audioContext.createOscillator();
+                lfo.frequency.value = 0.1 + (index * 0.05);
+                const lfoGain = audioContext.createGain();
+                lfoGain.gain.value = 2 + (index * 0.5);
+
+                lfo.connect(lfoGain);
+                lfoGain.connect(osc.frequency);
+                lfo.start();
+            });
+
+            // Add noise for "vacuum" effect
+            const bufferSize = 4096;
+            const whiteNoise = audioContext.createScriptProcessor(bufferSize, 1, 1);
+            whiteNoise.onaudioprocess = (e) => {
+                const output = e.outputBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = (Math.random() * 2 - 1) * 0.02; // Very quiet noise
+                }
+            };
+
+            const noiseFilter = audioContext.createBiquadFilter();
+            noiseFilter.type = 'lowpass';
+            noiseFilter.frequency.value = 400; // Filter high frequencies
+
+            whiteNoise.connect(noiseFilter);
+            noiseFilter.connect(masterGain);
+
+            isAudioInitialized = true;
+        };
+
+        // Mute/Unmute toggle
+        muteBtn.addEventListener('click', () => {
+            if (!isAudioInitialized) {
+                initAudio();
+            }
+
+            isMuted = !isMuted;
+            if (audioContext) {
+                masterGain.gain.value = isMuted ? 0 : 0.15;
+            }
+            muteBtn.classList.toggle('muted', isMuted);
+        });
+
+        // Auto-start audio on first user interaction
+        const startAudio = () => {
+            if (!isAudioInitialized && !isMuted) {
+                initAudio();
+            }
+        };
+
+        // Subdomain Button Logic with Animation
+        const handleSubdomainClick = (url, buttonId) => {
+            const btn = document.getElementById(buttonId);
+            btn.classList.add('clicked');
+
+            setTimeout(() => {
+                window.open(url, '_blank');
+                btn.classList.remove('clicked');
+            }, 600);
+        };
+
+        document.getElementById('n8n-btn').addEventListener('click', () => {
+            handleSubdomainClick('https://n8n.fares-khiary.com', 'n8n-btn');
+        });
+
+        document.getElementById('chicha-btn').addEventListener('click', () => {
+            handleSubdomainClick('https://chicha.fares-khiary.com', 'chicha-btn');
+        });
+
         // Button Logic
         document.getElementById('start-btn').addEventListener('click', () => {
             state = 'UNLOCKED';
             document.getElementById('ui-layer').classList.add('fade-out');
             document.getElementById('interactive-hint').classList.add('show-hint');
+            document.getElementById('back-btn').classList.remove('hidden');
+            document.getElementById('back-btn').classList.add('flex');
+
+            // Start audio on user interaction
+            startAudio();
         });
+
+        // Back Button Logic
+        document.getElementById('back-btn').addEventListener('click', () => {
+            state = 'MENU';
+            document.getElementById('ui-layer').classList.remove('fade-out');
+            document.getElementById('interactive-hint').classList.remove('show-hint');
+            document.getElementById('back-btn').classList.add('hidden');
+            document.getElementById('back-btn').classList.remove('flex');
+
+            // Reset camera position
+            cameraDistance = 150;
+            cameraOffset = { x: 0, y: 30, z: 0 };
+            solarSystem.rotation.set(0, 0, 0);
+        });
+
+        // Attempt to start audio on first user interaction
+        document.addEventListener('click', startAudio, { once: true });
 
         // Resize
         window.addEventListener('resize', () => {
@@ -544,5 +787,13 @@
 
         animate();
     </script>
+
+    <!-- Footer -->
+    <footer class="footer fixed bottom-0 left-0 right-0 z-20 py-3 text-center pointer-events-none">
+        <p class="font-['Rajdhani'] text-gray-300 text-xs md:text-sm tracking-wide">
+            Created with <span class="text-red-400 animate-pulse">❤️</span> by <span class="font-bold text-white">Fares KHIARY</span>
+            <span class="ml-2 px-2 py-0.5 bg-gradient-to-r from-purple-500/30 to-pink-500/30 border border-purple-400/50 rounded text-[10px] font-bold tracking-wider">AI</span>
+        </p>
+    </footer>
 </body>
 </html>
