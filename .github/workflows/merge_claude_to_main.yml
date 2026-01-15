@@ -14,11 +14,18 @@ jobs:
         with:
           fetch-depth: 0  # Fetch all history
 
+      - name: Check for differences
+        id: check_diff
+        run: |
+          git fetch origin claude/${{ github.ref }}
+          DIFF=$(git diff --name-only origin/${{ github.ref }} main)
+          echo "::set-output name=diff::$DIFF"
+          
       - name: Merge branch into main
+        if: steps.check_diff.outputs.diff
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git fetch origin claude/*:claude/*  # Fetch the claude branches
           git checkout main
           git pull origin main
           git merge --no-ff claude/${{ github.ref }} -m "Automated merge of ${{ github.ref }} into main"
