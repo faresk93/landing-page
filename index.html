@@ -190,9 +190,14 @@
     </div>
 
     <div id="interactive-hint" class="fixed bottom-8 w-full text-center pointer-events-none z-20">
-        <p class="font-['Rajdhani'] text-cyan-300 text-sm tracking-[0.3em] uppercase drop-shadow-md bg-black/50 inline-block px-4 py-1 rounded-full border border-cyan-500/30">
-            Swipe to Rotate Universe
-        </p>
+        <div class="flex flex-col gap-2 items-center">
+            <p class="font-['Rajdhani'] text-cyan-300 text-sm tracking-[0.2em] uppercase drop-shadow-md bg-black/50 inline-block px-4 py-1 rounded-full border border-cyan-500/30">
+                🖱️ Drag to Rotate • Scroll to Zoom
+            </p>
+            <p class="font-['Rajdhani'] text-cyan-300 text-xs tracking-[0.2em] uppercase drop-shadow-md bg-black/50 inline-block px-4 py-1 rounded-full border border-cyan-500/30">
+                Right-click or Shift+Drag to Pan
+            </p>
+        </div>
     </div>
 
     <script type="module">
@@ -295,9 +300,15 @@
             return { mesh, dist, speed, angle };
         };
 
-        planets.push(createPlanet(2, 30, 0.5, 0xff0055)); // Red Planet
-        planets.push(createPlanet(3, 50, 0.3, 0x00ffaa)); // Green Planet
-        planets.push(createPlanet(4, 80, 0.15, 0x5500ff)); // Purple Planet
+        // Real Solar System Planets (scaled for visibility)
+        planets.push(createPlanet(1.5, 25, 0.8, 0x8c7853));  // Mercury
+        planets.push(createPlanet(2.5, 35, 0.6, 0xffc649));  // Venus
+        planets.push(createPlanet(2.8, 45, 0.5, 0x4169e1));  // Earth (blue)
+        planets.push(createPlanet(2, 55, 0.4, 0xff6347));    // Mars
+        planets.push(createPlanet(6, 75, 0.2, 0xdaa520));    // Jupiter
+        planets.push(createPlanet(5, 95, 0.15, 0xf4a460));   // Saturn
+        planets.push(createPlanet(3.5, 115, 0.1, 0x4fd0e7)); // Uranus
+        planets.push(createPlanet(3.5, 130, 0.08, 0x4169e1)); // Neptune
 
         // 3. Asteroid Belt
         const asteroidGeo = new THREE.TetrahedronGeometry(0.5, 0);
@@ -306,10 +317,10 @@
         const dummy = new THREE.Object3D();
         
         for(let i=0; i<1000; i++) {
-            const r = 90 + Math.random() * 40; // Belt distance
+            const r = 60 + Math.random() * 20; // Belt between Mars and Jupiter
             const theta = Math.random() * Math.PI * 2;
             const y = (Math.random() - 0.5) * 10;
-            
+
             dummy.position.set(r * Math.cos(theta), y, r * Math.sin(theta));
             dummy.rotation.set(Math.random(), Math.random(), Math.random());
             dummy.scale.setScalar(Math.random() * 2);
@@ -338,29 +349,48 @@
         let mouseX = 0;
         let mouseY = 0;
         let isDragging = false;
+        let isPanning = false;
         let previousMousePosition = { x: 0, y: 0 };
         let state = 'MENU'; // MENU or UNLOCKED
 
+        // Camera controls
+        let cameraDistance = 150;
+        let cameraOffset = { x: 0, y: 30, z: 0 };
+        const minDistance = 30;
+        const maxDistance = 300;
+
         // Unified Input Handling (Touch & Mouse)
-        const handleStart = (x, y) => {
-            isDragging = true;
+        const handleStart = (x, y, button = 0, shiftKey = false) => {
+            if (button === 2 || shiftKey) {
+                // Right-click or Shift+drag for panning
+                isPanning = true;
+            } else {
+                // Left-click for rotation
+                isDragging = true;
+            }
             previousMousePosition = { x, y };
         };
 
         const handleMove = (x, y) => {
-            if (isDragging) {
-                const deltaMove = {
-                    x: x - previousMousePosition.x,
-                    y: y - previousMousePosition.y
-                };
+            const deltaMove = {
+                x: x - previousMousePosition.x,
+                y: y - previousMousePosition.y
+            };
 
+            if (isPanning && state === 'UNLOCKED') {
+                // Pan camera
+                const panSpeed = 0.3;
+                cameraOffset.x -= deltaMove.x * panSpeed;
+                cameraOffset.y += deltaMove.y * panSpeed;
+            } else if (isDragging && state === 'UNLOCKED') {
                 // Rotate the Solar System Group
                 const rotateSpeed = 0.005;
                 solarSystem.rotation.y += deltaMove.x * rotateSpeed;
                 solarSystem.rotation.x += deltaMove.y * rotateSpeed;
-
-                previousMousePosition = { x, y };
             }
+
+            previousMousePosition = { x, y };
+
             // Parallax for stars
             mouseX = (x / window.innerWidth) * 2 - 1;
             mouseY = -(y / window.innerHeight) * 2 + 1;
@@ -368,10 +398,23 @@
 
         const handleEnd = () => {
             isDragging = false;
+            isPanning = false;
+        };
+
+        // Zoom with mouse wheel
+        const handleWheel = (e) => {
+            if (state === 'UNLOCKED') {
+                e.preventDefault();
+                const zoomSpeed = 0.1;
+                cameraDistance += e.deltaY * zoomSpeed;
+                cameraDistance = Math.max(minDistance, Math.min(maxDistance, cameraDistance));
+            }
         };
 
         // Listeners
-        document.addEventListener('mousedown', e => handleStart(e.clientX, e.clientY));
+        document.addEventListener('mousedown', e => {
+            handleStart(e.clientX, e.clientY, e.button, e.shiftKey);
+        });
         document.addEventListener('touchstart', e => handleStart(e.touches[0].clientX, e.touches[0].clientY), {passive: false});
 
         document.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
@@ -382,6 +425,14 @@
 
         document.addEventListener('mouseup', handleEnd);
         document.addEventListener('touchend', handleEnd);
+
+        // Wheel for zoom
+        document.addEventListener('wheel', handleWheel, {passive: false});
+
+        // Prevent context menu on right-click
+        document.addEventListener('contextmenu', e => {
+            if (state === 'UNLOCKED') e.preventDefault();
+        });
 
         // Button Logic
         document.getElementById('start-btn').addEventListener('click', () => {
@@ -429,9 +480,13 @@
                 camera.position.y = 20 + Math.cos(time * 0.2) * 10;
                 camera.lookAt(0, 0, 0);
             } else {
-                // UNLOCKED: Camera moves closer, user controls rotation of system
-                // Smooth transition to center
-                camera.position.lerp(new THREE.Vector3(0, 30, 90), 0.05);
+                // UNLOCKED: User controls zoom, pan, and rotation
+                const targetPos = new THREE.Vector3(
+                    cameraOffset.x,
+                    cameraOffset.y,
+                    cameraDistance
+                );
+                camera.position.lerp(targetPos, 0.1);
                 camera.lookAt(0, 0, 0);
             }
 
