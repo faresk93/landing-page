@@ -7,7 +7,7 @@ on:
 
 jobs:
   auto-merge-claude:
-    if: github.event_name == 'push' && github.event.head_commit && github.event.before != '0000000000000000'
+    if: github.event_name == 'push' && github.event.head_commit && (github.event.commits.length > 0)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
