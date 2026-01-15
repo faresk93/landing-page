@@ -362,7 +362,7 @@
 
     <div id="canvas-container" class="absolute inset-0 z-0 bg-black cursor-move"></div>
 
-    <main id="ui-layer" class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-2 py-0.5 pointer-events-none overflow-hidden">
+    <main id="ui-layer" class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-2 py-3 pointer-events-none overflow-hidden">
 
         <div class="pointer-events-auto bg-black/75 backdrop-blur-xl border border-white/10 p-2 md:p-3 rounded-lg max-w-5xl w-full shadow-2xl relative overflow-hidden">
 
@@ -384,7 +384,7 @@
                             Work in Progress
                         </p>
                     </div>
-                    <div class="font-['Orbitron'] text-orange-400 text-xs font-bold">v1.4</div>
+                    <div class="font-['Orbitron'] text-orange-400 text-xs font-bold">v1.5</div>
                 </div>
             </div>
 
@@ -630,16 +630,48 @@
                 ctx.fill();
             }
 
-            // Add text label
+            return new THREE.CanvasTexture(canvas);
+        };
+
+        // Create sprite label for planets
+        const createSpriteLabel = (text, color) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+
+            // Background with rounded rectangle
+            ctx.fillStyle = `rgba(0, 0, 0, 0.7)`;
+            ctx.beginPath();
+            ctx.roundRect(10, 30, 236, 68, 15);
+            ctx.fill();
+
+            // Border with color
+            ctx.strokeStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.8)`;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.roundRect(10, 30, 236, 68, 15);
+            ctx.stroke();
+
+            // Text
             ctx.fillStyle = "#ffffff";
-            ctx.font = "bold 60px Arial";
+            ctx.font = "bold 42px Arial";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.shadowColor = "#000000";
-            ctx.shadowBlur = 8;
-            ctx.fillText(label, 256, 256);
+            ctx.shadowColor = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.9)`;
+            ctx.shadowBlur = 15;
+            ctx.fillText(text, 128, 64);
 
-            return new THREE.CanvasTexture(canvas);
+            const texture = new THREE.CanvasTexture(canvas);
+            const spriteMaterial = new THREE.SpriteMaterial({
+                map: texture,
+                transparent: true,
+                opacity: 0.95
+            });
+            const sprite = new THREE.Sprite(spriteMaterial);
+            sprite.scale.set(8, 4, 1);
+
+            return sprite;
         };
 
         // --- SOLAR SYSTEM ---
@@ -715,8 +747,14 @@
             ring.rotation.x = Math.PI/2;
             solarSystem.add(ring);
 
+            // Add sprite label
+            const spriteLabel = createSpriteLabel(label, color);
+            spriteLabel.position.copy(mesh.position);
+            spriteLabel.position.y += size + 3;
+            solarSystem.add(spriteLabel);
+
             solarSystem.add(mesh);
-            return { mesh, dist, speed, angle };
+            return { mesh, dist, speed, angle, label: spriteLabel, size };
         };
 
         // Create planets with tech labels
@@ -896,14 +934,15 @@
 
         const muteBtn = document.getElementById('mute-btn');
 
-        const initAudio = () => {
+        const initAudio = async () => {
             if (isAudioInitialized) return;
 
             try {
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
+                // Ensure audio context is running
                 if (audioContext.state === 'suspended') {
-                    audioContext.resume();
+                    await audioContext.resume();
                 }
 
                 masterGain = audioContext.createGain();
@@ -1010,13 +1049,13 @@
             }
         };
 
-        muteBtn.addEventListener('click', () => {
+        muteBtn.addEventListener('click', async () => {
             if (!isAudioInitialized) {
-                initAudio();
+                await initAudio();
             }
 
             if (audioContext && audioContext.state === 'suspended') {
-                audioContext.resume();
+                await audioContext.resume();
             }
 
             isMuted = !isMuted;
@@ -1027,12 +1066,12 @@
             muteBtn.classList.toggle('muted', isMuted);
         });
 
-        const startAudio = () => {
+        const startAudio = async () => {
             if (!isAudioInitialized && !isMuted) {
-                initAudio();
+                await initAudio();
             }
             if (audioContext && audioContext.state === 'suspended') {
-                audioContext.resume();
+                await audioContext.resume();
             }
         };
 
@@ -1081,12 +1120,17 @@
             const delta = clock.getDelta();
             const time = clock.getElapsedTime();
 
-            // Rotate Planets
+            // Rotate Planets and update labels
             planets.forEach(p => {
                 p.angle += p.speed * delta;
                 p.mesh.position.x = Math.cos(p.angle) * p.dist;
                 p.mesh.position.z = Math.sin(p.angle) * p.dist;
                 p.mesh.rotation.y += delta * 0.3;
+
+                // Update label position to follow planet
+                p.label.position.x = p.mesh.position.x;
+                p.label.position.z = p.mesh.position.z;
+                p.label.position.y = p.mesh.position.y + p.size + 3;
             });
 
             asteroids.rotation.y += 0.015 * delta;
