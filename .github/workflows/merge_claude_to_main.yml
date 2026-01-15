@@ -6,7 +6,7 @@ on:
       - 'claude/**'
 
 jobs:
-  auto-merge:
+  auto-merge-claude:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
