@@ -15,6 +15,37 @@
         .fade-out { opacity: 0; pointer-events: none; transform: scale(0.95); filter: blur(10px); }
         .ui-transition { transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
 
+        /* Construction Banner - Restored */
+        .construction-banner {
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.15) 0%, rgba(255, 100, 0, 0.15) 100%);
+            border: 2px solid rgba(255, 165, 0, 0.5);
+            animation: banner-glow 2s ease-in-out infinite alternate;
+            position: relative;
+            overflow: hidden;
+        }
+        @keyframes banner-glow {
+            0% { box-shadow: 0 0 10px rgba(255, 165, 0, 0.3), inset 0 0 20px rgba(255, 165, 0, 0.1); }
+            100% { box-shadow: 0 0 25px rgba(255, 165, 0, 0.6), inset 0 0 30px rgba(255, 165, 0, 0.2); }
+        }
+
+        .construction-icon {
+            display: inline-block;
+            animation: icon-bounce 1s ease-in-out infinite;
+        }
+        @keyframes icon-bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-5px) scale(1.05); }
+        }
+
+        .gear-spin {
+            display: inline-block;
+            animation: gear-rotate 3s linear infinite;
+        }
+        @keyframes gear-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         /* Glitch Text - Enhanced */
         .glitch {
             position: relative;
@@ -48,30 +79,33 @@
         #interactive-hint { opacity: 0; transition: opacity 1s; }
         .show-hint { opacity: 1 !important; }
 
-        /* Greeting Animation - Enhanced */
+        /* Enhanced Greeting Animations with Zoom */
         .greeting-word {
             opacity: 0;
-            animation: greeting-fade 8s ease-in-out infinite;
             position: absolute;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             background: linear-gradient(45deg, #00f5ff, #a855f7, #ec4899, #fbbf24);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: greeting-fade 8s ease-in-out infinite, gradient-shift 3s ease infinite;
-            filter: drop-shadow(0 0 12px rgba(0, 245, 255, 0.7));
+            animation: greeting-zoom 8s ease-in-out infinite, gradient-shift 3s ease infinite;
+            filter: drop-shadow(0 0 15px rgba(0, 245, 255, 0.8));
         }
         .greeting-word:nth-child(1) { animation-delay: 0s; }
         .greeting-word:nth-child(2) { animation-delay: 2s; }
         .greeting-word:nth-child(3) { animation-delay: 4s; }
         .greeting-word:nth-child(4) { animation-delay: 6s; }
 
-        @keyframes greeting-fade {
-            0%, 100% { opacity: 0; transform: scale(0.8) rotate(-5deg); }
-            12.5%, 37.5% { opacity: 1; transform: scale(1) rotate(0deg); }
+        @keyframes greeting-zoom {
+            0% { opacity: 0; transform: scale(0.3) rotate(-10deg); }
+            10% { opacity: 1; transform: scale(1.2) rotate(2deg); }
+            20% { transform: scale(1) rotate(0deg); }
+            30% { transform: scale(1.05) rotate(-1deg); }
+            40% { opacity: 1; transform: scale(1) rotate(0deg); }
             50% { opacity: 0; transform: scale(0.8) rotate(5deg); }
+            100% { opacity: 0; transform: scale(0.3) rotate(-10deg); }
         }
 
         @keyframes gradient-shift {
@@ -80,12 +114,61 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Inline Info Chip - Stunning Design */
+        /* Typing Animation */
+        .typing-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .typing-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #00d9ff;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+        }
+
+        .tech-stack {
+            display: inline;
+            animation: tech-fade 12s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes tech-fade {
+            0%, 100% { opacity: 0; }
+            8%, 24% { opacity: 1; }
+            32% { opacity: 0; }
+        }
+
+        .tech-stack:nth-child(1) { animation-delay: 0s; }
+        .tech-stack:nth-child(2) { animation-delay: 1.5s; }
+        .tech-stack:nth-child(3) { animation-delay: 3s; }
+        .tech-stack:nth-child(4) { animation-delay: 4.5s; }
+        .tech-stack:nth-child(5) { animation-delay: 6s; }
+        .tech-stack:nth-child(6) { animation-delay: 7.5s; }
+        .tech-stack:nth-child(7) { animation-delay: 9s; }
+        .tech-stack:nth-child(8) { animation-delay: 10.5s; }
+
+        .cursor-blink {
+            animation: blink 0.8s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Info Chip */
         .info-chip {
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
-            padding: 0.3rem 0.7rem;
+            gap: 0.3rem;
+            padding: 0.25rem 0.6rem;
             background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
             border: 1px solid rgba(0, 255, 255, 0.3);
             border-radius: 9999px;
@@ -93,7 +176,7 @@
             position: relative;
             overflow: hidden;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             white-space: nowrap;
         }
         .info-chip::before {
@@ -114,12 +197,12 @@
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.4), inset 0 0 15px rgba(0, 255, 255, 0.1);
         }
         .info-chip i {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #00d9ff;
             filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.8));
         }
 
-        /* Social Media Buttons - Enhanced */
+        /* Social Media Buttons */
         .social-btn {
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
@@ -150,12 +233,12 @@
             border-color: rgba(88, 166, 255, 0.8) !important;
         }
 
-        /* Email Chip - Special Design */
+        /* Email Chip */
         .email-chip {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.4rem 0.9rem;
+            gap: 0.35rem;
+            padding: 0.35rem 0.8rem;
             background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(249, 115, 22, 0.12) 100%);
             border: 1px solid rgba(236, 72, 153, 0.4);
             border-radius: 9999px;
@@ -183,7 +266,7 @@
             filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.8));
         }
 
-        /* Subdomain Button - Enhanced */
+        /* Subdomain Button */
         .subdomain-btn {
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
@@ -204,15 +287,15 @@
             border-color: rgba(34, 211, 238, 0.8) !important;
         }
 
-        /* Preview Button - Enhanced */
-        .preview-btn {
+        /* Enter Universe Button */
+        .universe-btn {
             position: relative;
             overflow: hidden;
             background: linear-gradient(135deg, rgba(249, 115, 22, 0.25), rgba(236, 72, 153, 0.25));
             border: 2px solid rgba(249, 115, 22, 0.6);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .preview-btn::before {
+        .universe-btn::before {
             content: '';
             position: absolute;
             inset: 0;
@@ -220,8 +303,8 @@
             transform: translateX(-100%) skewX(-15deg);
             transition: transform 0.6s;
         }
-        .preview-btn:hover::before { transform: translateX(100%) skewX(-15deg); }
-        .preview-btn:hover {
+        .universe-btn:hover::before { transform: translateX(100%) skewX(-15deg); }
+        .universe-btn:hover {
             transform: scale(1.07);
             box-shadow: 0 0 45px rgba(249, 115, 22, 0.9), inset 0 0 30px rgba(249, 115, 22, 0.35);
             border-color: rgba(249, 115, 22, 0.9);
@@ -248,13 +331,6 @@
             box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
         }
 
-        /* Compact layout */
-        @media (max-width: 768px) {
-            .glitch { font-size: 2.5rem !important; }
-            .greeting-word { font-size: 0.9rem !important; }
-            .info-chip { font-size: 0.65rem !important; padding: 0.25rem 0.5rem !important; }
-        }
-
         /* Floating particles */
         @keyframes float {
             0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.3; }
@@ -270,15 +346,25 @@
             animation: float 4s ease-in-out infinite;
             pointer-events: none;
         }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .glitch { font-size: 2rem !important; }
+            .greeting-word { font-size: 0.85rem !important; }
+            .info-chip { font-size: 0.6rem !important; padding: 0.2rem 0.5rem !important; }
+            .typing-text { font-size: 0.65rem !important; }
+            .social-btn { padding: 0.4rem !important; }
+            .construction-banner { padding: 0.3rem !important; font-size: 0.7rem !important; }
+        }
     </style>
 </head>
 <body class="antialiased text-white selection:bg-cyan-500 selection:text-black">
 
     <div id="canvas-container" class="absolute inset-0 z-0 bg-black cursor-move"></div>
 
-    <main id="ui-layer" class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-2 py-1 pointer-events-none">
+    <main id="ui-layer" class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-2 py-0.5 pointer-events-none overflow-hidden">
 
-        <div class="pointer-events-auto bg-black/75 backdrop-blur-xl border border-white/10 p-3 md:p-4 rounded-lg max-w-5xl w-full shadow-2xl relative overflow-hidden">
+        <div class="pointer-events-auto bg-black/75 backdrop-blur-xl border border-white/10 p-2 md:p-3 rounded-lg max-w-5xl w-full shadow-2xl relative overflow-hidden">
 
             <div class="scanline"></div>
 
@@ -288,13 +374,32 @@
             <div class="particle" style="bottom: 20%; left: 25%; animation-delay: 2s;"></div>
             <div class="particle" style="top: 60%; right: 15%; animation-delay: 3s;"></div>
 
-            <div class="grid md:grid-cols-2 gap-3">
+            <!-- Construction Banner with v1.4 -->
+            <div class="construction-banner rounded px-3 py-1.5 mb-2 backdrop-blur-sm">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="construction-icon text-base">🚧</span>
+                        <span class="gear-spin text-base">⚙️</span>
+                        <p class="font-['Rajdhani'] text-orange-300 text-xs font-bold tracking-wider uppercase">
+                            Work in Progress
+                        </p>
+                    </div>
+                    <div class="font-['Orbitron'] text-orange-400 text-xs font-bold">v1.4</div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-2 md:gap-3">
 
                 <!-- Left Column: Main Info -->
-                <div class="space-y-1.5">
+                <div class="space-y-1">
 
-                    <!-- Name with Greetings -->
-                    <div class="relative h-14 md:h-16 flex items-center justify-center mb-0.5">
+                    <!-- Name -->
+                    <h1 class="glitch text-3xl md:text-5xl font-black tracking-tighter font-['Orbitron'] text-center mb-1" data-text="FARES KHIARY">
+                        FARES KHIARY
+                    </h1>
+
+                    <!-- Greetings -->
+                    <div class="relative h-10 md:h-12 flex items-center justify-center mb-1">
                         <div class="absolute inset-0 flex items-center justify-center">
                             <span class="greeting-word">Bonjour</span>
                             <span class="greeting-word">مرحبا</span>
@@ -303,12 +408,27 @@
                         </div>
                     </div>
 
-                    <h1 class="glitch text-4xl md:text-6xl font-black tracking-tighter font-['Orbitron'] text-center mb-2" data-text="FARES KHIARY">
-                        FARES KHIARY
-                    </h1>
+                    <!-- Typing Animation - Web Developer + Tech Stacks -->
+                    <div class="flex justify-center mb-1.5">
+                        <div class="typing-container">
+                            <i class="fas fa-code text-cyan-400 text-xs"></i>
+                            <div class="typing-text">
+                                <span>Web Developer •</span>
+                                <span class="tech-stack">JavaScript</span>
+                                <span class="tech-stack">PHP</span>
+                                <span class="tech-stack">React</span>
+                                <span class="tech-stack">Node.js</span>
+                                <span class="tech-stack">Docker</span>
+                                <span class="tech-stack">AWS</span>
+                                <span class="tech-stack">MySQL</span>
+                                <span class="tech-stack">Python</span>
+                                <span class="cursor-blink">|</span>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Personal Info - Inline Chips -->
-                    <div class="flex flex-wrap items-center justify-center gap-1.5 mb-2">
+                    <div class="flex flex-wrap items-center justify-center gap-1 mb-1.5">
                         <div class="info-chip">
                             <i class="fas fa-birthday-cake"></i>
                             <span class="font-['Rajdhani'] font-semibold">32</span>
@@ -327,54 +447,54 @@
                         </div>
                     </div>
 
-                    <!-- Email - Inline -->
-                    <div class="flex justify-center mb-2">
+                    <!-- Email -->
+                    <div class="flex justify-center mb-1.5">
                         <a href="mailto:contact@fares-khiary.com" class="email-chip">
-                            <i class="fas fa-envelope text-sm"></i>
-                            <span class="font-['Rajdhani'] font-semibold text-xs text-pink-200">contact@fares-khiary.com</span>
+                            <i class="fas fa-envelope text-xs"></i>
+                            <span class="font-['Rajdhani'] font-semibold text-[11px] text-pink-200">contact@fares-khiary.com</span>
                         </a>
                     </div>
 
                     <!-- Social Media Section -->
-                    <div class="border-t border-white/10 pt-2">
-                        <h2 class="font-['Orbitron'] text-cyan-300 text-xs font-bold tracking-wider uppercase mb-2 text-center flex items-center justify-center gap-1.5">
-                            <i class="fas fa-share-nodes text-[10px]"></i>
+                    <div class="border-t border-white/10 pt-1.5">
+                        <h2 class="font-['Orbitron'] text-cyan-300 text-[10px] font-bold tracking-wider uppercase mb-1.5 text-center flex items-center justify-center gap-1">
+                            <i class="fas fa-share-nodes text-[8px]"></i>
                             <span>Connect</span>
                         </h2>
-                        <div class="flex gap-2 justify-center">
+                        <div class="flex gap-1.5 justify-center">
                             <a href="https://www.linkedin.com/in/fares-khiary" target="_blank" rel="noopener noreferrer"
-                               class="social-btn linkedin flex items-center justify-center gap-1.5 px-3 py-2 bg-gradient-to-r from-blue-900/40 to-blue-700/40 border border-blue-500/50 rounded-lg cursor-pointer group">
-                                <i class="fab fa-linkedin text-lg group-hover:scale-110 transition-transform"></i>
-                                <span class="font-['Rajdhani'] text-[10px] font-bold hidden sm:inline">LinkedIn</span>
+                               class="social-btn linkedin flex items-center justify-center gap-1 px-2 py-1.5 bg-gradient-to-r from-blue-900/40 to-blue-700/40 border border-blue-500/50 rounded-lg cursor-pointer group">
+                                <i class="fab fa-linkedin text-base group-hover:scale-110 transition-transform"></i>
+                                <span class="font-['Rajdhani'] text-[9px] font-bold hidden sm:inline">LinkedIn</span>
                             </a>
 
                             <a href="https://www.instagram.com/khiary.fares" target="_blank" rel="noopener noreferrer"
-                               class="social-btn instagram flex items-center justify-center gap-1.5 px-3 py-2 bg-gradient-to-r from-pink-900/40 to-purple-900/40 border border-pink-500/50 rounded-lg cursor-pointer group">
-                                <i class="fab fa-instagram text-lg group-hover:scale-110 transition-transform"></i>
-                                <span class="font-['Rajdhani'] text-[10px] font-bold hidden sm:inline">Instagram</span>
+                               class="social-btn instagram flex items-center justify-center gap-1 px-2 py-1.5 bg-gradient-to-r from-pink-900/40 to-purple-900/40 border border-pink-500/50 rounded-lg cursor-pointer group">
+                                <i class="fab fa-instagram text-base group-hover:scale-110 transition-transform"></i>
+                                <span class="font-['Rajdhani'] text-[9px] font-bold hidden sm:inline">Instagram</span>
                             </a>
 
                             <a href="https://github.com/faresk93" target="_blank" rel="noopener noreferrer"
-                               class="social-btn github flex items-center justify-center gap-1.5 px-3 py-2 bg-gradient-to-r from-gray-900/40 to-gray-700/40 border border-gray-500/50 rounded-lg cursor-pointer group">
-                                <i class="fab fa-github text-lg group-hover:scale-110 transition-transform"></i>
-                                <span class="font-['Rajdhani'] text-[10px] font-bold hidden sm:inline">GitHub</span>
+                               class="social-btn github flex items-center justify-center gap-1 px-2 py-1.5 bg-gradient-to-r from-gray-900/40 to-gray-700/40 border border-gray-500/50 rounded-lg cursor-pointer group">
+                                <i class="fab fa-github text-base group-hover:scale-110 transition-transform"></i>
+                                <span class="font-['Rajdhani'] text-[9px] font-bold hidden sm:inline">GitHub</span>
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Column: Subdomains & Preview -->
-                <div class="space-y-2 flex flex-col justify-center">
+                <!-- Right Column: Subdomains & Universe -->
+                <div class="space-y-1.5 flex flex-col justify-center">
 
-                    <div class="text-center mb-1">
-                        <p class="font-['Rajdhani'] text-gray-300 text-sm md:text-base font-medium leading-relaxed">
-                            <span class="text-cyan-400">🌟</span> Explore My Universe <span class="text-cyan-400">🌟</span>
+                    <div class="text-center mb-0.5">
+                        <p class="font-['Rajdhani'] text-gray-300 text-xs md:text-sm font-medium leading-relaxed">
+                            <span class="text-cyan-400">🌟</span> Explore My Digital Universe <span class="text-cyan-400">🌟</span>
                         </p>
                     </div>
 
                     <!-- n8n Button -->
-                    <button id="n8n-btn" class="subdomain-btn flex items-center justify-center gap-2.5 px-4 py-3 bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/50 rounded-lg font-['Orbitron'] text-xs font-bold tracking-wide cursor-pointer group">
-                        <svg class="w-7 h-7 group-hover:rotate-180 transition-transform duration-500" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <button id="n8n-btn" class="subdomain-btn flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/50 rounded-lg font-['Orbitron'] text-[10px] font-bold tracking-wide cursor-pointer group">
+                        <svg class="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="20" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
                             <rect x="120" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
                             <rect x="20" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
@@ -384,12 +504,12 @@
                         <span class="group-hover:text-cyan-300 transition-colors">n8n Automation</span>
                     </button>
 
-                    <!-- Preview Universe Button -->
+                    <!-- Enter My Universe Button -->
                     <button id="start-btn"
-                       class="preview-btn relative inline-flex items-center justify-center px-5 py-3 font-bold text-white cursor-pointer group uppercase font-['Orbitron'] text-sm tracking-widest rounded-lg">
-                        <span class="relative z-10 mr-2 text-xl">🔮</span>
-                        <span class="relative z-10">Preview Universe</span>
-                        <svg class="relative z-10 w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                       class="universe-btn relative inline-flex items-center justify-center px-4 py-2.5 font-bold text-white cursor-pointer group uppercase font-['Orbitron'] text-xs tracking-widest rounded-lg">
+                        <span class="relative z-10 mr-1.5 text-lg">🌌</span>
+                        <span class="relative z-10">Enter My Universe</span>
+                        <svg class="relative z-10 w-3.5 h-3.5 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                     </button>
 
                 </div>
@@ -397,9 +517,9 @@
         </div>
     </main>
 
-    <!-- Mute Button (Black Hole Icon) -->
-    <button id="mute-btn" class="mute-btn fixed top-3 left-3 z-30 w-11 h-11 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center cursor-pointer hover:bg-black/80 pointer-events-auto">
-        <svg class="w-6 h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Mute Button -->
+    <button id="mute-btn" class="mute-btn fixed top-2 left-2 z-30 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center cursor-pointer hover:bg-black/80 pointer-events-auto">
+        <svg class="w-5 h-5" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="50" cy="50" r="45" fill="url(#blackhole-gradient)"/>
             <circle cx="50" cy="50" r="15" fill="#000000"/>
             <circle cx="50" cy="50" r="25" fill="none" stroke="#9333EA" stroke-width="2" opacity="0.6"/>
@@ -415,17 +535,17 @@
         </svg>
     </button>
 
-    <!-- Back Button (Hidden by default) -->
-    <button id="back-btn" class="back-btn fixed top-3 left-16 z-30 hidden px-3 py-2 rounded-lg bg-black/60 backdrop-blur-md border border-white/20 items-center gap-2 cursor-pointer hover:bg-black/80 pointer-events-auto font-['Orbitron'] text-xs font-bold tracking-wider">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <!-- Back Button -->
+    <button id="back-btn" class="back-btn fixed top-2 left-14 z-30 hidden px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-md border border-white/20 items-center gap-1.5 cursor-pointer hover:bg-black/80 pointer-events-auto font-['Orbitron'] text-[10px] font-bold tracking-wider">
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
         <span>BACK</span>
     </button>
 
-    <div id="interactive-hint" class="fixed bottom-6 w-full text-center pointer-events-none z-20">
-        <p class="font-['Rajdhani'] text-cyan-300 text-sm tracking-[0.2em] uppercase drop-shadow-md bg-black/50 inline-block px-4 py-1 rounded-full border border-cyan-500/30">
-            🖱️ Drag to Rotate • Scroll to Zoom
+    <div id="interactive-hint" class="fixed bottom-4 w-full text-center pointer-events-none z-20">
+        <p class="font-['Rajdhani'] text-cyan-300 text-xs tracking-[0.2em] uppercase drop-shadow-md bg-black/50 inline-block px-3 py-1 rounded-full border border-cyan-500/30">
+            🖱️ Drag • Scroll • Explore
         </p>
     </div>
 
@@ -434,7 +554,7 @@
 
         // --- SETUP ---
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x000000, 0.0015);
+        scene.fog = new THREE.FogExp2(0x000000, 0.0012);
 
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(0, 20, 100);
@@ -444,7 +564,7 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // --- ENHANCED TEXTURE GENERATOR ---
+        // --- TEXTURE GENERATOR ---
         const createTexture = (type) => {
             const canvas = document.createElement('canvas');
             canvas.width = 512; canvas.height = 512;
@@ -459,6 +579,15 @@
                 grd.addColorStop(0.8, "#ff8800");
                 grd.addColorStop(1, "#ff4400");
                 ctx.fillStyle = grd; ctx.fillRect(0,0,512,512);
+
+                // Add "Web" text to sun
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 120px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.shadowColor = "#000000";
+                ctx.shadowBlur = 10;
+                ctx.fillText("Web", 256, 256);
             } else if (type === 'planet') {
                 const grd = ctx.createRadialGradient(256,256,150, 256,256,300);
                 grd.addColorStop(0, "rgba(255,255,255,0.4)");
@@ -481,16 +610,48 @@
             return new THREE.CanvasTexture(canvas);
         };
 
+        // Create planet textures with tech labels
+        const createPlanetTexture = (label, color) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512; canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            // Planet surface
+            const grd = ctx.createRadialGradient(256,256,150, 256,256,300);
+            grd.addColorStop(0, `rgba(${color[0]},${color[1]},${color[2]},0.5)`);
+            grd.addColorStop(1, "rgba(0,0,0,0.7)");
+            ctx.fillStyle = grd; ctx.fillRect(0,0,512,512);
+
+            // Surface details
+            for(let i=0; i<100; i++) {
+                ctx.fillStyle = `rgba(${color[0]+Math.random()*50}, ${color[1]+Math.random()*50}, ${color[2]+Math.random()*50}, 0.2)`;
+                ctx.beginPath();
+                ctx.arc(Math.random()*512, Math.random()*512, Math.random()*40, 0, Math.PI*2);
+                ctx.fill();
+            }
+
+            // Add text label
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 60px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.shadowColor = "#000000";
+            ctx.shadowBlur = 8;
+            ctx.fillText(label, 256, 256);
+
+            return new THREE.CanvasTexture(canvas);
+        };
+
         // --- SOLAR SYSTEM ---
         const solarSystem = new THREE.Group();
         scene.add(solarSystem);
 
-        // Enhanced Sun
+        // Enhanced Sun with "Web" label
         const sunGeo = new THREE.SphereGeometry(12, 64, 64);
         const sunMat = new THREE.MeshBasicMaterial({
             map: createTexture('sun'),
             emissive: 0xffaa00,
-            emissiveIntensity: 0.8
+            emissiveIntensity: 0.9
         });
         const sun = new THREE.Mesh(sunGeo, sunMat);
         solarSystem.add(sun);
@@ -501,42 +662,54 @@
                 map: createTexture('particle'),
                 color: i === 0 ? 0xffff00 : (i === 1 ? 0xffaa00 : 0xff6600),
                 transparent: true,
-                opacity: 0.6 - (i * 0.15),
+                opacity: 0.7 - (i * 0.15),
                 blending: THREE.AdditiveBlending
             });
             const glow = new THREE.Sprite(glowMat);
-            glow.scale.set(70 + (i * 20), 70 + (i * 20), 1);
+            glow.scale.set(75 + (i * 25), 75 + (i * 25), 1);
             solarSystem.add(glow);
         }
 
         // Enhanced Lighting
-        const pointLight = new THREE.PointLight(0xffffdd, 4, 500);
+        const pointLight = new THREE.PointLight(0xffffdd, 5, 550);
         solarSystem.add(pointLight);
-        scene.add(new THREE.AmbientLight(0x505050));
+        scene.add(new THREE.AmbientLight(0x606060));
 
-        // Enhanced Planets
+        // Planets with tech labels
         const planets = [];
-        const createPlanet = (size, dist, speed, color, emissiveColor) => {
+        const techLabels = ['JS', 'PHP', 'DB', 'AI', 'React', 'Node', 'AWS', 'Docker'];
+        const planetColors = [
+            [220, 180, 100],  // JS - golden
+            [100, 100, 220],  // PHP - purple
+            [50, 150, 220],   // DB - blue
+            [220, 50, 150],   // AI - magenta
+            [100, 220, 250],  // React - cyan
+            [100, 200, 100],  // Node - green
+            [255, 153, 0],    // AWS - orange
+            [100, 180, 220]   // Docker - blue
+        ];
+
+        const createPlanet = (size, dist, speed, label, color) => {
             const mesh = new THREE.Mesh(
                 new THREE.SphereGeometry(size, 32, 32),
                 new THREE.MeshStandardMaterial({
-                    color: color,
+                    map: createPlanetTexture(label, color),
                     roughness: 0.4,
                     metalness: 0.4,
-                    emissive: emissiveColor || color,
-                    emissiveIntensity: 0.2,
-                    map: createTexture('planet')
+                    emissive: new THREE.Color(color[0]/255, color[1]/255, color[2]/255),
+                    emissiveIntensity: 0.3
                 })
             );
             const angle = Math.random() * Math.PI * 2;
             mesh.position.set(Math.cos(angle) * dist, 0, Math.sin(angle) * dist);
 
+            // Enhanced orbit rings
             const ringGeo = new THREE.RingGeometry(dist-0.3, dist+0.3, 128);
             const ringMat = new THREE.MeshBasicMaterial({
-                color: 0x00ffff,
+                color: new THREE.Color(color[0]/255, color[1]/255, color[2]/255),
                 side: THREE.DoubleSide,
                 transparent: true,
-                opacity: 0.15
+                opacity: 0.2
             });
             const ring = new THREE.Mesh(ringGeo, ringMat);
             ring.rotation.x = Math.PI/2;
@@ -546,28 +719,28 @@
             return { mesh, dist, speed, angle };
         };
 
-        planets.push(createPlanet(1.5, 25, 0.8, 0xa89968, 0x8c7853));
-        planets.push(createPlanet(2.5, 35, 0.6, 0xffd700, 0xffc649));
-        planets.push(createPlanet(2.8, 45, 0.5, 0x4169e1, 0x1e90ff));
-        planets.push(createPlanet(2, 55, 0.4, 0xff6347, 0xdc143c));
-        planets.push(createPlanet(6, 75, 0.2, 0xdaa520, 0xb8860b));
-        planets.push(createPlanet(5, 95, 0.15, 0xf4a460, 0xdeb887));
-        planets.push(createPlanet(3.5, 115, 0.1, 0x4fd0e7, 0x00ced1));
-        planets.push(createPlanet(3.5, 130, 0.08, 0x4169e1, 0x1e3a8a));
+        // Create planets with tech labels
+        const distances = [25, 35, 45, 55, 75, 95, 115, 130];
+        const speeds = [0.8, 0.6, 0.5, 0.4, 0.2, 0.15, 0.1, 0.08];
+        const sizes = [1.5, 2.5, 2.8, 2, 6, 5, 3.5, 3.5];
+
+        for(let i = 0; i < 8; i++) {
+            planets.push(createPlanet(sizes[i], distances[i], speeds[i], techLabels[i], planetColors[i]));
+        }
 
         // Asteroid Belt
         const asteroidGeo = new THREE.TetrahedronGeometry(0.5, 0);
         const asteroidMat = new THREE.MeshStandardMaterial({
-            color: 0x999999,
+            color: 0xaaaaaa,
             roughness: 0.9,
             metalness: 0.1,
-            emissive: 0x333333,
-            emissiveIntensity: 0.1
+            emissive: 0x444444,
+            emissiveIntensity: 0.15
         });
-        const asteroids = new THREE.InstancedMesh(asteroidGeo, asteroidMat, 1500);
+        const asteroids = new THREE.InstancedMesh(asteroidGeo, asteroidMat, 2000);
         const dummy = new THREE.Object3D();
 
-        for(let i=0; i<1500; i++) {
+        for(let i=0; i<2000; i++) {
             const r = 60 + Math.random() * 20;
             const theta = Math.random() * Math.PI * 2;
             const y = (Math.random() - 0.5) * 12;
@@ -586,7 +759,7 @@
         const starsColors = [];
         const starsSizes = [];
 
-        for(let i=0; i<8000; i++) {
+        for(let i=0; i<10000; i++) {
             starsPos.push(
                 (Math.random()-0.5)*2000,
                 (Math.random()-0.5)*2000,
@@ -604,7 +777,7 @@
                 starsColors.push(1.0, 0.6 + Math.random()*0.2, 0.5 + Math.random()*0.2);
             }
 
-            starsSizes.push(Math.random() * 3 + 0.3);
+            starsSizes.push(Math.random() * 4 + 0.3);
         }
 
         starsGeo.setAttribute('position', new THREE.Float32BufferAttribute(starsPos, 3));
@@ -614,7 +787,7 @@
         const stars = new THREE.Points(
             starsGeo,
             new THREE.PointsMaterial({
-                size: 2,
+                size: 2.5,
                 vertexColors: true,
                 transparent: true,
                 opacity: 0.95,
@@ -623,12 +796,12 @@
         );
         scene.add(stars);
 
-        // Nebula Clouds
-        const nebulaGeo = new THREE.SphereGeometry(300, 32, 32);
+        // Nebula Clouds - Enhanced
+        const nebulaGeo = new THREE.SphereGeometry(350, 32, 32);
         const nebulaMat = new THREE.MeshBasicMaterial({
             color: 0x9333ea,
             transparent: true,
-            opacity: 0.08,
+            opacity: 0.1,
             side: THREE.BackSide,
             blending: THREE.AdditiveBlending
         });
@@ -640,6 +813,11 @@
         nebula2.material.color.setHex(0x06b6d4);
         nebula2.position.set(-200, -100, 200);
         scene.add(nebula2);
+
+        const nebula3 = new THREE.Mesh(nebulaGeo.clone(), nebulaMat.clone());
+        nebula3.material.color.setHex(0xec4899);
+        nebula3.position.set(0, 150, 100);
+        scene.add(nebula3);
 
         // --- INTERACTION ---
         let isDragging = false;
@@ -708,7 +886,7 @@
             if (state === 'UNLOCKED') e.preventDefault();
         });
 
-        // --- ENHANCED AUDIO ---
+        // --- ENHANCED AUDIO WITH SHOOTING STARS & SPACECRAFT ---
         let audioContext;
         let masterGain;
         let oscillators = [];
@@ -733,6 +911,7 @@
                 masterGain.gain.setValueAtTime(0, audioContext.currentTime);
                 masterGain.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 2);
 
+                // Base ambient frequencies
                 const frequencies = [55, 73, 110, 147, 220];
 
                 frequencies.forEach((freq, index) => {
@@ -758,6 +937,7 @@
                     lfo.start(audioContext.currentTime);
                 });
 
+                // White noise
                 const bufferSize = 4096;
                 noiseNode = audioContext.createScriptProcessor(bufferSize, 1, 1);
                 noiseNode.onaudioprocess = (e) => {
@@ -774,8 +954,57 @@
                 noiseNode.connect(noiseFilter);
                 noiseFilter.connect(masterGain);
 
+                // Shooting star sound effect (periodic high-pitched sweep)
+                setInterval(() => {
+                    if (!isMuted && audioContext) {
+                        const shootingStar = audioContext.createOscillator();
+                        const shootingGain = audioContext.createGain();
+
+                        shootingStar.type = 'sine';
+                        shootingStar.frequency.setValueAtTime(1200, audioContext.currentTime);
+                        shootingStar.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.5);
+
+                        shootingGain.gain.setValueAtTime(0, audioContext.currentTime);
+                        shootingGain.gain.linearRampToValueAtTime(0.03, audioContext.currentTime + 0.05);
+                        shootingGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+
+                        shootingStar.connect(shootingGain);
+                        shootingGain.connect(masterGain);
+                        shootingStar.start(audioContext.currentTime);
+                        shootingStar.stop(audioContext.currentTime + 0.5);
+                    }
+                }, 8000 + Math.random() * 4000); // Random interval between 8-12 seconds
+
+                // Spacecraft whoosh sound (periodic)
+                setInterval(() => {
+                    if (!isMuted && audioContext) {
+                        const spacecraft = audioContext.createOscillator();
+                        const spacecraftGain = audioContext.createGain();
+                        const spacecraftFilter = audioContext.createBiquadFilter();
+
+                        spacecraft.type = 'sawtooth';
+                        spacecraft.frequency.setValueAtTime(80, audioContext.currentTime);
+                        spacecraft.frequency.linearRampToValueAtTime(120, audioContext.currentTime + 1.5);
+
+                        spacecraftFilter.type = 'lowpass';
+                        spacecraftFilter.frequency.setValueAtTime(400, audioContext.currentTime);
+                        spacecraftFilter.frequency.linearRampToValueAtTime(800, audioContext.currentTime + 1.5);
+
+                        spacecraftGain.gain.setValueAtTime(0, audioContext.currentTime);
+                        spacecraftGain.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 0.3);
+                        spacecraftGain.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 1.2);
+                        spacecraftGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1.5);
+
+                        spacecraft.connect(spacecraftFilter);
+                        spacecraftFilter.connect(spacecraftGain);
+                        spacecraftGain.connect(masterGain);
+                        spacecraft.start(audioContext.currentTime);
+                        spacecraft.stop(audioContext.currentTime + 1.5);
+                    }
+                }, 15000 + Math.random() * 10000); // Random interval between 15-25 seconds
+
                 isAudioInitialized = true;
-                console.log('Audio initialized successfully');
+                console.log('Audio initialized with space effects');
             } catch (error) {
                 console.error('Audio initialization failed:', error);
             }
@@ -807,13 +1036,12 @@
             }
         };
 
-        // n8n Button
+        // Buttons
         document.getElementById('n8n-btn').addEventListener('click', () => {
             startAudio();
             window.open('https://n8n.fares-khiary.com', '_blank');
         });
 
-        // Preview Universe Button
         document.getElementById('start-btn').addEventListener('click', () => {
             state = 'UNLOCKED';
             document.getElementById('ui-layer').classList.add('fade-out');
@@ -823,7 +1051,6 @@
             startAudio();
         });
 
-        // Back Button
         document.getElementById('back-btn').addEventListener('click', () => {
             state = 'MENU';
             document.getElementById('ui-layer').classList.remove('fade-out');
@@ -835,13 +1062,11 @@
             solarSystem.rotation.set(0, 0, 0);
         });
 
-        // Initialize audio on ANY user interaction
         const events = ['click', 'touchstart', 'keydown'];
         events.forEach(event => {
             document.addEventListener(event, startAudio, { once: true });
         });
 
-        // Resize
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -856,28 +1081,31 @@
             const delta = clock.getDelta();
             const time = clock.getElapsedTime();
 
+            // Rotate Planets
             planets.forEach(p => {
                 p.angle += p.speed * delta;
                 p.mesh.position.x = Math.cos(p.angle) * p.dist;
                 p.mesh.position.z = Math.sin(p.angle) * p.dist;
-                p.mesh.rotation.y += delta * 0.5;
+                p.mesh.rotation.y += delta * 0.3;
             });
 
             asteroids.rotation.y += 0.015 * delta;
 
-            const pulse = 1 + Math.sin(time * 2) * 0.06;
+            const pulse = 1 + Math.sin(time * 2) * 0.07;
             sun.scale.setScalar(pulse);
 
-            stars.rotation.y += 0.00008;
-            stars.rotation.x += 0.00003;
+            stars.rotation.y += 0.0001;
+            stars.rotation.x += 0.00004;
 
-            const twinkle = 0.88 + Math.sin(time * 0.7) * 0.12;
+            const twinkle = 0.85 + Math.sin(time * 0.7) * 0.15;
             stars.material.opacity = twinkle;
 
-            nebula1.rotation.y += 0.0001;
-            nebula1.rotation.z += 0.00005;
-            nebula2.rotation.y -= 0.00008;
-            nebula2.rotation.z -= 0.00006;
+            nebula1.rotation.y += 0.00012;
+            nebula1.rotation.z += 0.00006;
+            nebula2.rotation.y -= 0.0001;
+            nebula2.rotation.z -= 0.00007;
+            nebula3.rotation.y += 0.00008;
+            nebula3.rotation.z -= 0.00005;
 
             if (state === 'MENU') {
                 camera.position.x = Math.sin(time * 0.15) * 25;
