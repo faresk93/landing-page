@@ -27,7 +27,6 @@ jobs:
           fi
 
       - name: Merge branch into main
-        if: env.branch_exists == 'true'
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
