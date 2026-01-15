@@ -45,13 +45,13 @@
 
         /* Compact Construction Banner */
         .construction-banner {
-            background: linear-gradient(135deg, rgba(255, 165, 0, 0.12) 0%, rgba(255, 100, 0, 0.12) 100%);
-            border: 1px solid rgba(255, 165, 0, 0.4);
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(255, 100, 0, 0.1) 100%);
+            border: 1px solid rgba(255, 165, 0, 0.3);
             animation: banner-glow 2s ease-in-out infinite alternate;
         }
         @keyframes banner-glow {
-            0% { box-shadow: 0 0 8px rgba(255, 165, 0, 0.3); }
-            100% { box-shadow: 0 0 15px rgba(255, 165, 0, 0.5); }
+            0% { box-shadow: 0 0 5px rgba(255, 165, 0, 0.2); }
+            100% { box-shadow: 0 0 12px rgba(255, 165, 0, 0.4); }
         }
 
         /* Construction Icon Animations */
@@ -61,7 +61,7 @@
         }
         @keyframes icon-bounce {
             0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-5px) scale(1.05); }
+            50% { transform: translateY(-3px) scale(1.03); }
         }
 
         /* Rotating Gear */
@@ -74,21 +74,12 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Blinking Warning Light */
-        .blink-warning {
-            animation: warning-blink 1s ease-in-out infinite;
-        }
-        @keyframes warning-blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
         /* Greeting Animation */
         .greeting-word {
             opacity: 0;
             animation: greeting-fade 8s ease-in-out infinite;
             position: absolute;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
             background: linear-gradient(45deg, #00f5ff, #a855f7, #ec4899, #fbbf24);
             background-size: 300% 300%;
@@ -96,6 +87,7 @@
             background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: greeting-fade 8s ease-in-out infinite, gradient-shift 3s ease infinite;
+            filter: drop-shadow(0 0 8px rgba(0, 245, 255, 0.5));
         }
         .greeting-word:nth-child(1) { animation-delay: 0s; }
         .greeting-word:nth-child(2) { animation-delay: 2s; }
@@ -120,34 +112,93 @@
             position: relative;
             overflow: hidden;
         }
-        .social-btn:hover {
-            transform: translateY(-3px) scale(1.05);
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
-        .social-btn.linkedin:hover { box-shadow: 0 0 25px rgba(10, 102, 194, 0.7); }
-        .social-btn.instagram:hover { box-shadow: 0 0 25px rgba(225, 48, 108, 0.7); }
-        .social-btn.github:hover { box-shadow: 0 0 25px rgba(88, 166, 255, 0.7); }
+        .social-btn:hover::before { opacity: 1; }
+        .social-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+        .social-btn.linkedin:hover { box-shadow: 0 0 20px rgba(10, 102, 194, 0.8), inset 0 0 15px rgba(10, 102, 194, 0.3); }
+        .social-btn.instagram:hover { box-shadow: 0 0 20px rgba(225, 48, 108, 0.8), inset 0 0 15px rgba(225, 48, 108, 0.3); }
+        .social-btn.github:hover { box-shadow: 0 0 20px rgba(88, 166, 255, 0.8), inset 0 0 15px rgba(88, 166, 255, 0.3); }
 
-        /* Info Cards */
+        /* Info Cards - Enhanced */
         .info-card {
             transition: all 0.3s ease;
-            background: linear-gradient(135deg, rgba(0, 255, 255, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        .info-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        .info-card:hover::before {
+            transform: translateX(100%);
         }
         .info-card:hover {
             transform: translateY(-2px);
-            border-color: rgba(0, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            border-color: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), inset 0 0 15px rgba(0, 255, 255, 0.1);
         }
 
-        /* Subdomain Button Animations */
+        /* Subdomain Button */
         .subdomain-btn {
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
         }
+        .subdomain-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+        .subdomain-btn:hover::after {
+            transform: translateX(100%);
+        }
         .subdomain-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(34, 211, 238, 0.6);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.7), inset 0 0 20px rgba(34, 211, 238, 0.2);
+        }
+
+        /* Preview Button - Enhanced */
+        .preview-btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(236, 72, 153, 0.2));
+            border: 2px solid rgba(249, 115, 22, 0.5);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .preview-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%) skewX(-15deg);
+            transition: transform 0.6s;
+        }
+        .preview-btn:hover::before {
+            transform: translateX(100%) skewX(-15deg);
+        }
+        .preview-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(249, 115, 22, 0.8), inset 0 0 25px rgba(249, 115, 22, 0.3);
+            border-color: rgba(249, 115, 22, 0.8);
         }
 
         /* Mute Button */
@@ -169,42 +220,22 @@
             transform: translateX(-5px);
         }
 
-        /* Particle Background Effect */
-        @keyframes float-particle {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            33% { transform: translateY(-20px) translateX(10px); }
-            66% { transform: translateY(-10px) translateX(-10px); }
-        }
-
-        .floating-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: radial-gradient(circle, rgba(0, 255, 255, 0.8), transparent);
-            border-radius: 50%;
-            animation: float-particle 6s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        /* Compact layout for mobile */
+        /* Compact layout */
         @media (max-width: 768px) {
-            .glitch { font-size: 2.5rem !important; }
-            .greeting-word { font-size: 1.2rem !important; }
-            .info-card { padding: 0.5rem !important; font-size: 0.75rem !important; }
-            .social-btn { padding: 0.5rem !important; }
+            .glitch { font-size: 2rem !important; }
+            .greeting-word { font-size: 1rem !important; }
         }
 
-        /* Enhanced star twinkle */
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+        /* Pulse glow effect */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(0, 255, 255, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.6); }
         }
 
-        /* Nebula effect */
-        @keyframes nebula-drift {
-            0% { transform: translate(0, 0) scale(1); opacity: 0.3; }
-            50% { transform: translate(20px, -20px) scale(1.1); opacity: 0.5; }
-            100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+        /* Shimmer effect */
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
         }
     </style>
 </head>
@@ -212,29 +243,29 @@
 
     <div id="canvas-container" class="absolute inset-0 z-0 bg-black cursor-move"></div>
 
-    <main id="ui-layer" class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-4 pointer-events-none">
+    <main id="ui-layer" class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-3 py-2 pointer-events-none">
 
-        <div class="pointer-events-auto bg-black/70 backdrop-blur-xl border border-white/10 p-4 md:p-6 rounded-sm max-w-6xl w-full shadow-2xl relative overflow-hidden">
+        <div class="pointer-events-auto bg-black/70 backdrop-blur-xl border border-white/10 p-3 md:p-4 rounded-sm max-w-5xl w-full shadow-2xl relative overflow-hidden">
 
             <div class="scanline"></div>
 
             <!-- Compact Construction Banner -->
-            <div class="construction-banner rounded px-3 py-1.5 mb-3 backdrop-blur-sm flex items-center justify-center gap-2">
-                <span class="construction-icon text-sm">🚧</span>
-                <span class="gear-spin text-sm">⚙️</span>
-                <p class="font-['Rajdhani'] text-orange-300 text-xs font-bold tracking-wider uppercase">
+            <div class="construction-banner rounded px-2 py-1 mb-2 backdrop-blur-sm flex items-center justify-center gap-1.5">
+                <span class="construction-icon text-xs">🚧</span>
+                <span class="gear-spin text-xs">⚙️</span>
+                <p class="font-['Rajdhani'] text-orange-300 text-[10px] font-bold tracking-wider uppercase">
                     Work in Progress
                 </p>
-                <span class="construction-icon text-sm">🔨</span>
+                <span class="construction-icon text-xs">🔨</span>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+            <div class="grid md:grid-cols-2 gap-3 md:gap-4">
 
                 <!-- Left Column: Main Info -->
-                <div class="space-y-3 md:space-y-4">
+                <div class="space-y-2">
 
                     <!-- Name with Greetings -->
-                    <div class="relative h-24 md:h-28 flex items-center justify-center mb-2">
+                    <div class="relative h-16 md:h-20 flex items-center justify-center mb-1">
                         <div class="absolute inset-0 flex items-center justify-center">
                             <span class="greeting-word">Bonjour</span>
                             <span class="greeting-word">مرحبا</span>
@@ -243,123 +274,109 @@
                         </div>
                     </div>
 
-                    <h1 class="glitch text-3xl md:text-5xl font-black tracking-tighter font-['Orbitron'] text-center" data-text="FARES KHIARY">
+                    <h1 class="glitch text-2xl md:text-4xl font-black tracking-tighter font-['Orbitron'] text-center" data-text="FARES KHIARY">
                         FARES KHIARY
                     </h1>
 
-                    <!-- Personal Info Grid -->
-                    <div class="grid grid-cols-2 gap-2 mt-3">
-                        <div class="info-card rounded-lg p-2 text-center">
-                            <div class="text-cyan-400 mb-1">
-                                <i class="fas fa-birthday-cake text-lg"></i>
+                    <!-- Personal Info Grid - Compact -->
+                    <div class="grid grid-cols-2 gap-1.5 mt-2">
+                        <div class="info-card rounded p-1.5 text-center">
+                            <div class="text-cyan-400 mb-0.5">
+                                <i class="fas fa-birthday-cake text-sm"></i>
                             </div>
-                            <div class="text-xs text-gray-400">Age</div>
-                            <div class="text-sm font-bold">32</div>
+                            <div class="text-[9px] text-gray-400">Age</div>
+                            <div class="text-xs font-bold">32</div>
                         </div>
 
-                        <div class="info-card rounded-lg p-2 text-center">
-                            <div class="text-cyan-400 mb-1">
-                                <i class="fas fa-map-marker-alt text-lg"></i>
+                        <div class="info-card rounded p-1.5 text-center">
+                            <div class="text-cyan-400 mb-0.5">
+                                <i class="fas fa-map-marker-alt text-sm"></i>
                             </div>
-                            <div class="text-xs text-gray-400">Location</div>
-                            <div class="text-sm font-bold">Paris 🇫🇷</div>
+                            <div class="text-[9px] text-gray-400">Location</div>
+                            <div class="text-xs font-bold">Paris 🇫🇷</div>
                         </div>
 
-                        <div class="info-card rounded-lg p-2 text-center">
-                            <div class="text-cyan-400 mb-1">
-                                <i class="fas fa-home text-lg"></i>
+                        <div class="info-card rounded p-1.5 text-center">
+                            <div class="text-cyan-400 mb-0.5">
+                                <i class="fas fa-home text-sm"></i>
                             </div>
-                            <div class="text-xs text-gray-400">Born in</div>
-                            <div class="text-sm font-bold">🇴🇲 Oman</div>
+                            <div class="text-[9px] text-gray-400">Born in</div>
+                            <div class="text-xs font-bold">🇴🇲 Oman</div>
                         </div>
 
-                        <div class="info-card rounded-lg p-2 text-center">
-                            <div class="text-cyan-400 mb-1">
-                                <i class="fas fa-flag text-lg"></i>
+                        <div class="info-card rounded p-1.5 text-center">
+                            <div class="text-cyan-400 mb-0.5">
+                                <i class="fas fa-flag text-sm"></i>
                             </div>
-                            <div class="text-xs text-gray-400">Citizen</div>
-                            <div class="text-sm font-bold">🇹🇳 Tunisia</div>
+                            <div class="text-[9px] text-gray-400">Citizen</div>
+                            <div class="text-xs font-bold">🇹🇳 Tunisia</div>
                         </div>
                     </div>
 
-                    <!-- Email -->
-                    <div class="info-card rounded-lg p-2 text-center">
-                        <div class="text-cyan-400 mb-1">
-                            <i class="fas fa-envelope text-lg"></i>
+                    <!-- Email - Compact -->
+                    <div class="info-card rounded p-1.5 text-center">
+                        <div class="text-cyan-400 mb-0.5">
+                            <i class="fas fa-envelope text-sm"></i>
                         </div>
-                        <a href="mailto:contact@fares-khiary.com" class="text-sm font-['Rajdhani'] hover:text-cyan-300 transition-colors">
+                        <a href="mailto:contact@fares-khiary.com" class="text-[11px] font-['Rajdhani'] hover:text-cyan-300 transition-colors">
                             contact@fares-khiary.com
                         </a>
                     </div>
 
-                    <!-- Social Media Section -->
-                    <div class="border-t border-white/10 pt-3">
-                        <h2 class="font-['Orbitron'] text-cyan-300 text-sm font-bold tracking-wider uppercase mb-2 text-center">
-                            <i class="fas fa-share-nodes mr-2"></i>Connect
+                    <!-- Social Media Section - Compact -->
+                    <div class="border-t border-white/10 pt-2">
+                        <h2 class="font-['Orbitron'] text-cyan-300 text-xs font-bold tracking-wider uppercase mb-1.5 text-center">
+                            <i class="fas fa-share-nodes mr-1 text-[10px]"></i>Connect
                         </h2>
-                        <div class="flex gap-2 justify-center">
+                        <div class="flex gap-1.5 justify-center">
                             <a href="https://www.linkedin.com/in/fares-khiary" target="_blank" rel="noopener noreferrer"
-                               class="social-btn linkedin flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-900/40 to-blue-700/40 border border-blue-500/50 hover:border-blue-300 rounded-lg cursor-pointer group">
-                                <i class="fab fa-linkedin text-xl group-hover:scale-110 transition-transform"></i>
-                                <span class="font-['Rajdhani'] text-xs font-bold hidden sm:inline">LinkedIn</span>
+                               class="social-btn linkedin flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 bg-gradient-to-r from-blue-900/40 to-blue-700/40 border border-blue-500/50 hover:border-blue-300 rounded cursor-pointer group">
+                                <i class="fab fa-linkedin text-base group-hover:scale-110 transition-transform"></i>
+                                <span class="font-['Rajdhani'] text-[10px] font-bold hidden sm:inline">LinkedIn</span>
                             </a>
 
                             <a href="https://www.instagram.com/khiary.fares" target="_blank" rel="noopener noreferrer"
-                               class="social-btn instagram flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-pink-900/40 to-purple-900/40 border border-pink-500/50 hover:border-pink-300 rounded-lg cursor-pointer group">
-                                <i class="fab fa-instagram text-xl group-hover:scale-110 transition-transform"></i>
-                                <span class="font-['Rajdhani'] text-xs font-bold hidden sm:inline">Instagram</span>
+                               class="social-btn instagram flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 bg-gradient-to-r from-pink-900/40 to-purple-900/40 border border-pink-500/50 hover:border-pink-300 rounded cursor-pointer group">
+                                <i class="fab fa-instagram text-base group-hover:scale-110 transition-transform"></i>
+                                <span class="font-['Rajdhani'] text-[10px] font-bold hidden sm:inline">Instagram</span>
                             </a>
 
                             <a href="https://github.com/faresk93" target="_blank" rel="noopener noreferrer"
-                               class="social-btn github flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-gray-900/40 to-gray-700/40 border border-gray-500/50 hover:border-gray-300 rounded-lg cursor-pointer group">
-                                <i class="fab fa-github text-xl group-hover:scale-110 transition-transform"></i>
-                                <span class="font-['Rajdhani'] text-xs font-bold hidden sm:inline">GitHub</span>
+                               class="social-btn github flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 bg-gradient-to-r from-gray-900/40 to-gray-700/40 border border-gray-500/50 hover:border-gray-300 rounded cursor-pointer group">
+                                <i class="fab fa-github text-base group-hover:scale-110 transition-transform"></i>
+                                <span class="font-['Rajdhani'] text-[10px] font-bold hidden sm:inline">GitHub</span>
                             </a>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right Column: Subdomains & Preview -->
-                <div class="space-y-3 md:space-y-4 flex flex-col">
+                <div class="space-y-2 flex flex-col">
 
                     <div class="text-center">
-                        <p class="font-['Rajdhani'] text-gray-300 text-base md:text-lg font-medium leading-relaxed">
+                        <p class="font-['Rajdhani'] text-gray-300 text-sm md:text-base font-medium leading-relaxed">
                             <span class="text-cyan-400">🌟</span> Explore My Universe <span class="text-cyan-400">🌟</span>
                         </p>
                     </div>
 
-                    <!-- Subdomain Buttons -->
-                    <div class="flex flex-col gap-2">
-                        <button id="n8n-btn" class="subdomain-btn flex items-center justify-center gap-3 px-4 py-3 bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/50 hover:border-cyan-300 rounded-lg font-['Orbitron'] text-sm font-bold tracking-wide cursor-pointer group">
-                            <svg class="w-7 h-7" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="20" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
-                                <rect x="120" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
-                                <rect x="20" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
-                                <rect x="120" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
-                                <path d="M80 50 L120 50 M50 80 L50 120 M150 80 L150 120 M80 150 L120 150" stroke="#EA4B71" stroke-width="8" stroke-linecap="round"/>
-                            </svg>
-                            <span class="group-hover:text-cyan-300 transition-colors">n8n Automation</span>
-                        </button>
+                    <!-- n8n Button Only -->
+                    <button id="n8n-btn" class="subdomain-btn flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/50 hover:border-cyan-300 rounded font-['Orbitron'] text-xs font-bold tracking-wide cursor-pointer group">
+                        <svg class="w-6 h-6" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
+                            <rect x="120" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
+                            <rect x="20" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
+                            <rect x="120" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
+                            <path d="M80 50 L120 50 M50 80 L50 120 M150 80 L150 120 M80 150 L120 150" stroke="#EA4B71" stroke-width="8" stroke-linecap="round"/>
+                        </svg>
+                        <span class="group-hover:text-cyan-300 transition-colors">n8n Automation</span>
+                    </button>
 
-                        <button id="chicha-btn" class="subdomain-btn flex items-center justify-center gap-3 px-4 py-3 bg-gradient-to-r from-purple-900/40 to-pink-900/40 border border-purple-500/50 hover:border-purple-300 rounded-lg font-['Orbitron'] text-sm font-bold tracking-wide cursor-pointer group">
-                            <svg class="w-7 h-7" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <ellipse cx="100" cy="170" rx="40" ry="15" fill="#9333EA"/>
-                                <rect x="85" y="120" width="30" height="50" rx="5" fill="#A855F7"/>
-                                <rect x="95" y="60" width="10" height="60" fill="#C084FC"/>
-                                <ellipse cx="100" cy="50" rx="25" ry="12" fill="#E9D5FF"/>
-                                <path d="M 75 50 Q 100 70, 125 50" fill="#DDD6FE"/>
-                                <path d="M 70 140 Q 40 130, 30 120" stroke="#A855F7" stroke-width="6" fill="none" stroke-linecap="round"/>
-                                <circle cx="30" cy="120" r="8" fill="#C084FC"/>
-                            </svg>
-                            <span class="group-hover:text-purple-300 transition-colors">Chicha Lounge</span>
-                        </button>
-                    </div>
-
+                    <!-- Preview Universe Button -->
                     <button id="start-btn"
-                       class="mt-auto relative inline-flex items-center justify-center px-6 py-3 font-bold text-white transition-all duration-300 bg-gradient-to-r from-orange-900/50 to-pink-900/50 border-2 border-orange-500/50 hover:bg-orange-500 hover:border-orange-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] cursor-pointer group uppercase font-['Orbitron'] text-sm tracking-widest rounded-lg">
-                        <span class="mr-2">🔮</span>
-                        <span>Preview Universe</span>
-                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                       class="preview-btn mt-auto relative inline-flex items-center justify-center px-4 py-2.5 font-bold text-white cursor-pointer group uppercase font-['Orbitron'] text-xs tracking-widest rounded">
+                        <span class="relative z-10 mr-1.5">🔮</span>
+                        <span class="relative z-10">Preview Universe</span>
+                        <svg class="relative z-10 w-3.5 h-3.5 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                     </button>
 
                 </div>
@@ -437,7 +454,6 @@
                 grd.addColorStop(1, "rgba(0,0,0,0.6)");
                 ctx.fillStyle = grd; ctx.fillRect(0,0,512,512);
 
-                // Enhanced surface details
                 for(let i=0; i<120; i++) {
                     ctx.fillStyle = `rgba(${100+Math.random()*155}, ${100+Math.random()*155}, ${100+Math.random()*155}, 0.2)`;
                     ctx.beginPath();
@@ -504,7 +520,6 @@
             const angle = Math.random() * Math.PI * 2;
             mesh.position.set(Math.cos(angle) * dist, 0, Math.sin(angle) * dist);
 
-            // Enhanced orbit rings
             const ringGeo = new THREE.RingGeometry(dist-0.3, dist+0.3, 128);
             const ringMat = new THREE.MeshBasicMaterial({
                 color: 0x00ffff,
@@ -520,17 +535,16 @@
             return { mesh, dist, speed, angle };
         };
 
-        // Enhanced planets with better colors
-        planets.push(createPlanet(1.5, 25, 0.8, 0xa89968, 0x8c7853));  // Mercury
-        planets.push(createPlanet(2.5, 35, 0.6, 0xffd700, 0xffc649));  // Venus
-        planets.push(createPlanet(2.8, 45, 0.5, 0x4169e1, 0x1e90ff));  // Earth
-        planets.push(createPlanet(2, 55, 0.4, 0xff6347, 0xdc143c));    // Mars
-        planets.push(createPlanet(6, 75, 0.2, 0xdaa520, 0xb8860b));    // Jupiter
-        planets.push(createPlanet(5, 95, 0.15, 0xf4a460, 0xdeb887));   // Saturn
-        planets.push(createPlanet(3.5, 115, 0.1, 0x4fd0e7, 0x00ced1)); // Uranus
-        planets.push(createPlanet(3.5, 130, 0.08, 0x4169e1, 0x1e3a8a)); // Neptune
+        planets.push(createPlanet(1.5, 25, 0.8, 0xa89968, 0x8c7853));
+        planets.push(createPlanet(2.5, 35, 0.6, 0xffd700, 0xffc649));
+        planets.push(createPlanet(2.8, 45, 0.5, 0x4169e1, 0x1e90ff));
+        planets.push(createPlanet(2, 55, 0.4, 0xff6347, 0xdc143c));
+        planets.push(createPlanet(6, 75, 0.2, 0xdaa520, 0xb8860b));
+        planets.push(createPlanet(5, 95, 0.15, 0xf4a460, 0xdeb887));
+        planets.push(createPlanet(3.5, 115, 0.1, 0x4fd0e7, 0x00ced1));
+        planets.push(createPlanet(3.5, 130, 0.08, 0x4169e1, 0x1e3a8a));
 
-        // Enhanced Asteroid Belt
+        // Asteroid Belt
         const asteroidGeo = new THREE.TetrahedronGeometry(0.5, 0);
         const asteroidMat = new THREE.MeshStandardMaterial({
             color: 0x999999,
@@ -555,7 +569,7 @@
         }
         solarSystem.add(asteroids);
 
-        // STUNNING ENHANCED STARFIELD with varied colors and sizes
+        // Enhanced Starfield
         const starsGeo = new THREE.BufferGeometry();
         const starsPos = [];
         const starsColors = [];
@@ -570,20 +584,15 @@
 
             const colorChoice = Math.random();
             if (colorChoice > 0.8) {
-                // Blue-white hot stars
                 starsColors.push(0.6 + Math.random()*0.4, 0.7 + Math.random()*0.3, 1.0);
             } else if (colorChoice > 0.5) {
-                // Pure white stars
                 starsColors.push(1.0, 1.0, 1.0);
             } else if (colorChoice > 0.2) {
-                // Yellow-white stars
                 starsColors.push(1.0, 0.9 + Math.random()*0.1, 0.7 + Math.random()*0.2);
             } else {
-                // Red giants
                 starsColors.push(1.0, 0.6 + Math.random()*0.2, 0.5 + Math.random()*0.2);
             }
 
-            // More varied sizes
             starsSizes.push(Math.random() * 3 + 0.3);
         }
 
@@ -603,7 +612,7 @@
         );
         scene.add(stars);
 
-        // Add Nebula Clouds
+        // Nebula Clouds
         const nebulaGeo = new THREE.SphereGeometry(300, 32, 32);
         const nebulaMat = new THREE.MeshBasicMaterial({
             color: 0x9333ea,
@@ -621,7 +630,7 @@
         nebula2.position.set(-200, -100, 200);
         scene.add(nebula2);
 
-        // --- INTERACTION LOGIC ---
+        // --- INTERACTION ---
         let isDragging = false;
         let isPanning = false;
         let previousMousePosition = { x: 0, y: 0 };
@@ -674,7 +683,6 @@
             }
         };
 
-        // Event Listeners
         document.addEventListener('mousedown', e => handleStart(e.clientX, e.clientY, e.button, e.shiftKey));
         document.addEventListener('touchstart', e => handleStart(e.touches[0].clientX, e.touches[0].clientY), {passive: false});
         document.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
@@ -689,10 +697,11 @@
             if (state === 'UNLOCKED') e.preventDefault();
         });
 
-        // --- ENHANCED AUDIO ---
+        // --- ENHANCED AUDIO WITH AUTOPLAY FIX ---
         let audioContext;
         let masterGain;
         let oscillators = [];
+        let noiseNode = null;
         let isMuted = false;
         let isAudioInitialized = false;
 
@@ -701,54 +710,66 @@
         const initAudio = () => {
             if (isAudioInitialized) return;
 
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            masterGain = audioContext.createGain();
-            masterGain.connect(audioContext.destination);
-            masterGain.gain.setValueAtTime(0, audioContext.currentTime);
-            masterGain.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 2);
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-            const frequencies = [55, 73, 110, 147, 220];
-
-            frequencies.forEach((freq, index) => {
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-                gain.gain.value = 0.08 / (index + 1);
-
-                osc.connect(gain);
-                gain.connect(masterGain);
-                osc.start();
-                oscillators.push({ osc, gain });
-
-                const lfo = audioContext.createOscillator();
-                lfo.frequency.value = 0.08 + (index * 0.04);
-                const lfoGain = audioContext.createGain();
-                lfoGain.gain.value = 1.5 + (index * 0.3);
-
-                lfo.connect(lfoGain);
-                lfoGain.connect(osc.frequency);
-                lfo.start();
-            });
-
-            const bufferSize = 4096;
-            const whiteNoise = audioContext.createScriptProcessor(bufferSize, 1, 1);
-            whiteNoise.onaudioprocess = (e) => {
-                const output = e.outputBuffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    output[i] = (Math.random() * 2 - 1) * 0.015;
+                // Resume if suspended
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
                 }
-            };
 
-            const noiseFilter = audioContext.createBiquadFilter();
-            noiseFilter.type = 'lowpass';
-            noiseFilter.frequency.value = 350;
+                masterGain = audioContext.createGain();
+                masterGain.connect(audioContext.destination);
+                masterGain.gain.setValueAtTime(0, audioContext.currentTime);
+                masterGain.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 2);
 
-            whiteNoise.connect(noiseFilter);
-            noiseFilter.connect(masterGain);
+                const frequencies = [55, 73, 110, 147, 220];
 
-            isAudioInitialized = true;
+                frequencies.forEach((freq, index) => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.value = 0.08 / (index + 1);
+
+                    osc.connect(gain);
+                    gain.connect(masterGain);
+                    osc.start(audioContext.currentTime);
+                    oscillators.push({ osc, gain });
+
+                    const lfo = audioContext.createOscillator();
+                    lfo.frequency.value = 0.08 + (index * 0.04);
+                    const lfoGain = audioContext.createGain();
+                    lfoGain.gain.value = 1.5 + (index * 0.3);
+
+                    lfo.connect(lfoGain);
+                    lfoGain.connect(osc.frequency);
+                    lfo.start(audioContext.currentTime);
+                });
+
+                // White noise using AudioWorklet fallback
+                const bufferSize = 4096;
+                noiseNode = audioContext.createScriptProcessor(bufferSize, 1, 1);
+                noiseNode.onaudioprocess = (e) => {
+                    const output = e.outputBuffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        output[i] = (Math.random() * 2 - 1) * 0.015;
+                    }
+                };
+
+                const noiseFilter = audioContext.createBiquadFilter();
+                noiseFilter.type = 'lowpass';
+                noiseFilter.frequency.value = 350;
+
+                noiseNode.connect(noiseFilter);
+                noiseFilter.connect(masterGain);
+
+                isAudioInitialized = true;
+                console.log('Audio initialized successfully');
+            } catch (error) {
+                console.error('Audio initialization failed:', error);
+            }
         };
 
         muteBtn.addEventListener('click', () => {
@@ -756,8 +777,12 @@
                 initAudio();
             }
 
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
             isMuted = !isMuted;
-            if (audioContext) {
+            if (audioContext && masterGain) {
                 masterGain.gain.setValueAtTime(masterGain.gain.value, audioContext.currentTime);
                 masterGain.gain.linearRampToValueAtTime(isMuted ? 0 : 0.15, audioContext.currentTime + 0.5);
             }
@@ -768,24 +793,15 @@
             if (!isAudioInitialized && !isMuted) {
                 initAudio();
             }
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
         };
 
-        // Subdomain Buttons
-        const handleSubdomainClick = (url, buttonId) => {
-            const btn = document.getElementById(buttonId);
-            btn.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                window.open(url, '_blank');
-                btn.style.transform = '';
-            }, 200);
-        };
-
+        // n8n Button
         document.getElementById('n8n-btn').addEventListener('click', () => {
-            handleSubdomainClick('https://n8n.fares-khiary.com', 'n8n-btn');
-        });
-
-        document.getElementById('chicha-btn').addEventListener('click', () => {
-            handleSubdomainClick('https://chicha.fares-khiary.com', 'chicha-btn');
+            startAudio();
+            window.open('https://n8n.fares-khiary.com', '_blank');
         });
 
         // Preview Universe Button
@@ -810,7 +826,11 @@
             solarSystem.rotation.set(0, 0, 0);
         });
 
-        document.addEventListener('click', startAudio, { once: true });
+        // Initialize audio on ANY user interaction
+        const events = ['click', 'touchstart', 'keydown'];
+        events.forEach(event => {
+            document.addEventListener(event, startAudio, { once: true });
+        });
 
         // Resize
         window.addEventListener('resize', () => {
@@ -827,7 +847,6 @@
             const delta = clock.getDelta();
             const time = clock.getElapsedTime();
 
-            // Rotate Planets
             planets.forEach(p => {
                 p.angle += p.speed * delta;
                 p.mesh.position.x = Math.cos(p.angle) * p.dist;
@@ -835,28 +854,22 @@
                 p.mesh.rotation.y += delta * 0.5;
             });
 
-            // Rotate Asteroids
             asteroids.rotation.y += 0.015 * delta;
 
-            // Pulse Sun
             const pulse = 1 + Math.sin(time * 2) * 0.06;
             sun.scale.setScalar(pulse);
 
-            // Enhanced star effects
             stars.rotation.y += 0.00008;
             stars.rotation.x += 0.00003;
 
-            // Twinkle effect
             const twinkle = 0.88 + Math.sin(time * 0.7) * 0.12;
             stars.material.opacity = twinkle;
 
-            // Nebula drift
             nebula1.rotation.y += 0.0001;
             nebula1.rotation.z += 0.00005;
             nebula2.rotation.y -= 0.00008;
             nebula2.rotation.z -= 0.00006;
 
-            // Camera
             if (state === 'MENU') {
                 camera.position.x = Math.sin(time * 0.15) * 25;
                 camera.position.y = 20 + Math.cos(time * 0.15) * 12;
