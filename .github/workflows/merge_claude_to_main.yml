@@ -11,12 +11,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history
 
       - name: Merge branch into main
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
+          git fetch origin claude/*:claude/*  # Fetch the claude branches
           git checkout main
           git pull origin main
-          git merge --no-ff ${{ github.ref }} -m "Automated merge of ${{ github.ref }} into main"
+          git merge --no-ff claude/${{ github.ref }} -m "Automated merge of ${{ github.ref }} into main"
           git push origin main
