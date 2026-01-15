@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🚧 Under Construction | Fares KHIARY</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚧</text></svg>">
+    <title>Fares KHIARY</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💻</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { margin: 0; overflow: hidden; background-color: #000; touch-action: none; }
-        
+
         /* UI Animations */
         .fade-out { opacity: 0; pointer-events: none; transform: scale(0.95); filter: blur(10px); }
         .ui-transition { transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-        
+
         /* Glitch Text */
         .glitch { position: relative; color: white; mix-blend-mode: lighten; }
         .glitch::before, .glitch::after {
@@ -42,19 +43,15 @@
         #interactive-hint { opacity: 0; transition: opacity 1s; }
         .show-hint { opacity: 1 !important; }
 
-        /* Under Construction Banner */
+        /* Compact Construction Banner */
         .construction-banner {
-            background: linear-gradient(135deg, rgba(255, 165, 0, 0.15) 0%, rgba(255, 100, 0, 0.15) 100%);
-            border: 2px solid rgba(255, 165, 0, 0.5);
-            animation: banner-glow 2s ease-in-out infinite alternate, banner-float 3s ease-in-out infinite;
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.12) 0%, rgba(255, 100, 0, 0.12) 100%);
+            border: 1px solid rgba(255, 165, 0, 0.4);
+            animation: banner-glow 2s ease-in-out infinite alternate;
         }
         @keyframes banner-glow {
-            0% { box-shadow: 0 0 10px rgba(255, 165, 0, 0.3), inset 0 0 20px rgba(255, 165, 0, 0.1); }
-            100% { box-shadow: 0 0 25px rgba(255, 165, 0, 0.6), inset 0 0 30px rgba(255, 165, 0, 0.2); }
-        }
-        @keyframes banner-float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
+            0% { box-shadow: 0 0 8px rgba(255, 165, 0, 0.3); }
+            100% { box-shadow: 0 0 15px rgba(255, 165, 0, 0.5); }
         }
 
         /* Construction Icon Animations */
@@ -62,13 +59,9 @@
             display: inline-block;
             animation: icon-bounce 1s ease-in-out infinite;
         }
-        .construction-icon:nth-child(2) { animation-delay: 0.1s; }
-        .construction-icon:nth-child(3) { animation-delay: 0.2s; }
-        .construction-icon:nth-child(4) { animation-delay: 0.3s; }
-
         @keyframes icon-bounce {
             0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-8px) scale(1.1); }
+            50% { transform: translateY(-5px) scale(1.05); }
         }
 
         /* Rotating Gear */
@@ -90,27 +83,60 @@
             50% { opacity: 0.4; }
         }
 
-        /* Progress Bar Animation */
-        .progress-bar {
-            background: linear-gradient(90deg,
-                rgba(255, 165, 0, 0) 0%,
-                rgba(255, 165, 0, 0.8) 50%,
-                rgba(255, 165, 0, 0) 100%
-            );
-            animation: progress-sweep 2s ease-in-out infinite;
+        /* Greeting Animation */
+        .greeting-word {
+            opacity: 0;
+            animation: greeting-fade 8s ease-in-out infinite;
+            position: absolute;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00f5ff, #a855f7, #ec4899, #fbbf24);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: greeting-fade 8s ease-in-out infinite, gradient-shift 3s ease infinite;
         }
-        @keyframes progress-sweep {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(200%); }
+        .greeting-word:nth-child(1) { animation-delay: 0s; }
+        .greeting-word:nth-child(2) { animation-delay: 2s; }
+        .greeting-word:nth-child(3) { animation-delay: 4s; }
+        .greeting-word:nth-child(4) { animation-delay: 6s; }
+
+        @keyframes greeting-fade {
+            0%, 100% { opacity: 0; transform: scale(0.8) rotate(-5deg); }
+            12.5%, 37.5% { opacity: 1; transform: scale(1) rotate(0deg); }
+            50% { opacity: 0; transform: scale(0.8) rotate(5deg); }
         }
 
-        /* Typing cursor */
-        .typing-cursor {
-            animation: cursor-blink 0.8s step-end infinite;
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        @keyframes cursor-blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+
+        /* Social Media Buttons */
+        .social-btn {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .social-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+        .social-btn.linkedin:hover { box-shadow: 0 0 25px rgba(10, 102, 194, 0.7); }
+        .social-btn.instagram:hover { box-shadow: 0 0 25px rgba(225, 48, 108, 0.7); }
+        .social-btn.github:hover { box-shadow: 0 0 25px rgba(88, 166, 255, 0.7); }
+
+        /* Info Cards */
+        .info-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .info-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
         }
 
         /* Subdomain Button Animations */
@@ -122,26 +148,6 @@
         .subdomain-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 0 30px rgba(34, 211, 238, 0.6);
-        }
-        .subdomain-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        .subdomain-btn.clicked::before {
-            width: 300%;
-            height: 300%;
-        }
-        @keyframes ripple-out {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
         }
 
         /* Mute Button */
@@ -163,9 +169,42 @@
             transform: translateX(-5px);
         }
 
-        /* Footer */
-        .footer {
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        /* Particle Background Effect */
+        @keyframes float-particle {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            33% { transform: translateY(-20px) translateX(10px); }
+            66% { transform: translateY(-10px) translateX(-10px); }
+        }
+
+        .floating-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.8), transparent);
+            border-radius: 50%;
+            animation: float-particle 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        /* Compact layout for mobile */
+        @media (max-width: 768px) {
+            .glitch { font-size: 2.5rem !important; }
+            .greeting-word { font-size: 1.2rem !important; }
+            .info-card { padding: 0.5rem !important; font-size: 0.75rem !important; }
+            .social-btn { padding: 0.5rem !important; }
+        }
+
+        /* Enhanced star twinkle */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Nebula effect */
+        @keyframes nebula-drift {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+            50% { transform: translate(20px, -20px) scale(1.1); opacity: 0.5; }
+            100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
         }
     </style>
 </head>
@@ -173,112 +212,164 @@
 
     <div id="canvas-container" class="absolute inset-0 z-0 bg-black cursor-move"></div>
 
-    <main id="ui-layer" class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-6 pointer-events-none">
-        
-        <div class="pointer-events-auto bg-black/60 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-sm max-w-2xl w-full text-center shadow-2xl relative overflow-hidden group">
-            
+    <main id="ui-layer" class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-4 pointer-events-none">
+
+        <div class="pointer-events-auto bg-black/70 backdrop-blur-xl border border-white/10 p-4 md:p-6 rounded-sm max-w-6xl w-full shadow-2xl relative overflow-hidden">
+
             <div class="scanline"></div>
-            
-            <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-                <span class="font-['Rajdhani'] text-orange-400 tracking-[0.2em] text-xs font-bold uppercase blink-warning">⚠️ Under Construction</span>
-                <div class="flex gap-1">
-                    <div class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></div>
-                    <div class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse delay-75"></div>
-                    <div class="w-2 h-2 rounded-full bg-orange-500 animate-pulse delay-150"></div>
-                </div>
+
+            <!-- Compact Construction Banner -->
+            <div class="construction-banner rounded px-3 py-1.5 mb-3 backdrop-blur-sm flex items-center justify-center gap-2">
+                <span class="construction-icon text-sm">🚧</span>
+                <span class="gear-spin text-sm">⚙️</span>
+                <p class="font-['Rajdhani'] text-orange-300 text-xs font-bold tracking-wider uppercase">
+                    Work in Progress
+                </p>
+                <span class="construction-icon text-sm">🔨</span>
             </div>
 
-            <!-- Under Construction Banner -->
-            <div class="construction-banner rounded-lg p-4 mb-6 backdrop-blur-sm relative overflow-hidden">
-                <div class="absolute inset-0 overflow-hidden">
-                    <div class="progress-bar absolute inset-0 h-full w-1/3"></div>
-                </div>
-                <div class="relative z-10">
-                    <div class="flex items-center justify-center gap-2 mb-2">
-                        <span class="construction-icon text-2xl">🚧</span>
-                        <span class="construction-icon text-2xl">⛑️</span>
-                        <span class="construction-icon text-2xl">👷</span>
-                        <span class="gear-spin text-2xl">⚙️</span>
-                        <span class="construction-icon text-2xl">🔨</span>
-                        <span class="construction-icon text-2xl">🚧</span>
+            <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+
+                <!-- Left Column: Main Info -->
+                <div class="space-y-3 md:space-y-4">
+
+                    <!-- Name with Greetings -->
+                    <div class="relative h-24 md:h-28 flex items-center justify-center mb-2">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="greeting-word">Bonjour</span>
+                            <span class="greeting-word">مرحبا</span>
+                            <span class="greeting-word">Hello</span>
+                            <span class="greeting-word">Hallo</span>
+                        </div>
                     </div>
-                    <p class="font-['Orbitron'] text-orange-300 text-sm md:text-base font-bold tracking-wider uppercase">
-                        Version 1.3 — Under Construction
-                    </p>
-                    <p class="font-['Rajdhani'] text-orange-200/80 text-xs md:text-sm mt-1">
-                        Something amazing is being built<span class="typing-cursor">|</span>
-                    </p>
+
+                    <h1 class="glitch text-3xl md:text-5xl font-black tracking-tighter font-['Orbitron'] text-center" data-text="FARES KHIARY">
+                        FARES KHIARY
+                    </h1>
+
+                    <!-- Personal Info Grid -->
+                    <div class="grid grid-cols-2 gap-2 mt-3">
+                        <div class="info-card rounded-lg p-2 text-center">
+                            <div class="text-cyan-400 mb-1">
+                                <i class="fas fa-birthday-cake text-lg"></i>
+                            </div>
+                            <div class="text-xs text-gray-400">Age</div>
+                            <div class="text-sm font-bold">32</div>
+                        </div>
+
+                        <div class="info-card rounded-lg p-2 text-center">
+                            <div class="text-cyan-400 mb-1">
+                                <i class="fas fa-map-marker-alt text-lg"></i>
+                            </div>
+                            <div class="text-xs text-gray-400">Location</div>
+                            <div class="text-sm font-bold">Paris 🇫🇷</div>
+                        </div>
+
+                        <div class="info-card rounded-lg p-2 text-center">
+                            <div class="text-cyan-400 mb-1">
+                                <i class="fas fa-home text-lg"></i>
+                            </div>
+                            <div class="text-xs text-gray-400">Born in</div>
+                            <div class="text-sm font-bold">🇴🇲 Oman</div>
+                        </div>
+
+                        <div class="info-card rounded-lg p-2 text-center">
+                            <div class="text-cyan-400 mb-1">
+                                <i class="fas fa-flag text-lg"></i>
+                            </div>
+                            <div class="text-xs text-gray-400">Citizen</div>
+                            <div class="text-sm font-bold">🇹🇳 Tunisia</div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="info-card rounded-lg p-2 text-center">
+                        <div class="text-cyan-400 mb-1">
+                            <i class="fas fa-envelope text-lg"></i>
+                        </div>
+                        <a href="mailto:contact@fares-khiary.com" class="text-sm font-['Rajdhani'] hover:text-cyan-300 transition-colors">
+                            contact@fares-khiary.com
+                        </a>
+                    </div>
+
+                    <!-- Social Media Section -->
+                    <div class="border-t border-white/10 pt-3">
+                        <h2 class="font-['Orbitron'] text-cyan-300 text-sm font-bold tracking-wider uppercase mb-2 text-center">
+                            <i class="fas fa-share-nodes mr-2"></i>Connect
+                        </h2>
+                        <div class="flex gap-2 justify-center">
+                            <a href="https://www.linkedin.com/in/fares-khiary" target="_blank" rel="noopener noreferrer"
+                               class="social-btn linkedin flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-900/40 to-blue-700/40 border border-blue-500/50 hover:border-blue-300 rounded-lg cursor-pointer group">
+                                <i class="fab fa-linkedin text-xl group-hover:scale-110 transition-transform"></i>
+                                <span class="font-['Rajdhani'] text-xs font-bold hidden sm:inline">LinkedIn</span>
+                            </a>
+
+                            <a href="https://www.instagram.com/khiary.fares" target="_blank" rel="noopener noreferrer"
+                               class="social-btn instagram flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-pink-900/40 to-purple-900/40 border border-pink-500/50 hover:border-pink-300 rounded-lg cursor-pointer group">
+                                <i class="fab fa-instagram text-xl group-hover:scale-110 transition-transform"></i>
+                                <span class="font-['Rajdhani'] text-xs font-bold hidden sm:inline">Instagram</span>
+                            </a>
+
+                            <a href="https://github.com/faresk93" target="_blank" rel="noopener noreferrer"
+                               class="social-btn github flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-gray-900/40 to-gray-700/40 border border-gray-500/50 hover:border-gray-300 rounded-lg cursor-pointer group">
+                                <i class="fab fa-github text-xl group-hover:scale-110 transition-transform"></i>
+                                <span class="font-['Rajdhani'] text-xs font-bold hidden sm:inline">GitHub</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Subdomains & Preview -->
+                <div class="space-y-3 md:space-y-4 flex flex-col">
+
+                    <div class="text-center">
+                        <p class="font-['Rajdhani'] text-gray-300 text-base md:text-lg font-medium leading-relaxed">
+                            <span class="text-cyan-400">🌟</span> Explore My Universe <span class="text-cyan-400">🌟</span>
+                        </p>
+                    </div>
+
+                    <!-- Subdomain Buttons -->
+                    <div class="flex flex-col gap-2">
+                        <button id="n8n-btn" class="subdomain-btn flex items-center justify-center gap-3 px-4 py-3 bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/50 hover:border-cyan-300 rounded-lg font-['Orbitron'] text-sm font-bold tracking-wide cursor-pointer group">
+                            <svg class="w-7 h-7" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="20" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
+                                <rect x="120" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
+                                <rect x="20" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
+                                <rect x="120" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
+                                <path d="M80 50 L120 50 M50 80 L50 120 M150 80 L150 120 M80 150 L120 150" stroke="#EA4B71" stroke-width="8" stroke-linecap="round"/>
+                            </svg>
+                            <span class="group-hover:text-cyan-300 transition-colors">n8n Automation</span>
+                        </button>
+
+                        <button id="chicha-btn" class="subdomain-btn flex items-center justify-center gap-3 px-4 py-3 bg-gradient-to-r from-purple-900/40 to-pink-900/40 border border-purple-500/50 hover:border-purple-300 rounded-lg font-['Orbitron'] text-sm font-bold tracking-wide cursor-pointer group">
+                            <svg class="w-7 h-7" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <ellipse cx="100" cy="170" rx="40" ry="15" fill="#9333EA"/>
+                                <rect x="85" y="120" width="30" height="50" rx="5" fill="#A855F7"/>
+                                <rect x="95" y="60" width="10" height="60" fill="#C084FC"/>
+                                <ellipse cx="100" cy="50" rx="25" ry="12" fill="#E9D5FF"/>
+                                <path d="M 75 50 Q 100 70, 125 50" fill="#DDD6FE"/>
+                                <path d="M 70 140 Q 40 130, 30 120" stroke="#A855F7" stroke-width="6" fill="none" stroke-linecap="round"/>
+                                <circle cx="30" cy="120" r="8" fill="#C084FC"/>
+                            </svg>
+                            <span class="group-hover:text-purple-300 transition-colors">Chicha Lounge</span>
+                        </button>
+                    </div>
+
+                    <button id="start-btn"
+                       class="mt-auto relative inline-flex items-center justify-center px-6 py-3 font-bold text-white transition-all duration-300 bg-gradient-to-r from-orange-900/50 to-pink-900/50 border-2 border-orange-500/50 hover:bg-orange-500 hover:border-orange-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] cursor-pointer group uppercase font-['Orbitron'] text-sm tracking-widest rounded-lg">
+                        <span class="mr-2">🔮</span>
+                        <span>Preview Universe</span>
+                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                    </button>
+
                 </div>
             </div>
-
-            <h1 class="glitch text-5xl md:text-7xl font-black tracking-tighter font-['Orbitron'] mb-4" data-text="FARES KHIARY">
-                FARES KHIARY
-            </h1>
-
-            <p class="font-['Rajdhani'] text-gray-200 text-lg md:text-2xl font-medium mb-8 leading-relaxed">
-                🌟 Coming Soon 🌟<br>
-                <span class="text-base text-gray-400">Stay tuned for something stellar!</span> <span class="inline-block animate-bounce">🚀</span>
-            </p>
-
-            <!-- Subdomain Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 mb-8 w-full max-w-md mx-auto">
-                <button id="n8n-btn" class="subdomain-btn flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/50 hover:border-cyan-300 rounded-lg font-['Orbitron'] text-sm font-bold tracking-wide cursor-pointer group">
-                    <svg class="w-8 h-8" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="20" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
-                        <rect x="120" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
-                        <rect x="20" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
-                        <rect x="120" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
-                        <path d="M80 50 L120 50 M50 80 L50 120 M150 80 L150 120 M80 150 L120 150" stroke="#EA4B71" stroke-width="8" stroke-linecap="round"/>
-                    </svg>
-                    <span class="group-hover:text-cyan-300 transition-colors">n8n</span>
-                </button>
-
-                <button id="chicha-btn" class="subdomain-btn flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-900/40 to-pink-900/40 border border-purple-500/50 hover:border-purple-300 rounded-lg font-['Orbitron'] text-sm font-bold tracking-wide cursor-pointer group">
-                    <svg class="w-8 h-8" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Hookah base -->
-                        <ellipse cx="100" cy="170" rx="40" ry="15" fill="#9333EA"/>
-                        <rect x="85" y="120" width="30" height="50" rx="5" fill="#A855F7"/>
-                        <!-- Stem -->
-                        <rect x="95" y="60" width="10" height="60" fill="#C084FC"/>
-                        <!-- Bowl -->
-                        <ellipse cx="100" cy="50" rx="25" ry="12" fill="#E9D5FF"/>
-                        <path d="M 75 50 Q 100 70, 125 50" fill="#DDD6FE"/>
-                        <!-- Hose -->
-                        <path d="M 70 140 Q 40 130, 30 120" stroke="#A855F7" stroke-width="6" fill="none" stroke-linecap="round"/>
-                        <circle cx="30" cy="120" r="8" fill="#C084FC"/>
-                    </svg>
-                    <span class="group-hover:text-purple-300 transition-colors">Chicha</span>
-                </button>
-            </div>
-
-            <button id="start-btn"
-               class="relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-900/40 border border-orange-500/50 hover:bg-orange-500 hover:border-orange-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] cursor-pointer group uppercase font-['Orbitron'] text-sm tracking-widest rounded">
-                <span class="mr-2">🔮</span>
-                <span>PREVIEW UNIVERSE</span>
-                <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-            </button>
-            
         </div>
     </main>
-
-    <!-- Floating Construction Badge -->
-    <div class="fixed top-4 right-4 z-30 pointer-events-none">
-        <div class="construction-banner rounded-full px-4 py-2 backdrop-blur-md flex items-center gap-2">
-            <span class="construction-icon text-lg">⛑️</span>
-            <span class="gear-spin text-lg">⚙️</span>
-            <span class="font-['Rajdhani'] text-orange-300 text-xs font-bold uppercase tracking-wider">v1.3 Building...</span>
-        </div>
-    </div>
-
-    <!-- Animated Construction Tape -->
-    <div class="fixed top-0 left-0 right-0 h-1 z-30 overflow-hidden bg-gradient-to-r from-orange-500/20 via-yellow-500/40 to-orange-500/20">
-        <div class="h-full w-full bg-[repeating-linear-gradient(90deg,transparent,transparent_10px,rgba(255,165,0,0.3)_10px,rgba(255,165,0,0.3)_20px)] animate-[progress-sweep_3s_linear_infinite]"></div>
-    </div>
 
     <!-- Mute Button (Black Hole Icon) -->
     <button id="mute-btn" class="mute-btn fixed top-4 left-4 z-30 w-12 h-12 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center cursor-pointer hover:bg-black/80 pointer-events-auto">
         <svg class="w-6 h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Black hole -->
             <circle cx="50" cy="50" r="45" fill="url(#blackhole-gradient)"/>
             <circle cx="50" cy="50" r="15" fill="#000000"/>
             <circle cx="50" cy="50" r="25" fill="none" stroke="#9333EA" stroke-width="2" opacity="0.6"/>
@@ -295,21 +386,17 @@
     </button>
 
     <!-- Back Button (Hidden by default) -->
-    <button id="back-btn" class="back-btn fixed top-4 left-20 z-30 hidden px-4 py-2 rounded-lg bg-black/60 backdrop-blur-md border border-white/20 flex items-center gap-2 cursor-pointer hover:bg-black/80 pointer-events-auto font-['Orbitron'] text-xs font-bold tracking-wider">
+    <button id="back-btn" class="back-btn fixed top-4 left-20 z-30 hidden px-4 py-2 rounded-lg bg-black/60 backdrop-blur-md border border-white/20 items-center gap-2 cursor-pointer hover:bg-black/80 pointer-events-auto font-['Orbitron'] text-xs font-bold tracking-wider">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
         <span>BACK</span>
     </button>
 
-
     <div id="interactive-hint" class="fixed bottom-8 w-full text-center pointer-events-none z-20">
         <div class="flex flex-col gap-2 items-center">
             <p class="font-['Rajdhani'] text-cyan-300 text-sm tracking-[0.2em] uppercase drop-shadow-md bg-black/50 inline-block px-4 py-1 rounded-full border border-cyan-500/30">
                 🖱️ Drag to Rotate • Scroll to Zoom
-            </p>
-            <p class="font-['Rajdhani'] text-cyan-300 text-xs tracking-[0.2em] uppercase drop-shadow-md bg-black/50 inline-block px-4 py-1 rounded-full border border-cyan-500/30">
-                Right-click or Shift+Drag to Pan
             </p>
         </div>
     </div>
@@ -319,8 +406,7 @@
 
         // --- SETUP ---
         const scene = new THREE.Scene();
-        // Deep space fog
-        scene.fog = new THREE.FogExp2(0x000000, 0.002);
+        scene.fog = new THREE.FogExp2(0x000000, 0.0015);
 
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(0, 20, 100);
@@ -330,159 +416,175 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // --- ASSETS ---
-        
-        // 1. Procedural Texture Generator (Avoids loading external images)
+        // --- ENHANCED TEXTURE GENERATOR ---
         const createTexture = (type) => {
             const canvas = document.createElement('canvas');
             canvas.width = 512; canvas.height = 512;
             const ctx = canvas.getContext('2d');
-            
+
             if(type === 'sun') {
                 const grd = ctx.createRadialGradient(256,256,0, 256,256,256);
-                grd.addColorStop(0, "#ffffff");     // White core
-                grd.addColorStop(0.3, "#ffff00");   // Bright yellow
-                grd.addColorStop(0.6, "#ffaa00");   // Golden orange
-                grd.addColorStop(1, "#ff6600");     // Deep orange edge
+                grd.addColorStop(0, "#ffffff");
+                grd.addColorStop(0.2, "#fffacd");
+                grd.addColorStop(0.4, "#ffff00");
+                grd.addColorStop(0.6, "#ffaa00");
+                grd.addColorStop(0.8, "#ff8800");
+                grd.addColorStop(1, "#ff4400");
                 ctx.fillStyle = grd; ctx.fillRect(0,0,512,512);
             } else if (type === 'planet') {
-                // Create a more visible planet texture with surface details
                 const grd = ctx.createRadialGradient(256,256,150, 256,256,300);
-                grd.addColorStop(0, "rgba(255,255,255,0.3)");
-                grd.addColorStop(1, "rgba(0,0,0,0.5)");
+                grd.addColorStop(0, "rgba(255,255,255,0.4)");
+                grd.addColorStop(1, "rgba(0,0,0,0.6)");
                 ctx.fillStyle = grd; ctx.fillRect(0,0,512,512);
 
-                // Add some surface variation
-                for(let i=0; i<80; i++) {
-                    ctx.fillStyle = `rgba(${100+Math.random()*100}, ${100+Math.random()*100}, ${100+Math.random()*100}, 0.15)`;
+                // Enhanced surface details
+                for(let i=0; i<120; i++) {
+                    ctx.fillStyle = `rgba(${100+Math.random()*155}, ${100+Math.random()*155}, ${100+Math.random()*155}, 0.2)`;
                     ctx.beginPath();
-                    ctx.arc(Math.random()*512, Math.random()*512, Math.random()*40, 0, Math.PI*2);
+                    ctx.arc(Math.random()*512, Math.random()*512, Math.random()*50, 0, Math.PI*2);
                     ctx.fill();
                 }
             } else if (type === 'particle') {
                 const grd = ctx.createRadialGradient(256,256,0, 256,256,256);
                 grd.addColorStop(0, "rgba(255,255,255,1)");
+                grd.addColorStop(0.5, "rgba(255,255,200,0.5)");
                 grd.addColorStop(1, "rgba(0,0,0,0)");
                 ctx.fillStyle = grd; ctx.fillRect(0,0,512,512);
             }
             return new THREE.CanvasTexture(canvas);
         };
 
-        // --- OBJECTS ---
-        
+        // --- SOLAR SYSTEM ---
         const solarSystem = new THREE.Group();
         scene.add(solarSystem);
 
-        // 1. The Central Star (VPS Core)
-        const sunGeo = new THREE.SphereGeometry(10, 64, 64);
-        const sunMat = new THREE.MeshBasicMaterial({ map: createTexture('sun') });
+        // Enhanced Sun
+        const sunGeo = new THREE.SphereGeometry(12, 64, 64);
+        const sunMat = new THREE.MeshBasicMaterial({
+            map: createTexture('sun'),
+            emissive: 0xffaa00,
+            emissiveIntensity: 0.8
+        });
         const sun = new THREE.Mesh(sunGeo, sunMat);
         solarSystem.add(sun);
 
-        // Sun Glow (Sprite)
-        const spriteMat = new THREE.SpriteMaterial({
-            map: createTexture('particle'),
-            color: 0xffaa00,  // Golden yellow glow
-            transparent: true,
-            opacity: 0.8,
-            blending: THREE.AdditiveBlending
-        });
-        const sunGlow = new THREE.Sprite(spriteMat);
-        sunGlow.scale.set(60, 60, 1);
-        solarSystem.add(sunGlow);
+        // Multi-layered Sun Glow
+        for(let i = 0; i < 3; i++) {
+            const glowMat = new THREE.SpriteMaterial({
+                map: createTexture('particle'),
+                color: i === 0 ? 0xffff00 : (i === 1 ? 0xffaa00 : 0xff6600),
+                transparent: true,
+                opacity: 0.6 - (i * 0.15),
+                blending: THREE.AdditiveBlending
+            });
+            const glow = new THREE.Sprite(glowMat);
+            glow.scale.set(70 + (i * 20), 70 + (i * 20), 1);
+            solarSystem.add(glow);
+        }
 
-        // Light - Yellow/Golden sunlight
-        const pointLight = new THREE.PointLight(0xffffdd, 3, 400);
+        // Enhanced Lighting
+        const pointLight = new THREE.PointLight(0xffffdd, 4, 500);
         solarSystem.add(pointLight);
-        scene.add(new THREE.AmbientLight(0x404040));  // Brighter ambient light so planets are visible
+        scene.add(new THREE.AmbientLight(0x505050));
 
-        // 2. Orbiting Planets
+        // Enhanced Planets
         const planets = [];
-        const createPlanet = (size, dist, speed, color) => {
+        const createPlanet = (size, dist, speed, color, emissiveColor) => {
             const mesh = new THREE.Mesh(
                 new THREE.SphereGeometry(size, 32, 32),
                 new THREE.MeshStandardMaterial({
                     color: color,
-                    roughness: 0.5,
-                    metalness: 0.3,
-                    emissive: color,
-                    emissiveIntensity: 0.15,  // Slight self-illumination so planets are visible
+                    roughness: 0.4,
+                    metalness: 0.4,
+                    emissive: emissiveColor || color,
+                    emissiveIntensity: 0.2,
                     map: createTexture('planet')
                 })
             );
-            // Random start angle
             const angle = Math.random() * Math.PI * 2;
             mesh.position.set(Math.cos(angle) * dist, 0, Math.sin(angle) * dist);
-            
-            // Orbit Ring
-            const ringGeo = new THREE.RingGeometry(dist-0.2, dist+0.2, 64);
-            const ringMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true, opacity: 0.1 });
+
+            // Enhanced orbit rings
+            const ringGeo = new THREE.RingGeometry(dist-0.3, dist+0.3, 128);
+            const ringMat = new THREE.MeshBasicMaterial({
+                color: 0x00ffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.15
+            });
             const ring = new THREE.Mesh(ringGeo, ringMat);
             ring.rotation.x = Math.PI/2;
             solarSystem.add(ring);
-            
+
             solarSystem.add(mesh);
             return { mesh, dist, speed, angle };
         };
 
-        // Real Solar System Planets (scaled for visibility)
-        planets.push(createPlanet(1.5, 25, 0.8, 0x8c7853));  // Mercury
-        planets.push(createPlanet(2.5, 35, 0.6, 0xffc649));  // Venus
-        planets.push(createPlanet(2.8, 45, 0.5, 0x4169e1));  // Earth (blue)
-        planets.push(createPlanet(2, 55, 0.4, 0xff6347));    // Mars
-        planets.push(createPlanet(6, 75, 0.2, 0xdaa520));    // Jupiter
-        planets.push(createPlanet(5, 95, 0.15, 0xf4a460));   // Saturn
-        planets.push(createPlanet(3.5, 115, 0.1, 0x4fd0e7)); // Uranus
-        planets.push(createPlanet(3.5, 130, 0.08, 0x4169e1)); // Neptune
+        // Enhanced planets with better colors
+        planets.push(createPlanet(1.5, 25, 0.8, 0xa89968, 0x8c7853));  // Mercury
+        planets.push(createPlanet(2.5, 35, 0.6, 0xffd700, 0xffc649));  // Venus
+        planets.push(createPlanet(2.8, 45, 0.5, 0x4169e1, 0x1e90ff));  // Earth
+        planets.push(createPlanet(2, 55, 0.4, 0xff6347, 0xdc143c));    // Mars
+        planets.push(createPlanet(6, 75, 0.2, 0xdaa520, 0xb8860b));    // Jupiter
+        planets.push(createPlanet(5, 95, 0.15, 0xf4a460, 0xdeb887));   // Saturn
+        planets.push(createPlanet(3.5, 115, 0.1, 0x4fd0e7, 0x00ced1)); // Uranus
+        planets.push(createPlanet(3.5, 130, 0.08, 0x4169e1, 0x1e3a8a)); // Neptune
 
-        // 3. Asteroid Belt
+        // Enhanced Asteroid Belt
         const asteroidGeo = new THREE.TetrahedronGeometry(0.5, 0);
-        const asteroidMat = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.8 });
-        const asteroids = new THREE.InstancedMesh(asteroidGeo, asteroidMat, 1000);
+        const asteroidMat = new THREE.MeshStandardMaterial({
+            color: 0x999999,
+            roughness: 0.9,
+            metalness: 0.1,
+            emissive: 0x333333,
+            emissiveIntensity: 0.1
+        });
+        const asteroids = new THREE.InstancedMesh(asteroidGeo, asteroidMat, 1500);
         const dummy = new THREE.Object3D();
-        
-        for(let i=0; i<1000; i++) {
-            const r = 60 + Math.random() * 20; // Belt between Mars and Jupiter
+
+        for(let i=0; i<1500; i++) {
+            const r = 60 + Math.random() * 20;
             const theta = Math.random() * Math.PI * 2;
-            const y = (Math.random() - 0.5) * 10;
+            const y = (Math.random() - 0.5) * 12;
 
             dummy.position.set(r * Math.cos(theta), y, r * Math.sin(theta));
             dummy.rotation.set(Math.random(), Math.random(), Math.random());
-            dummy.scale.setScalar(Math.random() * 2);
+            dummy.scale.setScalar(Math.random() * 2.5);
             dummy.updateMatrix();
             asteroids.setMatrixAt(i, dummy.matrix);
         }
         solarSystem.add(asteroids);
 
-        // 4. Enhanced Starfield - Realistic universe with varied, shiny stars
+        // STUNNING ENHANCED STARFIELD with varied colors and sizes
         const starsGeo = new THREE.BufferGeometry();
         const starsPos = [];
         const starsColors = [];
         const starsSizes = [];
 
-        for(let i=0; i<5000; i++) {
-            // Random positions in a large sphere
+        for(let i=0; i<8000; i++) {
             starsPos.push(
-                (Math.random()-0.5)*1500,
-                (Math.random()-0.5)*1500,
-                (Math.random()-0.5)*1500
+                (Math.random()-0.5)*2000,
+                (Math.random()-0.5)*2000,
+                (Math.random()-0.5)*2000
             );
 
-            // Realistic star colors - white, blue-white, yellow-white
             const colorChoice = Math.random();
-            if (colorChoice > 0.7) {
-                // Blue-white stars (hot)
-                starsColors.push(0.7, 0.8, 1.0);
-            } else if (colorChoice > 0.3) {
-                // White stars
+            if (colorChoice > 0.8) {
+                // Blue-white hot stars
+                starsColors.push(0.6 + Math.random()*0.4, 0.7 + Math.random()*0.3, 1.0);
+            } else if (colorChoice > 0.5) {
+                // Pure white stars
                 starsColors.push(1.0, 1.0, 1.0);
+            } else if (colorChoice > 0.2) {
+                // Yellow-white stars
+                starsColors.push(1.0, 0.9 + Math.random()*0.1, 0.7 + Math.random()*0.2);
             } else {
-                // Yellow-white stars (like our sun)
-                starsColors.push(1.0, 0.95, 0.8);
+                // Red giants
+                starsColors.push(1.0, 0.6 + Math.random()*0.2, 0.5 + Math.random()*0.2);
             }
 
-            // Varied sizes for depth and realism
-            starsSizes.push(Math.random() * 2 + 0.5);
+            // More varied sizes
+            starsSizes.push(Math.random() * 3 + 0.3);
         }
 
         starsGeo.setAttribute('position', new THREE.Float32BufferAttribute(starsPos, 3));
@@ -492,39 +594,48 @@
         const stars = new THREE.Points(
             starsGeo,
             new THREE.PointsMaterial({
-                size: 1.5,
+                size: 2,
                 vertexColors: true,
                 transparent: true,
-                opacity: 0.9,
+                opacity: 0.95,
                 sizeAttenuation: true
             })
         );
         scene.add(stars);
 
+        // Add Nebula Clouds
+        const nebulaGeo = new THREE.SphereGeometry(300, 32, 32);
+        const nebulaMat = new THREE.MeshBasicMaterial({
+            color: 0x9333ea,
+            transparent: true,
+            opacity: 0.08,
+            side: THREE.BackSide,
+            blending: THREE.AdditiveBlending
+        });
+        const nebula1 = new THREE.Mesh(nebulaGeo, nebulaMat);
+        nebula1.position.set(200, 100, -200);
+        scene.add(nebula1);
+
+        const nebula2 = new THREE.Mesh(nebulaGeo.clone(), nebulaMat.clone());
+        nebula2.material.color.setHex(0x06b6d4);
+        nebula2.position.set(-200, -100, 200);
+        scene.add(nebula2);
 
         // --- INTERACTION LOGIC ---
-        let targetRotationX = 0;
-        let targetRotationY = 0;
-        let mouseX = 0;
-        let mouseY = 0;
         let isDragging = false;
         let isPanning = false;
         let previousMousePosition = { x: 0, y: 0 };
-        let state = 'MENU'; // MENU or UNLOCKED
+        let state = 'MENU';
 
-        // Camera controls
         let cameraDistance = 150;
         let cameraOffset = { x: 0, y: 30, z: 0 };
         const minDistance = 30;
         const maxDistance = 300;
 
-        // Unified Input Handling (Touch & Mouse)
         const handleStart = (x, y, button = 0, shiftKey = false) => {
             if (button === 2 || shiftKey) {
-                // Right-click or Shift+drag for panning
                 isPanning = true;
             } else {
-                // Left-click for rotation
                 isDragging = true;
             }
             previousMousePosition = { x, y };
@@ -537,22 +648,16 @@
             };
 
             if (isPanning && state === 'UNLOCKED') {
-                // Pan camera
                 const panSpeed = 0.3;
                 cameraOffset.x -= deltaMove.x * panSpeed;
                 cameraOffset.y += deltaMove.y * panSpeed;
             } else if (isDragging && state === 'UNLOCKED') {
-                // Rotate the Solar System Group
                 const rotateSpeed = 0.005;
                 solarSystem.rotation.y += deltaMove.x * rotateSpeed;
                 solarSystem.rotation.x += deltaMove.y * rotateSpeed;
             }
 
             previousMousePosition = { x, y };
-
-            // Parallax for stars
-            mouseX = (x / window.innerWidth) * 2 - 1;
-            mouseY = -(y / window.innerHeight) * 2 + 1;
         };
 
         const handleEnd = () => {
@@ -560,7 +665,6 @@
             isPanning = false;
         };
 
-        // Zoom with mouse wheel
         const handleWheel = (e) => {
             if (state === 'UNLOCKED') {
                 e.preventDefault();
@@ -570,30 +674,22 @@
             }
         };
 
-        // Listeners
-        document.addEventListener('mousedown', e => {
-            handleStart(e.clientX, e.clientY, e.button, e.shiftKey);
-        });
+        // Event Listeners
+        document.addEventListener('mousedown', e => handleStart(e.clientX, e.clientY, e.button, e.shiftKey));
         document.addEventListener('touchstart', e => handleStart(e.touches[0].clientX, e.touches[0].clientY), {passive: false});
-
         document.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
         document.addEventListener('touchmove', e => {
-            e.preventDefault(); // Stop scrolling on mobile
+            e.preventDefault();
             handleMove(e.touches[0].clientX, e.touches[0].clientY);
         }, {passive: false});
-
         document.addEventListener('mouseup', handleEnd);
         document.addEventListener('touchend', handleEnd);
-
-        // Wheel for zoom
         document.addEventListener('wheel', handleWheel, {passive: false});
-
-        // Prevent context menu on right-click
         document.addEventListener('contextmenu', e => {
             if (state === 'UNLOCKED') e.preventDefault();
         });
 
-        // Background Audio Logic - Web Audio API for Space Ambient Sound
+        // --- ENHANCED AUDIO ---
         let audioContext;
         let masterGain;
         let oscillators = [];
@@ -602,17 +698,16 @@
 
         const muteBtn = document.getElementById('mute-btn');
 
-        // Create ambient space sound using Web Audio API
         const initAudio = () => {
             if (isAudioInitialized) return;
 
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
             masterGain = audioContext.createGain();
             masterGain.connect(audioContext.destination);
-            masterGain.gain.value = 0.15; // Low volume for ambient effect
+            masterGain.gain.setValueAtTime(0, audioContext.currentTime);
+            masterGain.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 2);
 
-            // Create multiple oscillators for layered ambient sound
-            const frequencies = [60, 80, 120, 180, 240]; // Low frequencies for deep space feel
+            const frequencies = [55, 73, 110, 147, 220];
 
             frequencies.forEach((freq, index) => {
                 const osc = audioContext.createOscillator();
@@ -620,40 +715,35 @@
 
                 osc.type = 'sine';
                 osc.frequency.value = freq;
-
-                // Vary volumes for depth
-                gain.gain.value = 0.1 / (index + 1);
+                gain.gain.value = 0.08 / (index + 1);
 
                 osc.connect(gain);
                 gain.connect(masterGain);
-
                 osc.start();
                 oscillators.push({ osc, gain });
 
-                // Add slight frequency modulation for movement
                 const lfo = audioContext.createOscillator();
-                lfo.frequency.value = 0.1 + (index * 0.05);
+                lfo.frequency.value = 0.08 + (index * 0.04);
                 const lfoGain = audioContext.createGain();
-                lfoGain.gain.value = 2 + (index * 0.5);
+                lfoGain.gain.value = 1.5 + (index * 0.3);
 
                 lfo.connect(lfoGain);
                 lfoGain.connect(osc.frequency);
                 lfo.start();
             });
 
-            // Add noise for "vacuum" effect
             const bufferSize = 4096;
             const whiteNoise = audioContext.createScriptProcessor(bufferSize, 1, 1);
             whiteNoise.onaudioprocess = (e) => {
                 const output = e.outputBuffer.getChannelData(0);
                 for (let i = 0; i < bufferSize; i++) {
-                    output[i] = (Math.random() * 2 - 1) * 0.02; // Very quiet noise
+                    output[i] = (Math.random() * 2 - 1) * 0.015;
                 }
             };
 
             const noiseFilter = audioContext.createBiquadFilter();
             noiseFilter.type = 'lowpass';
-            noiseFilter.frequency.value = 400; // Filter high frequencies
+            noiseFilter.frequency.value = 350;
 
             whiteNoise.connect(noiseFilter);
             noiseFilter.connect(masterGain);
@@ -661,7 +751,6 @@
             isAudioInitialized = true;
         };
 
-        // Mute/Unmute toggle
         muteBtn.addEventListener('click', () => {
             if (!isAudioInitialized) {
                 initAudio();
@@ -669,27 +758,26 @@
 
             isMuted = !isMuted;
             if (audioContext) {
-                masterGain.gain.value = isMuted ? 0 : 0.15;
+                masterGain.gain.setValueAtTime(masterGain.gain.value, audioContext.currentTime);
+                masterGain.gain.linearRampToValueAtTime(isMuted ? 0 : 0.15, audioContext.currentTime + 0.5);
             }
             muteBtn.classList.toggle('muted', isMuted);
         });
 
-        // Auto-start audio on first user interaction
         const startAudio = () => {
             if (!isAudioInitialized && !isMuted) {
                 initAudio();
             }
         };
 
-        // Subdomain Button Logic with Animation
+        // Subdomain Buttons
         const handleSubdomainClick = (url, buttonId) => {
             const btn = document.getElementById(buttonId);
-            btn.classList.add('clicked');
-
+            btn.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 window.open(url, '_blank');
-                btn.classList.remove('clicked');
-            }, 600);
+                btn.style.transform = '';
+            }, 200);
         };
 
         document.getElementById('n8n-btn').addEventListener('click', () => {
@@ -700,33 +788,28 @@
             handleSubdomainClick('https://chicha.fares-khiary.com', 'chicha-btn');
         });
 
-        // Button Logic
+        // Preview Universe Button
         document.getElementById('start-btn').addEventListener('click', () => {
             state = 'UNLOCKED';
             document.getElementById('ui-layer').classList.add('fade-out');
             document.getElementById('interactive-hint').classList.add('show-hint');
             document.getElementById('back-btn').classList.remove('hidden');
             document.getElementById('back-btn').classList.add('flex');
-
-            // Start audio on user interaction
             startAudio();
         });
 
-        // Back Button Logic
+        // Back Button
         document.getElementById('back-btn').addEventListener('click', () => {
             state = 'MENU';
             document.getElementById('ui-layer').classList.remove('fade-out');
             document.getElementById('interactive-hint').classList.remove('show-hint');
             document.getElementById('back-btn').classList.add('hidden');
             document.getElementById('back-btn').classList.remove('flex');
-
-            // Reset camera position
             cameraDistance = 150;
             cameraOffset = { x: 0, y: 30, z: 0 };
             solarSystem.rotation.set(0, 0, 0);
         });
 
-        // Attempt to start audio on first user interaction
         document.addEventListener('click', startAudio, { once: true });
 
         // Resize
@@ -736,7 +819,6 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-
         // --- ANIMATION LOOP ---
         const clock = new THREE.Clock();
 
@@ -745,34 +827,42 @@
             const delta = clock.getDelta();
             const time = clock.getElapsedTime();
 
-            // 1. Rotate Planets
+            // Rotate Planets
             planets.forEach(p => {
                 p.angle += p.speed * delta;
                 p.mesh.position.x = Math.cos(p.angle) * p.dist;
                 p.mesh.position.z = Math.sin(p.angle) * p.dist;
-                p.mesh.rotation.y += delta; // Self rotation
+                p.mesh.rotation.y += delta * 0.5;
             });
 
-            // 2. Rotate Asteroid Belt slowly
-            asteroids.rotation.y += 0.02 * delta;
+            // Rotate Asteroids
+            asteroids.rotation.y += 0.015 * delta;
 
-            // 3. Pulse Sun
-            const pulse = 1 + Math.sin(time * 2) * 0.05;
+            // Pulse Sun
+            const pulse = 1 + Math.sin(time * 2) * 0.06;
             sun.scale.setScalar(pulse);
-            sunGlow.scale.set(60 * pulse, 60 * pulse, 1);
 
-            // 4. Subtle star twinkling
-            stars.rotation.y += 0.0001;
-            stars.material.opacity = 0.85 + Math.sin(time * 0.5) * 0.1;
+            // Enhanced star effects
+            stars.rotation.y += 0.00008;
+            stars.rotation.x += 0.00003;
 
-            // 5. Camera Logic
+            // Twinkle effect
+            const twinkle = 0.88 + Math.sin(time * 0.7) * 0.12;
+            stars.material.opacity = twinkle;
+
+            // Nebula drift
+            nebula1.rotation.y += 0.0001;
+            nebula1.rotation.z += 0.00005;
+            nebula2.rotation.y -= 0.00008;
+            nebula2.rotation.z -= 0.00006;
+
+            // Camera
             if (state === 'MENU') {
-                // Gentle idle movement
-                camera.position.x = Math.sin(time * 0.2) * 20;
-                camera.position.y = 20 + Math.cos(time * 0.2) * 10;
+                camera.position.x = Math.sin(time * 0.15) * 25;
+                camera.position.y = 20 + Math.cos(time * 0.15) * 12;
+                camera.position.z = 100 + Math.sin(time * 0.1) * 10;
                 camera.lookAt(0, 0, 0);
             } else {
-                // UNLOCKED: User controls zoom, pan, and rotation
                 const targetPos = new THREE.Vector3(
                     cameraOffset.x,
                     cameraOffset.y,
@@ -787,13 +877,5 @@
 
         animate();
     </script>
-
-    <!-- Footer -->
-    <footer class="footer fixed bottom-0 left-0 right-0 z-20 py-3 text-center pointer-events-none">
-        <p class="font-['Rajdhani'] text-gray-300 text-xs md:text-sm tracking-wide">
-            Created with <span class="text-red-400 animate-pulse">❤️</span> by <span class="font-bold text-white">Fares KHIARY</span>
-            <span class="ml-2 px-2 py-0.5 bg-gradient-to-r from-purple-500/30 to-pink-500/30 border border-purple-400/50 rounded text-[10px] font-bold tracking-wider">AI</span>
-        </p>
-    </footer>
 </body>
 </html>
