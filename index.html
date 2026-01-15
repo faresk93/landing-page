@@ -148,7 +148,7 @@
                         <span class="construction-icon text-2xl">🚧</span>
                     </div>
                     <p class="font-['Orbitron'] text-orange-300 text-sm md:text-base font-bold tracking-wider uppercase">
-                        Version 1.1 — Under Construction
+                        Version 1.2 — Under Construction
                     </p>
                     <p class="font-['Rajdhani'] text-orange-200/80 text-xs md:text-sm mt-1">
                         Something amazing is being built<span class="typing-cursor">|</span>
@@ -180,7 +180,7 @@
         <div class="construction-banner rounded-full px-4 py-2 backdrop-blur-md flex items-center gap-2">
             <span class="construction-icon text-lg">⛑️</span>
             <span class="gear-spin text-lg">⚙️</span>
-            <span class="font-['Rajdhani'] text-orange-300 text-xs font-bold uppercase tracking-wider">v1.1 Building...</span>
+            <span class="font-['Rajdhani'] text-orange-300 text-xs font-bold uppercase tracking-wider">v1.2 Building...</span>
         </div>
     </div>
 
@@ -226,16 +226,24 @@
             
             if(type === 'sun') {
                 const grd = ctx.createRadialGradient(256,256,0, 256,256,256);
-                grd.addColorStop(0, "white");
-                grd.addColorStop(0.2, "#00ffff"); // Cyan Core
-                grd.addColorStop(1, "#000033");
+                grd.addColorStop(0, "#ffffff");     // White core
+                grd.addColorStop(0.3, "#ffff00");   // Bright yellow
+                grd.addColorStop(0.6, "#ffaa00");   // Golden orange
+                grd.addColorStop(1, "#ff6600");     // Deep orange edge
                 ctx.fillStyle = grd; ctx.fillRect(0,0,512,512);
             } else if (type === 'planet') {
-                ctx.fillStyle = "#1a1a1a"; ctx.fillRect(0,0,512,512);
-                for(let i=0; i<100; i++) {
-                    ctx.fillStyle = Math.random()>0.5 ? "#2244ff" : "#aa00ff";
-                    ctx.globalAlpha = 0.1;
-                    ctx.beginPath(); ctx.arc(Math.random()*512, Math.random()*512, Math.random()*50, 0, Math.PI*2); ctx.fill();
+                // Create a more visible planet texture with surface details
+                const grd = ctx.createRadialGradient(256,256,150, 256,256,300);
+                grd.addColorStop(0, "rgba(255,255,255,0.3)");
+                grd.addColorStop(1, "rgba(0,0,0,0.5)");
+                ctx.fillStyle = grd; ctx.fillRect(0,0,512,512);
+
+                // Add some surface variation
+                for(let i=0; i<80; i++) {
+                    ctx.fillStyle = `rgba(${100+Math.random()*100}, ${100+Math.random()*100}, ${100+Math.random()*100}, 0.15)`;
+                    ctx.beginPath();
+                    ctx.arc(Math.random()*512, Math.random()*512, Math.random()*40, 0, Math.PI*2);
+                    ctx.fill();
                 }
             } else if (type === 'particle') {
                 const grd = ctx.createRadialGradient(256,256,0, 256,256,256);
@@ -258,10 +266,10 @@
         solarSystem.add(sun);
 
         // Sun Glow (Sprite)
-        const spriteMat = new THREE.SpriteMaterial({ 
-            map: createTexture('particle'), 
-            color: 0x00ffff, 
-            transparent: true, 
+        const spriteMat = new THREE.SpriteMaterial({
+            map: createTexture('particle'),
+            color: 0xffaa00,  // Golden yellow glow
+            transparent: true,
             opacity: 0.8,
             blending: THREE.AdditiveBlending
         });
@@ -269,19 +277,22 @@
         sunGlow.scale.set(60, 60, 1);
         solarSystem.add(sunGlow);
 
-        // Light
-        const pointLight = new THREE.PointLight(0x00ffff, 2, 300);
+        // Light - Yellow/Golden sunlight
+        const pointLight = new THREE.PointLight(0xffffdd, 3, 400);
         solarSystem.add(pointLight);
-        scene.add(new THREE.AmbientLight(0x222222));
+        scene.add(new THREE.AmbientLight(0x404040));  // Brighter ambient light so planets are visible
 
         // 2. Orbiting Planets
         const planets = [];
         const createPlanet = (size, dist, speed, color) => {
             const mesh = new THREE.Mesh(
                 new THREE.SphereGeometry(size, 32, 32),
-                new THREE.MeshStandardMaterial({ 
-                    color: color, 
-                    roughness: 0.7,
+                new THREE.MeshStandardMaterial({
+                    color: color,
+                    roughness: 0.5,
+                    metalness: 0.3,
+                    emissive: color,
+                    emissiveIntensity: 0.15,  // Slight self-illumination so planets are visible
                     map: createTexture('planet')
                 })
             );
@@ -329,16 +340,50 @@
         }
         solarSystem.add(asteroids);
 
-        // 4. Starfield
+        // 4. Enhanced Starfield - Realistic universe with varied, shiny stars
         const starsGeo = new THREE.BufferGeometry();
         const starsPos = [];
-        for(let i=0; i<3000; i++) {
-            starsPos.push((Math.random()-0.5)*1000, (Math.random()-0.5)*1000, (Math.random()-0.5)*1000);
+        const starsColors = [];
+        const starsSizes = [];
+
+        for(let i=0; i<5000; i++) {
+            // Random positions in a large sphere
+            starsPos.push(
+                (Math.random()-0.5)*1500,
+                (Math.random()-0.5)*1500,
+                (Math.random()-0.5)*1500
+            );
+
+            // Realistic star colors - white, blue-white, yellow-white
+            const colorChoice = Math.random();
+            if (colorChoice > 0.7) {
+                // Blue-white stars (hot)
+                starsColors.push(0.7, 0.8, 1.0);
+            } else if (colorChoice > 0.3) {
+                // White stars
+                starsColors.push(1.0, 1.0, 1.0);
+            } else {
+                // Yellow-white stars (like our sun)
+                starsColors.push(1.0, 0.95, 0.8);
+            }
+
+            // Varied sizes for depth and realism
+            starsSizes.push(Math.random() * 2 + 0.5);
         }
+
         starsGeo.setAttribute('position', new THREE.Float32BufferAttribute(starsPos, 3));
+        starsGeo.setAttribute('color', new THREE.Float32BufferAttribute(starsColors, 3));
+        starsGeo.setAttribute('size', new THREE.Float32BufferAttribute(starsSizes, 1));
+
         const stars = new THREE.Points(
-            starsGeo, 
-            new THREE.PointsMaterial({color: 0xffffff, size: 0.7, transparent: true, opacity: 0.8})
+            starsGeo,
+            new THREE.PointsMaterial({
+                size: 1.5,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.9,
+                sizeAttenuation: true
+            })
         );
         scene.add(stars);
 
@@ -473,7 +518,11 @@
             sun.scale.setScalar(pulse);
             sunGlow.scale.set(60 * pulse, 60 * pulse, 1);
 
-            // 4. Camera Logic
+            // 4. Subtle star twinkling
+            stars.rotation.y += 0.0001;
+            stars.material.opacity = 0.85 + Math.sin(time * 0.5) * 0.1;
+
+            // 5. Camera Logic
             if (state === 'MENU') {
                 // Gentle idle movement
                 camera.position.x = Math.sin(time * 0.2) * 20;
