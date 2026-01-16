@@ -15,430 +15,126 @@
         .fade-out { opacity: 0; pointer-events: none; transform: scale(0.95); filter: blur(10px); }
         .ui-transition { transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
 
-        /* Construction Banner - Restored */
+        /* Construction Banner - Simplified */
         .construction-banner {
-            background: linear-gradient(135deg, rgba(255, 165, 0, 0.15) 0%, rgba(255, 100, 0, 0.15) 100%);
+            background: rgba(255, 165, 0, 0.15);
             border: 2px solid rgba(255, 165, 0, 0.5);
-            animation: banner-glow 2s ease-in-out infinite alternate;
-            position: relative;
-            overflow: hidden;
-        }
-        @keyframes banner-glow {
-            0% { box-shadow: 0 0 10px rgba(255, 165, 0, 0.3), inset 0 0 20px rgba(255, 165, 0, 0.1); }
-            100% { box-shadow: 0 0 25px rgba(255, 165, 0, 0.6), inset 0 0 30px rgba(255, 165, 0, 0.2); }
         }
 
-        .construction-icon {
+        .construction-icon, .gear-spin {
             display: inline-block;
-            animation: icon-bounce 1s ease-in-out infinite;
-        }
-        @keyframes icon-bounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-5px) scale(1.05); }
         }
 
-        .gear-spin {
-            display: inline-block;
-            animation: gear-rotate 3s linear infinite;
-        }
-        @keyframes gear-rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Glitch Text - Enhanced */
-        .glitch {
-            position: relative;
-            color: white;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.4), 0 0 40px rgba(168, 85, 247, 0.2);
-            animation: text-glow 4s ease-in-out infinite;
-        }
-
-        @keyframes text-glow {
-            0%, 100% {
-                text-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 60px rgba(168, 85, 247, 0.3);
-            }
-            50% {
-                text-shadow: 0 0 40px rgba(0, 255, 255, 0.7), 0 0 80px rgba(168, 85, 247, 0.5), 0 0 100px rgba(236, 72, 153, 0.3);
-            }
-        }
-        .glitch::before, .glitch::after {
-            content: attr(data-text); position: absolute; top: 0; width: 100%; height: 100%; opacity: 0.8;
-        }
-        .glitch::before {
-            left: 2px; color: #0ff; clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-            animation: glitch-anim-1 4s infinite linear alternate-reverse;
-        }
-        .glitch::after {
-            left: -2px; color: #f0f; clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-            animation: glitch-anim-2 4.5s infinite linear alternate-reverse;
-        }
-        @keyframes glitch-anim-1 { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 100% { transform: translate(1px, -1px); } }
-        @keyframes glitch-anim-2 { 0% { transform: translate(0); } 20% { transform: translate(2px, -2px); } 100% { transform: translate(-1px, 1px); } }
-
-        /* Scanning Line */
-        .scanline {
-            width: 100%; height: 2px; background: rgba(0, 255, 255, 0.3);
-            position: absolute; top: 0; left: 0;
-            animation: scan 4s infinite linear;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-            will-change: transform;
-            transform: translate3d(0, 0, 0);
-        }
-        @keyframes scan { 0% { top: 0%; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
 
         #interactive-hint { opacity: 0; transition: opacity 1s; }
         .show-hint { opacity: 1 !important; }
 
-        /* Enhanced Greeting Animations with Zoom */
-        .greeting-word {
-            opacity: 0;
-            position: absolute;
-            font-size: 1rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, #00f5ff, #a855f7, #ec4899, #fbbf24);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: greeting-zoom 8s ease-in-out infinite, gradient-shift 3s ease infinite;
-            text-shadow: 0 0 10px rgba(0, 245, 255, 0.4);
-            will-change: transform, opacity;
-            transform: translate3d(0, 0, 0);
-        }
-        .greeting-word:nth-child(1) { animation-delay: 0s; }
-        .greeting-word:nth-child(2) { animation-delay: 2s; }
-        .greeting-word:nth-child(3) { animation-delay: 4s; }
-        .greeting-word:nth-child(4) { animation-delay: 6s; }
-
-        @keyframes greeting-zoom {
-            0% { opacity: 0; transform: scale(0.3) rotate(-10deg); }
-            10% { opacity: 1; transform: scale(1.2) rotate(2deg); }
-            20% { transform: scale(1) rotate(0deg); }
-            30% { transform: scale(1.05) rotate(-1deg); }
-            40% { opacity: 1; transform: scale(1) rotate(0deg); }
-            50% { opacity: 0; transform: scale(0.8) rotate(5deg); }
-            100% { opacity: 0; transform: scale(0.3) rotate(-10deg); }
-        }
-
-        @keyframes gradient-shift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Typing Animation */
-        .typing-container {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
-            border: 1px solid rgba(34, 211, 238, 0.3);
-            border-radius: 0.5rem;
+        /* Tech Badge - Simple */
+        .tech-badge {
+            display: inline-block;
             padding: 0.4rem 0.8rem;
-            backdrop-filter: blur(10px);
+            background: rgba(34, 211, 238, 0.15);
+            border: 1px solid rgba(34, 211, 238, 0.4);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            color: #22d3ee;
         }
 
-        .typing-text {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #00d9ff;
-            text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
-        }
-
-        .tech-stack {
-            display: inline;
-            animation: tech-fade 12s ease-in-out infinite;
-            opacity: 0;
-            will-change: opacity;
-        }
-
-        @keyframes tech-fade {
-            0%, 100% { opacity: 0; }
-            8%, 24% { opacity: 1; }
-            32% { opacity: 0; }
-        }
-
-        .tech-stack:nth-child(1) { animation-delay: 0s; }
-        .tech-stack:nth-child(2) { animation-delay: 1.5s; }
-        .tech-stack:nth-child(3) { animation-delay: 3s; }
-        .tech-stack:nth-child(4) { animation-delay: 4.5s; }
-        .tech-stack:nth-child(5) { animation-delay: 6s; }
-        .tech-stack:nth-child(6) { animation-delay: 7.5s; }
-        .tech-stack:nth-child(7) { animation-delay: 9s; }
-        .tech-stack:nth-child(8) { animation-delay: 10.5s; }
-
-        .cursor-blink {
-            animation: blink 0.8s step-end infinite;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* Info Chip */
+        /* Info Chip - Simplified */
         .info-chip {
             display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
-            padding: 0.25rem 0.6rem;
-            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            gap: 0.4rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(0, 255, 255, 0.1);
             border: 1px solid rgba(0, 255, 255, 0.3);
             border-radius: 9999px;
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             white-space: nowrap;
         }
-        .info-chip::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
-            transform: translateX(-100%);
-            animation: chip-shimmer 3s ease-in-out infinite;
-        }
-        @keyframes chip-shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        .info-chip:hover {
-            transform: translateY(-2px) scale(1.05);
-            border-color: rgba(0, 255, 255, 0.6);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4), inset 0 0 15px rgba(0, 255, 255, 0.1);
-        }
         .info-chip i {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: #00d9ff;
-            filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.8));
         }
 
-        /* Social Media Buttons */
+        /* Social Media Buttons - Simplified */
         .social-btn {
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-            animation: social-glow 2.5s ease-in-out infinite;
+            transition: all 0.2s ease;
         }
-        .social-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.3), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .social-btn:hover::before { opacity: 1; }
         .social-btn:hover {
-            transform: translateY(-3px) scale(1.08);
-            animation: social-bounce 0.6s ease-in-out;
-        }
-        .social-btn.linkedin:hover {
-            box-shadow: 0 0 25px rgba(10, 102, 194, 0.9), inset 0 0 20px rgba(10, 102, 194, 0.4);
-            border-color: rgba(10, 102, 194, 0.8) !important;
-        }
-        .social-btn.instagram:hover {
-            box-shadow: 0 0 25px rgba(225, 48, 108, 0.9), inset 0 0 20px rgba(225, 48, 108, 0.4);
-            border-color: rgba(225, 48, 108, 0.8) !important;
-        }
-        .social-btn.github:hover {
-            box-shadow: 0 0 25px rgba(88, 166, 255, 0.9), inset 0 0 20px rgba(88, 166, 255, 0.4);
-            border-color: rgba(88, 166, 255, 0.8) !important;
+            transform: translateY(-2px);
+            opacity: 0.9;
         }
 
-        @keyframes social-glow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.15); }
-        }
-
-        @keyframes social-bounce {
-            0%, 100% { transform: translateY(-3px) scale(1.08); }
-            50% { transform: translateY(-5px) scale(1.1); }
-        }
-
-        /* Email Chip */
+        /* Email Chip - Simplified */
         .email-chip {
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
-            padding: 0.35rem 0.8rem;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(249, 115, 22, 0.12) 100%);
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(236, 72, 153, 0.15);
             border: 1px solid rgba(236, 72, 153, 0.4);
             border-radius: 9999px;
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
-        .email-chip::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, transparent, rgba(236, 72, 153, 0.15), transparent);
-            transform: translateX(-100%) skewX(-15deg);
-            transition: transform 0.6s;
-        }
-        .email-chip:hover::after { transform: translateX(100%) skewX(-15deg); }
         .email-chip:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(236, 72, 153, 0.6), inset 0 0 20px rgba(236, 72, 153, 0.2);
-            border-color: rgba(236, 72, 153, 0.7);
+            transform: scale(1.02);
+            opacity: 0.9;
         }
         .email-chip i {
             color: #ec4899;
-            filter: drop-shadow(0 0 5px rgba(236, 72, 153, 0.8));
         }
 
-        /* Subdomain Button */
+        /* Subdomain Button - Simplified */
         .subdomain-btn {
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-            will-change: transform;
+            transition: all 0.2s ease;
         }
-        .subdomain-btn::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.5s;
-        }
-        .subdomain-btn:hover::after { transform: translateX(100%); }
         .subdomain-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 0 40px rgba(34, 211, 238, 0.9), inset 0 0 30px rgba(34, 211, 238, 0.3);
-            border-color: rgba(34, 211, 238, 0.9) !important;
+            transform: translateY(-2px);
+            opacity: 0.9;
         }
 
-        @keyframes subdomain-pulse {
-            0%, 100% { box-shadow: 0 0 15px rgba(34, 211, 238, 0.3); }
-            50% { box-shadow: 0 0 30px rgba(34, 211, 238, 0.6); }
-        }
-
-        /* Enter Universe Button */
+        /* Enter Universe Button - Simplified */
         .universe-btn {
-            position: relative;
-            overflow: hidden;
             background: linear-gradient(135deg, rgba(249, 115, 22, 0.3), rgba(236, 72, 153, 0.3));
             border: 2px solid rgba(249, 115, 22, 0.7);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 0 20px rgba(249, 115, 22, 0.5), inset 0 0 15px rgba(249, 115, 22, 0.1);
-            will-change: transform;
+            transition: all 0.2s ease;
         }
-        .universe-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-            transform: translateX(-100%) skewX(-15deg);
-            transition: transform 0.6s;
-        }
-        .universe-btn::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff, #00ffff);
-            background-size: 400% 400%;
-            border-radius: 0.5rem;
-            z-index: -1;
-            opacity: 0;
-            animation: gradient-rotate 3s linear infinite;
-            transition: opacity 0.3s;
-        }
-        .universe-btn:hover::before { transform: translateX(100%) skewX(-15deg); }
-        .universe-btn:hover::after { opacity: 0.5; }
         .universe-btn:hover {
-            transform: scale(1.08) translateY(-2px);
-            box-shadow: 0 0 50px rgba(249, 115, 22, 1), inset 0 0 35px rgba(249, 115, 22, 0.4), 0 0 70px rgba(0, 255, 255, 0.6);
-            border-color: rgba(249, 115, 22, 1);
+            transform: translateY(-2px);
+            opacity: 0.9;
         }
 
-        @keyframes btn-pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); }
-            50% { box-shadow: 0 0 40px rgba(249, 115, 22, 0.7), 0 0 60px rgba(236, 72, 153, 0.5); }
-        }
-
-        @keyframes rainbow-border {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
-        }
-
-        @keyframes gradient-rotate {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Mute Button */
+        /* Mute Button - Simplified */
         .mute-btn {
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
         .mute-btn:hover {
-            transform: rotate(180deg) scale(1.15);
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+            opacity: 0.8;
         }
         .mute-btn.muted {
             opacity: 0.5;
         }
 
-        /* Back Button */
+        /* Back Button - Simplified */
         .back-btn {
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s ease;
         }
         .back-btn:hover {
-            transform: translateX(-5px);
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            opacity: 0.8;
         }
 
-        /* Floating particles */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.3; }
-            50% { transform: translateY(-20px) translateX(10px); opacity: 0.6; }
-        }
-
-        .particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: radial-gradient(circle, rgba(0, 255, 255, 0.8), transparent);
-            border-radius: 50%;
-            animation: float 4s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        /* Performance optimizations - use GPU acceleration */
-        .particle {
-            will-change: transform;
-            transform: translate3d(0, 0, 0);
-        }
-
-        /* Simplified border glow - less expensive */
-        @keyframes border-glow {
-            0%, 100% {
-                border-color: rgba(255, 255, 255, 0.1);
-            }
-            50% {
-                border-color: rgba(0, 255, 255, 0.25);
-            }
-        }
-
-        /* Apply subtle border pulse - no box-shadow for performance */
-        .pointer-events-auto {
-            animation: border-glow 5s ease-in-out infinite;
-        }
 
         /* Mobile Optimizations */
         @media (max-width: 768px) {
-            .glitch { font-size: 2.25rem !important; }
-            .greeting-word { font-size: 1rem !important; }
-            .info-chip { font-size: 0.65rem !important; padding: 0.25rem 0.6rem !important; }
-            .typing-text { font-size: 0.7rem !important; }
-            .social-btn { padding: 0.5rem !important; }
-            .construction-banner { padding: 0.4rem !important; font-size: 0.75rem !important; }
+            h1 { font-size: 2rem !important; }
+            .tech-badge { font-size: 0.75rem !important; padding: 0.3rem 0.6rem !important; }
+            .info-chip { font-size: 0.7rem !important; padding: 0.3rem 0.6rem !important; }
+            .social-btn { padding: 0.6rem !important; font-size: 0.7rem !important; }
+            .social-btn span { display: none; }
+            .construction-banner { padding: 0.5rem !important; font-size: 0.75rem !important; }
             body { overflow-y: auto; }
             main { min-height: 100vh; }
         }
@@ -450,18 +146,10 @@
 
     <main id="ui-layer" class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-2 pointer-events-none overflow-hidden">
 
-        <div class="pointer-events-auto bg-black/80 backdrop-blur-md border border-white/10 p-2 md:p-3 rounded-lg max-w-6xl w-full shadow-2xl relative overflow-hidden">
-
-            <div class="scanline"></div>
-
-            <!-- Floating Particles - Reduced for performance -->
-            <div class="particle" style="top: 15%; left: 20%; animation-delay: 0s;"></div>
-            <div class="particle" style="top: 65%; right: 25%; animation-delay: 2s; background: radial-gradient(circle, rgba(168, 85, 247, 0.6), transparent);"></div>
-            <div class="particle" style="bottom: 30%; left: 15%; animation-delay: 1s; background: radial-gradient(circle, rgba(34, 211, 238, 0.6), transparent);"></div>
-            <div class="particle" style="top: 45%; right: 15%; animation-delay: 3s; background: radial-gradient(circle, rgba(249, 115, 22, 0.6), transparent);"></div>
+        <div class="pointer-events-auto bg-black/90 border border-white/10 p-3 md:p-4 rounded-lg max-w-4xl w-full shadow-2xl relative">
 
             <!-- Construction Banner with v1.7 -->
-            <div class="construction-banner rounded px-3 py-1.5 md:py-1.5 mb-2 md:mb-1 backdrop-blur-sm">
+            <div class="construction-banner rounded px-3 py-1.5 md:py-1.5 mb-2 md:mb-1">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <span class="construction-icon text-base">🚧</span>
@@ -474,46 +162,31 @@
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-2 md:gap-3">
+            <div class="space-y-3">
 
-                <!-- Left Column: Main Info -->
-                <div class="space-y-1 md:space-y-0.5">
+                <!-- Name -->
+                <h1 class="text-4xl md:text-6xl font-black tracking-tighter font-['Orbitron'] text-center text-white">
+                    FARES KHIARY
+                </h1>
 
-                    <!-- Name -->
-                    <h1 class="glitch text-4xl md:text-7xl font-black tracking-tighter font-['Orbitron'] text-center mb-0.5" data-text="FARES KHIARY">
-                        FARES KHIARY
-                    </h1>
+                <!-- Subtitle -->
+                <p class="text-center text-cyan-400 font-['Rajdhani'] text-lg md:text-xl font-semibold">
+                    Web Developer
+                </p>
 
-                    <!-- Greetings -->
-                    <div class="relative h-12 md:h-14 flex items-center justify-center mb-1 md:mb-0.5">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <span class="greeting-word">Bonjour</span>
-                            <span class="greeting-word">مرحبا</span>
-                            <span class="greeting-word">Hello</span>
-                            <span class="greeting-word">Hallo</span>
-                        </div>
-                    </div>
+                <!-- Tech Stacks -->
+                <div class="flex flex-wrap justify-center gap-2 mb-2">
+                    <span class="tech-badge">JavaScript</span>
+                    <span class="tech-badge">PHP</span>
+                    <span class="tech-badge">React</span>
+                    <span class="tech-badge">Node.js</span>
+                    <span class="tech-badge">Docker</span>
+                    <span class="tech-badge">AWS</span>
+                    <span class="tech-badge">MySQL</span>
+                    <span class="tech-badge">Python</span>
+                </div>
 
-                    <!-- Typing Animation - Web Developer + Tech Stacks -->
-                    <div class="flex justify-center mb-1">
-                        <div class="typing-container">
-                            <i class="fas fa-code text-cyan-400 text-xs"></i>
-                            <div class="typing-text">
-                                <span>Web Developer •</span>
-                                <span class="tech-stack">JavaScript</span>
-                                <span class="tech-stack">PHP</span>
-                                <span class="tech-stack">React</span>
-                                <span class="tech-stack">Node.js</span>
-                                <span class="tech-stack">Docker</span>
-                                <span class="tech-stack">AWS</span>
-                                <span class="tech-stack">MySQL</span>
-                                <span class="tech-stack">Python</span>
-                                <span class="cursor-blink">|</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Personal Info - Inline Chips -->
+                <!-- Personal Info - Inline Chips -->
                     <div class="flex flex-wrap items-center justify-center gap-1 mb-1">
                         <div class="info-chip">
                             <i class="fas fa-birthday-cake"></i>
@@ -533,78 +206,63 @@
                         </div>
                     </div>
 
-                    <!-- Email -->
-                    <div class="flex justify-center mb-1">
-                        <a href="mailto:contact@fares-khiary.com" class="email-chip">
-                            <i class="fas fa-envelope text-xs"></i>
-                            <span class="font-['Rajdhani'] font-semibold text-[11px] text-pink-200">contact@fares-khiary.com</span>
-                        </a>
-                    </div>
-
-                    <!-- Social Media Section -->
-                    <div class="border-t border-white/10 pt-1">
-                        <h2 class="font-['Orbitron'] text-cyan-300 text-[10px] font-bold tracking-wider uppercase mb-1 text-center flex items-center justify-center gap-1">
-                            <i class="fas fa-share-nodes text-[8px]"></i>
-                            <span>Connect</span>
-                        </h2>
-                        <div class="flex gap-1.5 justify-center">
-                            <a href="https://www.linkedin.com/in/fares-khiary" target="_blank" rel="noopener noreferrer"
-                               class="social-btn linkedin flex items-center justify-center gap-1 px-2 py-1.5 bg-gradient-to-r from-blue-900/40 to-blue-700/40 border border-blue-500/50 rounded-lg cursor-pointer group">
-                                <i class="fab fa-linkedin text-base group-hover:scale-110 transition-transform"></i>
-                                <span class="font-['Rajdhani'] text-[9px] font-bold hidden sm:inline">LinkedIn</span>
-                            </a>
-
-                            <a href="https://www.instagram.com/khiary.fares" target="_blank" rel="noopener noreferrer"
-                               class="social-btn instagram flex items-center justify-center gap-1 px-2 py-1.5 bg-gradient-to-r from-pink-900/40 to-purple-900/40 border border-pink-500/50 rounded-lg cursor-pointer group">
-                                <i class="fab fa-instagram text-base group-hover:scale-110 transition-transform"></i>
-                                <span class="font-['Rajdhani'] text-[9px] font-bold hidden sm:inline">Instagram</span>
-                            </a>
-
-                            <a href="https://github.com/faresk93" target="_blank" rel="noopener noreferrer"
-                               class="social-btn github flex items-center justify-center gap-1 px-2 py-1.5 bg-gradient-to-r from-gray-900/40 to-gray-700/40 border border-gray-500/50 rounded-lg cursor-pointer group">
-                                <i class="fab fa-github text-base group-hover:scale-110 transition-transform"></i>
-                                <span class="font-['Rajdhani'] text-[9px] font-bold hidden sm:inline">GitHub</span>
-                            </a>
-                        </div>
-                    </div>
+                <!-- Email -->
+                <div class="flex justify-center">
+                    <a href="mailto:contact@fares-khiary.com" class="email-chip">
+                        <i class="fas fa-envelope text-xs"></i>
+                        <span class="font-['Rajdhani'] font-semibold text-sm text-pink-200">contact@fares-khiary.com</span>
+                    </a>
                 </div>
 
-                <!-- Right Column: Subdomains & Universe -->
-                <div class="space-y-2 md:space-y-1 flex flex-col justify-center">
+                <!-- Social Media Section -->
+                <div class="flex gap-3 justify-center">
+                    <a href="https://www.linkedin.com/in/fares-khiary" target="_blank" rel="noopener noreferrer"
+                       class="social-btn linkedin flex items-center justify-center gap-1.5 px-3 py-2 bg-gradient-to-r from-blue-900/40 to-blue-700/40 border border-blue-500/50 rounded-lg cursor-pointer group">
+                        <i class="fab fa-linkedin text-lg"></i>
+                        <span class="font-['Rajdhani'] text-xs font-bold">LinkedIn</span>
+                    </a>
 
-                    <div class="text-center">
-                        <p class="font-['Rajdhani'] text-gray-300 text-xs md:text-sm font-medium leading-relaxed">
-                            <span class="text-cyan-400">🌟</span> Explore My Digital Universe <span class="text-cyan-400">🌟</span>
-                        </p>
-                    </div>
+                    <a href="https://www.instagram.com/khiary.fares" target="_blank" rel="noopener noreferrer"
+                       class="social-btn instagram flex items-center justify-center gap-1.5 px-3 py-2 bg-gradient-to-r from-pink-900/40 to-purple-900/40 border border-pink-500/50 rounded-lg cursor-pointer group">
+                        <i class="fab fa-instagram text-lg"></i>
+                        <span class="font-['Rajdhani'] text-xs font-bold">Instagram</span>
+                    </a>
 
-                    <!-- n8n Button -->
-                    <button id="n8n-btn" class="subdomain-btn flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/50 rounded-lg font-['Orbitron'] text-[10px] font-bold tracking-wide cursor-pointer group">
-                        <svg class="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="20" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
-                            <rect x="120" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
-                            <rect x="20" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
-                            <rect x="120" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
-                            <path d="M80 50 L120 50 M50 80 L50 120 M150 80 L150 120 M80 150 L120 150" stroke="#EA4B71" stroke-width="8" stroke-linecap="round"/>
-                        </svg>
-                        <span class="group-hover:text-cyan-300 transition-colors">n8n Automation</span>
-                    </button>
-
-                    <!-- Enter My Universe Button -->
-                    <button id="start-btn"
-                       class="universe-btn relative inline-flex items-center justify-center px-4 py-2.5 font-bold text-white cursor-pointer group uppercase font-['Orbitron'] text-xs tracking-widest rounded-lg">
-                        <span class="relative z-10 mr-1.5 text-lg">🌌</span>
-                        <span class="relative z-10">Enter My Universe</span>
-                        <svg class="relative z-10 w-3.5 h-3.5 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                    </button>
-
+                    <a href="https://github.com/faresk93" target="_blank" rel="noopener noreferrer"
+                       class="social-btn github flex items-center justify-center gap-1.5 px-3 py-2 bg-gradient-to-r from-gray-900/40 to-gray-700/40 border border-gray-500/50 rounded-lg cursor-pointer group">
+                        <i class="fab fa-github text-lg"></i>
+                        <span class="font-['Rajdhani'] text-xs font-bold">GitHub</span>
+                    </a>
                 </div>
+
+                <!-- Divider -->
+                <div class="border-t border-white/10"></div>
+
+                <!-- n8n Button -->
+                <button id="n8n-btn" class="subdomain-btn flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/50 rounded-lg font-['Orbitron'] text-sm font-bold tracking-wide cursor-pointer group">
+                    <svg class="w-6 h-6" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
+                        <rect x="120" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
+                        <rect x="20" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
+                        <rect x="120" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
+                        <path d="M80 50 L120 50 M50 80 L50 120 M150 80 L150 120 M80 150 L120 150" stroke="#EA4B71" stroke-width="8" stroke-linecap="round"/>
+                    </svg>
+                    <span>n8n Automation</span>
+                </button>
+
+                <!-- Enter My Universe Button -->
+                <button id="start-btn"
+                   class="universe-btn relative inline-flex items-center justify-center px-5 py-3 font-bold text-white cursor-pointer group uppercase font-['Orbitron'] text-sm tracking-widest rounded-lg">
+                    <span class="relative z-10 mr-2 text-xl">🌌</span>
+                    <span class="relative z-10">Enter My Universe</span>
+                    <svg class="relative z-10 w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                </button>
             </div>
         </div>
     </main>
 
     <!-- Mute Button -->
-    <button id="mute-btn" class="mute-btn fixed top-2 left-2 z-30 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center cursor-pointer hover:bg-black/80 pointer-events-auto">
+    <button id="mute-btn" class="mute-btn fixed top-2 left-2 z-30 w-10 h-10 rounded-full bg-black/80 border border-white/20 flex items-center justify-center cursor-pointer hover:bg-black/90 pointer-events-auto">
         <svg class="w-5 h-5" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="50" cy="50" r="45" fill="url(#blackhole-gradient)"/>
             <circle cx="50" cy="50" r="15" fill="#000000"/>
@@ -622,7 +280,7 @@
     </button>
 
     <!-- Back Button -->
-    <button id="back-btn" class="back-btn fixed top-2 left-14 z-30 hidden px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-md border border-white/20 items-center gap-1.5 cursor-pointer hover:bg-black/80 pointer-events-auto font-['Orbitron'] text-[10px] font-bold tracking-wider">
+    <button id="back-btn" class="back-btn fixed top-2 left-14 z-30 hidden px-3 py-1.5 rounded-lg bg-black/80 border border-white/20 items-center gap-1.5 cursor-pointer hover:bg-black/90 pointer-events-auto font-['Orbitron'] text-[10px] font-bold tracking-wider">
         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
