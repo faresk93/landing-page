@@ -310,15 +310,7 @@
             color: #ec4899;
         }
 
-        /* Subdomain Button - Simplified */
-        .subdomain-btn {
-            transition: all 0.2s ease;
-        }
 
-        .subdomain-btn:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
-        }
 
         /* Enter Universe Button - Simplified */
         .universe-btn {
@@ -580,6 +572,25 @@
             border-radius: 10px;
         }
 
+        .typing-cursor::after {
+            content: '|';
+            animation: cursor-blink 0.8s infinite;
+            color: #00d9ff;
+            margin-left: 2px;
+        }
+
+        @keyframes cursor-blink {
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
         @media (max-width: 768px) {
             .loader-container {
                 position: relative;
@@ -715,26 +726,13 @@
 
                 <!-- Centered Buttons Container -->
                 <div class="flex flex-col items-center gap-3">
-                    <!-- n8n Button -->
-                    <button id="n8n-btn"
-                        class="subdomain-btn flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/50 rounded-lg font-['Orbitron'] text-sm font-bold tracking-wide cursor-pointer group w-full max-w-md">
-                        <svg class="w-6 h-6" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="20" y="20" width="60" height="60" rx="8" fill="#EA4B71" />
-                            <rect x="120" y="20" width="60" height="60" rx="8" fill="#EA4B71" />
-                            <rect x="20" y="120" width="60" height="60" rx="8" fill="#EA4B71" />
-                            <rect x="120" y="120" width="60" height="60" rx="8" fill="#EA4B71" />
-                            <path d="M80 50 L120 50 M50 80 L50 120 M150 80 L150 120 M80 150 L120 150" stroke="#EA4B71"
-                                stroke-width="8" stroke-linecap="round" />
-                        </svg>
-                        <span>n8n Automation</span>
-                    </button>
-
                     <!-- Enter My Universe Button -->
                     <button id="start-btn"
-                        class="universe-btn relative flex items-center justify-center px-5 py-3 font-bold text-white cursor-pointer group uppercase font-['Orbitron'] text-sm tracking-widest rounded-lg w-full max-w-md">
-                        <span class="relative z-10 mr-2 text-xl">🌌</span>
+                        class="universe-btn relative flex items-center justify-center px-6 py-4 font-bold text-white cursor-pointer group uppercase font-['Orbitron'] text-base tracking-widest rounded-lg w-full max-w-lg shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_30px_rgba(249,115,22,0.5)]">
+                        <span class="relative z-10 mr-3 text-2xl">🌌</span>
                         <span class="relative z-10">Enter My Universe</span>
-                        <svg class="relative z-10 w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="relative z-10 w-5 h-5 ml-3 transition-transform group-hover:translate-x-1"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
@@ -1344,11 +1342,7 @@
             }
         };
 
-        // Buttons
-        document.getElementById('n8n-btn').addEventListener('click', () => {
-            startAudio();
-            window.open('https://n8n.fares-khiary.com', '_blank');
-        });
+
 
         document.getElementById('start-btn').addEventListener('click', () => {
             state = 'UNLOCKED';
@@ -1450,6 +1444,43 @@
         const popupText = document.getElementById('popup-text');
         const closePopup = document.getElementById('close-popup');
 
+        let typeTimeout;
+        const playTypeSound = () => {
+            if (!audioContext || isMuted) return;
+            try {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(150 + Math.random() * 100, audioContext.currentTime);
+                gain.gain.setValueAtTime(0.02, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(masterGain || audioContext.destination);
+                osc.start();
+                osc.stop(audioContext.currentTime + 0.05);
+            } catch (e) { }
+        };
+
+        const typeMessage = (text, element, speed = 30) => {
+            let i = 0;
+            element.innerText = '';
+            element.classList.add('typing-cursor');
+
+            if (typeTimeout) clearTimeout(typeTimeout);
+
+            const internalTyping = () => {
+                if (i < text.length) {
+                    element.innerText += text.charAt(i);
+                    playTypeSound();
+                    i++;
+                    typeTimeout = setTimeout(internalTyping, speed + Math.random() * 20);
+                } else {
+                    element.classList.remove('typing-cursor');
+                }
+            };
+            internalTyping();
+        };
+
         const askQuestion = async () => {
             const question = questionInput.value.trim();
             if (!question) return;
@@ -1462,23 +1493,18 @@
             try {
                 const webhookUrl = `https://n8n.fares-khiary.com/webhook/886cf54c-6c18-4ea3-8f3c-c8215751748f?question=${encodeURIComponent(question)}`;
                 const response = await fetch(webhookUrl);
-                console.log('bug response', response)
 
                 if (!response.ok) throw new Error('Network response was not ok');
 
                 const data = await response.json();
-                console.log('bug data', data)
-                // Assuming the response is either a direct string or has a 'output' / 'response' field
-                // Adjust based on typical n8n output formats if needed
                 const message = data.output || data.response || data.message || (typeof data === 'string' ? data : JSON.stringify(data));
 
-                popupText.innerText = message;
                 popup.style.display = 'flex';
+                typeMessage(message, popupText);
             } catch (error) {
-                console.error('bug', error)
                 console.error('Error fetching webhook:', error);
-                popupText.innerText = "Error: Failed to connect to the cosmic network. Please try again later.";
                 popup.style.display = 'flex';
+                typeMessage("Error: Failed to connect to the cosmic network. Please try again later.", popupText);
             } finally {
                 loader.style.display = 'none';
                 submitBtn.style.opacity = '1';
@@ -1494,6 +1520,7 @@
 
         closePopup.addEventListener('click', () => {
             popup.style.display = 'none';
+            if (typeTimeout) clearTimeout(typeTimeout);
         });
 
         window.addEventListener('click', (e) => {
