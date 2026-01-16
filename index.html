@@ -106,6 +106,53 @@
             color: #22d3ee;
         }
 
+        /* Typing Animation */
+        .typing-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .typing-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #00d9ff;
+        }
+
+        .tech-stack {
+            display: inline;
+            animation: tech-fade 12s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes tech-fade {
+            0%, 100% { opacity: 0; }
+            8%, 24% { opacity: 1; }
+            32% { opacity: 0; }
+        }
+
+        .tech-stack:nth-child(1) { animation-delay: 0s; }
+        .tech-stack:nth-child(2) { animation-delay: 1.5s; }
+        .tech-stack:nth-child(3) { animation-delay: 3s; }
+        .tech-stack:nth-child(4) { animation-delay: 4.5s; }
+        .tech-stack:nth-child(5) { animation-delay: 6s; }
+        .tech-stack:nth-child(6) { animation-delay: 7.5s; }
+        .tech-stack:nth-child(7) { animation-delay: 9s; }
+        .tech-stack:nth-child(8) { animation-delay: 10.5s; }
+
+        .cursor-blink {
+            animation: blink 0.8s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
         /* Info Chip - Simplified */
         .info-chip {
             display: inline-flex;
@@ -195,7 +242,8 @@
         @media (max-width: 768px) {
             h1 { font-size: 2rem !important; }
             .greeting-word { font-size: 0.9rem !important; }
-            .tech-badge { font-size: 0.75rem !important; padding: 0.3rem 0.6rem !important; }
+            .typing-text { font-size: 0.75rem !important; }
+            .typing-container { padding: 0.4rem 0.8rem !important; }
             .info-chip { font-size: 0.7rem !important; padding: 0.3rem 0.6rem !important; }
             .social-btn { padding: 0.6rem !important; font-size: 0.7rem !important; }
             .social-btn span { display: none; }
@@ -244,16 +292,23 @@
                     </div>
                 </div>
 
-                <!-- Tech Stacks -->
-                <div class="flex flex-wrap justify-center gap-2 mb-2">
-                    <span class="tech-badge">JavaScript</span>
-                    <span class="tech-badge">PHP</span>
-                    <span class="tech-badge">React</span>
-                    <span class="tech-badge">Node.js</span>
-                    <span class="tech-badge">Docker</span>
-                    <span class="tech-badge">AWS</span>
-                    <span class="tech-badge">MySQL</span>
-                    <span class="tech-badge">Python</span>
+                <!-- Tech Stacks - Typing Animation -->
+                <div class="flex justify-center mb-2">
+                    <div class="typing-container">
+                        <i class="fas fa-code text-cyan-400 text-sm"></i>
+                        <div class="typing-text">
+                            <span>Web Developer • </span>
+                            <span class="tech-stack">JavaScript</span>
+                            <span class="tech-stack">PHP</span>
+                            <span class="tech-stack">React</span>
+                            <span class="tech-stack">Node.js</span>
+                            <span class="tech-stack">Docker</span>
+                            <span class="tech-stack">AWS</span>
+                            <span class="tech-stack">MySQL</span>
+                            <span class="tech-stack">Python</span>
+                            <span class="cursor-blink">|</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Personal Info - Inline Chips -->
@@ -329,6 +384,16 @@
                         <span class="relative z-10">Enter My Universe</span>
                         <svg class="relative z-10 w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                     </button>
+                </div>
+
+                <!-- Footer -->
+                <div class="mt-4 pt-3 border-t border-white/10 text-center">
+                    <p class="font-['Rajdhani'] text-gray-400 text-xs">
+                        Made with <span class="text-red-400">❤️</span> by <span class="text-cyan-400 font-bold">Fares KHIARY</span>
+                    </p>
+                    <p class="font-['Rajdhani'] text-gray-500 text-[10px] mt-1">
+                        <span class="text-purple-400">✨</span> Enhanced with AI assistance
+                    </p>
                 </div>
             </div>
         </div>
