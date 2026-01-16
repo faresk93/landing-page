@@ -400,6 +400,196 @@
                 min-height: 100vh;
             }
         }
+
+        /* Question Input Styling */
+        .question-input-container {
+            position: relative;
+            max-width: 400px;
+            margin: 1.5rem auto 0;
+            z-index: 20;
+        }
+
+        .question-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 12px;
+            padding: 12px 45px 12px 15px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .question-input:focus {
+            border-color: rgba(0, 217, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .send-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #00d9ff;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+            color: #fff;
+        }
+
+        /* Loading Spinner */
+        .loader-container {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            position: absolute;
+            right: -130px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem;
+            color: #00d9ff;
+            white-space: nowrap;
+        }
+
+        .gpt-loader {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(0, 217, 255, 0.1);
+            border-top: 2px solid #00d9ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Space Popup Styling */
+        #space-popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .popup-content {
+            background: linear-gradient(135deg, #0b0b1a 0%, #1a1a3a 100%);
+            border: 2px solid #4a90e2;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            padding: 35px 25px 25px;
+            box-shadow: 0 0 50px rgba(74, 144, 226, 0.3), inset 0 0 20px rgba(74, 144, 226, 0.2);
+            animation: popup-glow 4s infinite alternate;
+            color: #e0e0e0;
+            font-family: 'Rajdhani', sans-serif;
+            overflow: hidden;
+        }
+
+        @keyframes popup-glow {
+            from {
+                box-shadow: 0 0 30px rgba(74, 144, 226, 0.2);
+            }
+
+            to {
+                box-shadow: 0 0 50px rgba(168, 85, 247, 0.4);
+            }
+        }
+
+        .popup-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            z-index: 10;
+        }
+
+        .close-popup:hover {
+            transform: scale(1.1) rotate(90deg);
+            color: #ff4d4d;
+        }
+
+        .popup-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: #00d9ff;
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .popup-body {
+            line-height: 1.6;
+            font-size: 1.05rem;
+            max-height: 60vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #00d9ff rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .popup-body::-webkit-scrollbar-thumb {
+            background-color: #00d9ff;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .loader-container {
+                position: relative;
+                right: 0;
+                top: 0;
+                transform: none;
+                margin-top: 10px;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 
@@ -434,6 +624,19 @@
                     data-text="FARES KHIARY">
                     FARES KHIARY
                 </h1>
+
+                <!-- Question Input -->
+                <div class="question-input-container pointer-events-auto">
+                    <input type="text" id="user-question" class="question-input" placeholder="Ask me anything..."
+                        autocomplete="off">
+                    <button id="submit-question" class="send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                    <div id="loader-container" class="loader-container">
+                        <div class="gpt-loader"></div>
+                        <span>Thinking... 🧠</span>
+                    </div>
+                </div>
 
                 <!-- Greetings -->
                 <div class="relative h-12 md:h-14 flex items-center justify-center">
@@ -585,6 +788,17 @@
             class="font-['Rajdhani'] text-cyan-300 text-xs tracking-[0.2em] uppercase drop-shadow-md bg-black/50 inline-block px-3 py-1 rounded-full border border-cyan-500/30">
             🖱️ Drag • Scroll • Explore
         </p>
+    </div>
+
+    <!-- Space Response Popup -->
+    <div id="space-popup">
+        <div class="popup-content">
+            <span id="close-popup" class="close-popup">&times;</span>
+            <div class="popup-title">Frequency Received</div>
+            <div id="popup-text" class="popup-body">
+                Connecting to deep space network...
+            </div>
+        </div>
     </div>
 
     <script type="module">
@@ -1227,6 +1441,64 @@
 
         // Start typing animation
         typeEffect();
+
+        // --- WEBHOOK & POPUP LOGIC ---
+        const questionInput = document.getElementById('user-question');
+        const submitBtn = document.getElementById('submit-question');
+        const loader = document.getElementById('loader-container');
+        const popup = document.getElementById('space-popup');
+        const popupText = document.getElementById('popup-text');
+        const closePopup = document.getElementById('close-popup');
+
+        const askQuestion = async () => {
+            const question = questionInput.value.trim();
+            if (!question) return;
+
+            // Show loader
+            loader.style.display = 'flex';
+            submitBtn.style.opacity = '0.5';
+            submitBtn.disabled = true;
+
+            try {
+                const webhookUrl = `https://n8n.fares-khiary.com/webhook/886cf54c-6c18-4ea3-8f3c-c8215751748f?question=${encodeURIComponent(question)}`;
+                const response = await fetch(webhookUrl);
+                console.log('bug response', response)
+
+                if (!response.ok) throw new Error('Network response was not ok');
+
+                const data = await response.json();
+                console.log('bug data', data)
+                // Assuming the response is either a direct string or has a 'output' / 'response' field
+                // Adjust based on typical n8n output formats if needed
+                const message = data.output || data.response || data.message || (typeof data === 'string' ? data : JSON.stringify(data));
+
+                popupText.innerText = message;
+                popup.style.display = 'flex';
+            } catch (error) {
+                console.error('bug', error)
+                console.error('Error fetching webhook:', error);
+                popupText.innerText = "Error: Failed to connect to the cosmic network. Please try again later.";
+                popup.style.display = 'flex';
+            } finally {
+                loader.style.display = 'none';
+                submitBtn.style.opacity = '1';
+                submitBtn.disabled = false;
+                questionInput.value = '';
+            }
+        };
+
+        submitBtn.addEventListener('click', askQuestion);
+        questionInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') askQuestion();
+        });
+
+        closePopup.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === popup) popup.style.display = 'none';
+        });
 
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
