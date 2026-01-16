@@ -204,59 +204,45 @@
             color: #00d9ff;
         }
 
-        .tech-stack {
-            display: inline;
-            animation: tech-fade 12s ease-in-out infinite;
-            opacity: 0;
+        /* Tech Stack Typing & Glitch */
+        .tech-typing {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            color: #22d3ee;
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 0 5px rgba(34, 211, 238, 0.5);
         }
 
-        @keyframes tech-fade {
+        .tech-typing.glitched {
+            animation: stack-glitch 0.2s cubic-bezier(.25, .46, .45, .94) both infinite;
+            text-shadow: 2px 0 #ff00c1, -2px 0 #00fff9;
+        }
 
-            0%,
+        @keyframes stack-glitch {
+            0% {
+                transform: translate(0)
+            }
+
+            20% {
+                transform: translate(-2px, 2px)
+            }
+
+            40% {
+                transform: translate(-2px, -2px)
+            }
+
+            60% {
+                transform: translate(2px, 2px)
+            }
+
+            80% {
+                transform: translate(2px, -2px)
+            }
+
             100% {
-                opacity: 0;
+                transform: translate(0)
             }
-
-            8%,
-            24% {
-                opacity: 1;
-            }
-
-            32% {
-                opacity: 0;
-            }
-        }
-
-        .tech-stack:nth-child(1) {
-            animation-delay: 0s;
-        }
-
-        .tech-stack:nth-child(2) {
-            animation-delay: 1.5s;
-        }
-
-        .tech-stack:nth-child(3) {
-            animation-delay: 3s;
-        }
-
-        .tech-stack:nth-child(4) {
-            animation-delay: 4.5s;
-        }
-
-        .tech-stack:nth-child(5) {
-            animation-delay: 6s;
-        }
-
-        .tech-stack:nth-child(6) {
-            animation-delay: 7.5s;
-        }
-
-        .tech-stack:nth-child(7) {
-            animation-delay: 9s;
-        }
-
-        .tech-stack:nth-child(8) {
-            animation-delay: 10.5s;
         }
 
         .cursor-blink {
@@ -437,7 +423,7 @@
                             Work in Progress
                         </p>
                     </div>
-                    <div class="font-['Orbitron'] text-orange-400 text-xs font-bold">v1.8</div>
+                    <div class="font-['Orbitron'] text-orange-400 text-xs font-bold">v1.9</div>
                 </div>
             </div>
 
@@ -465,14 +451,7 @@
                         <i class="fas fa-code text-cyan-400 text-sm"></i>
                         <div class="typing-text">
                             <span>Web Developer • </span>
-                            <span class="tech-stack">JavaScript</span>
-                            <span class="tech-stack">PHP</span>
-                            <span class="tech-stack">React</span>
-                            <span class="tech-stack">Node.js</span>
-                            <span class="tech-stack">Docker</span>
-                            <span class="tech-stack">AWS</span>
-                            <span class="tech-stack">MySQL</span>
-                            <span class="tech-stack">Python</span>
+                            <span id="tech-typed" class="tech-typing"></span>
                             <span class="cursor-blink">|</span>
                         </div>
                     </div>
@@ -616,7 +595,10 @@
         scene.fog = new THREE.FogExp2(0x000000, 0.0012);
 
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-        camera.position.set(0, 20, 100);
+
+        // Mobile optimization: adjust camera Z pos to see more of the universe
+        const isMobile = window.innerWidth < 768;
+        camera.position.set(0, isMobile ? 10 : 20, isMobile ? 140 : 100);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -1191,44 +1173,114 @@
             document.addEventListener(event, autoStartAudio, { once: true });
         });
 
+        // --- TYPING & GLITCH ANIMATION ---
+        const techWords = [
+            "JavaScript", "PHP", "React", "Node.js", "Docker", "AWS",
+            "MySQL", "Python", "TypeScript", "Next.js", "Three.js",
+            "Linux", "Git", "DevOps", "Rust", "Go", "Kubernetes",
+            "GraphQL", "TailwindCSS", "Svelte"
+        ];
+        const typedElement = document.getElementById('tech-typed');
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeEffect() {
+            if (!typedElement) return;
+
+            const currentWord = techWords[wordIndex];
+
+            if (isDeleting) {
+                charIndex--;
+                typedElement.textContent = currentWord.substring(0, charIndex);
+            } else {
+                charIndex++;
+                typedElement.textContent = currentWord.substring(0, charIndex);
+            }
+
+            // Determine typing speed
+            let typeSpeed = isDeleting ? 40 : 100;
+
+            // Random glitch effect while typing
+            if (!isDeleting && Math.random() < 0.1) {
+                typedElement.classList.add('glitched');
+                setTimeout(() => typedElement.classList.remove('glitched'), 150);
+            }
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                // Word complete
+                typeSpeed = 2000;
+                isDeleting = true;
+
+                // Final glitch on completion
+                typedElement.classList.add('glitched');
+                setTimeout(() => typedElement.classList.remove('glitched'), 500);
+            } else if (isDeleting && charIndex === 0) {
+                // Deletion complete
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % techWords.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeEffect, typeSpeed);
+        }
+
+        // Start typing animation
+        typeEffect();
+
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Re-adjust camera on resize
+            const isMob = window.innerWidth < 768;
+            camera.position.z = isMob ? 140 : 100;
+            camera.position.y = isMob ? 10 : 20;
         });
 
         // --- ANIMATION LOOP ---
         const clock = new THREE.Clock();
 
-        function animate() {
+        const animate = () => {
             requestAnimationFrame(animate);
+
             const delta = clock.getDelta();
             const time = clock.getElapsedTime();
 
-            // Rotate Planets and update labels
+            // Rotate Solar System
+            solarSystem.rotation.y += 0.001;
+
+            // Orbite des planètes
             planets.forEach(p => {
                 p.angle += p.speed * delta;
                 p.mesh.position.x = Math.cos(p.angle) * p.dist;
                 p.mesh.position.z = Math.sin(p.angle) * p.dist;
                 p.mesh.rotation.y += delta * 0.3;
 
-                // Update label position to follow planet
-                p.label.position.x = p.mesh.position.x;
-                p.label.position.z = p.mesh.position.z;
-                p.label.position.y = p.mesh.position.y + p.size + 3;
+                // Make labels face camera
+                if (p.label) {
+                    p.label.position.copy(p.mesh.position);
+                    p.label.position.y += p.size + 2;
+                    // Add slight bobbing to label
+                    p.label.position.y += Math.sin(time * 2) * 0.5;
+                }
             });
 
+            // Asteroids
             asteroids.rotation.y += 0.015 * delta;
 
+            // Sun pulse
             const pulse = 1 + Math.sin(time * 2) * 0.07;
-            sun.scale.setScalar(pulse);
+            if (typeof sun !== 'undefined') sun.scale.setScalar(pulse);
 
+            // Stars
             stars.rotation.y += 0.0001;
             stars.rotation.x += 0.00004;
-
             const twinkle = 0.85 + Math.sin(time * 0.7) * 0.15;
             stars.material.opacity = twinkle;
 
+            // Nebulas
             nebula1.rotation.y += 0.00012;
             nebula1.rotation.z += 0.00006;
             nebula2.rotation.y -= 0.0001;
@@ -1236,10 +1288,15 @@
             nebula3.rotation.y += 0.00008;
             nebula3.rotation.z -= 0.00005;
 
+            // Camera movement
             if (state === 'MENU') {
+                const isMob = window.innerWidth < 768;
+                const baseZ = isMob ? 140 : 100;
+                const baseY = isMob ? 10 : 20;
+
                 camera.position.x = Math.sin(time * 0.15) * 25;
-                camera.position.y = 20 + Math.cos(time * 0.15) * 12;
-                camera.position.z = 100 + Math.sin(time * 0.1) * 10;
+                camera.position.y = baseY + Math.cos(time * 0.15) * 12;
+                camera.position.z = baseZ + Math.sin(time * 0.1) * 10;
                 camera.lookAt(0, 0, 0);
             } else {
                 const targetPos = new THREE.Vector3(
