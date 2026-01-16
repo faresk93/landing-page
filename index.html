@@ -29,6 +29,70 @@
         #interactive-hint { opacity: 0; transition: opacity 1s; }
         .show-hint { opacity: 1 !important; }
 
+        /* Glitch Text Effect */
+        .glitch {
+            position: relative;
+            color: white;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.4), 0 0 40px rgba(168, 85, 247, 0.2);
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+        .glitch::before {
+            left: 2px;
+            color: #0ff;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+            animation: glitch-anim-1 4s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px;
+            color: #f0f;
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+            animation: glitch-anim-2 4.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim-1 {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            100% { transform: translate(1px, -1px); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { transform: translate(0); }
+            20% { transform: translate(2px, -2px); }
+            100% { transform: translate(-1px, 1px); }
+        }
+
+        /* Greeting Word Animations */
+        .greeting-word {
+            opacity: 0;
+            position: absolute;
+            font-size: 1rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00f5ff, #a855f7, #ec4899, #fbbf24);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: greeting-zoom 8s ease-in-out infinite;
+        }
+        .greeting-word:nth-child(1) { animation-delay: 0s; }
+        .greeting-word:nth-child(2) { animation-delay: 2s; }
+        .greeting-word:nth-child(3) { animation-delay: 4s; }
+        .greeting-word:nth-child(4) { animation-delay: 6s; }
+
+        @keyframes greeting-zoom {
+            0% { opacity: 0; transform: scale(0.5); }
+            10% { opacity: 1; transform: scale(1.1); }
+            20% { transform: scale(1); }
+            40% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
         /* Tech Badge - Simple */
         .tech-badge {
             display: inline-block;
@@ -130,6 +194,7 @@
         /* Mobile Optimizations */
         @media (max-width: 768px) {
             h1 { font-size: 2rem !important; }
+            .greeting-word { font-size: 0.9rem !important; }
             .tech-badge { font-size: 0.75rem !important; padding: 0.3rem 0.6rem !important; }
             .info-chip { font-size: 0.7rem !important; padding: 0.3rem 0.6rem !important; }
             .social-btn { padding: 0.6rem !important; font-size: 0.7rem !important; }
@@ -165,14 +230,19 @@
             <div class="space-y-3">
 
                 <!-- Name -->
-                <h1 class="text-4xl md:text-6xl font-black tracking-tighter font-['Orbitron'] text-center text-white">
+                <h1 class="glitch text-4xl md:text-6xl font-black tracking-tighter font-['Orbitron'] text-center" data-text="FARES KHIARY">
                     FARES KHIARY
                 </h1>
 
-                <!-- Subtitle -->
-                <p class="text-center text-cyan-400 font-['Rajdhani'] text-lg md:text-xl font-semibold">
-                    Web Developer
-                </p>
+                <!-- Greetings -->
+                <div class="relative h-12 md:h-14 flex items-center justify-center">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="greeting-word">Bonjour</span>
+                        <span class="greeting-word">مرحبا</span>
+                        <span class="greeting-word">Hello</span>
+                        <span class="greeting-word">Hallo</span>
+                    </div>
+                </div>
 
                 <!-- Tech Stacks -->
                 <div class="flex flex-wrap justify-center gap-2 mb-2">
@@ -238,25 +308,28 @@
                 <!-- Divider -->
                 <div class="border-t border-white/10"></div>
 
-                <!-- n8n Button -->
-                <button id="n8n-btn" class="subdomain-btn flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/50 rounded-lg font-['Orbitron'] text-sm font-bold tracking-wide cursor-pointer group">
-                    <svg class="w-6 h-6" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="20" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
-                        <rect x="120" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
-                        <rect x="20" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
-                        <rect x="120" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
-                        <path d="M80 50 L120 50 M50 80 L50 120 M150 80 L150 120 M80 150 L120 150" stroke="#EA4B71" stroke-width="8" stroke-linecap="round"/>
-                    </svg>
-                    <span>n8n Automation</span>
-                </button>
+                <!-- Centered Buttons Container -->
+                <div class="flex flex-col items-center gap-3">
+                    <!-- n8n Button -->
+                    <button id="n8n-btn" class="subdomain-btn flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/50 rounded-lg font-['Orbitron'] text-sm font-bold tracking-wide cursor-pointer group w-full max-w-md">
+                        <svg class="w-6 h-6" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
+                            <rect x="120" y="20" width="60" height="60" rx="8" fill="#EA4B71"/>
+                            <rect x="20" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
+                            <rect x="120" y="120" width="60" height="60" rx="8" fill="#EA4B71"/>
+                            <path d="M80 50 L120 50 M50 80 L50 120 M150 80 L150 120 M80 150 L120 150" stroke="#EA4B71" stroke-width="8" stroke-linecap="round"/>
+                        </svg>
+                        <span>n8n Automation</span>
+                    </button>
 
-                <!-- Enter My Universe Button -->
-                <button id="start-btn"
-                   class="universe-btn relative inline-flex items-center justify-center px-5 py-3 font-bold text-white cursor-pointer group uppercase font-['Orbitron'] text-sm tracking-widest rounded-lg">
-                    <span class="relative z-10 mr-2 text-xl">🌌</span>
-                    <span class="relative z-10">Enter My Universe</span>
-                    <svg class="relative z-10 w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                </button>
+                    <!-- Enter My Universe Button -->
+                    <button id="start-btn"
+                       class="universe-btn relative flex items-center justify-center px-5 py-3 font-bold text-white cursor-pointer group uppercase font-['Orbitron'] text-sm tracking-widest rounded-lg w-full max-w-md">
+                        <span class="relative z-10 mr-2 text-xl">🌌</span>
+                        <span class="relative z-10">Enter My Universe</span>
+                        <svg class="relative z-10 w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                    </button>
+                </div>
             </div>
         </div>
     </main>
