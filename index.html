@@ -52,6 +52,16 @@
             color: white;
             mix-blend-mode: lighten;
             text-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 60px rgba(168, 85, 247, 0.3);
+            animation: text-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes text-glow {
+            0%, 100% {
+                text-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 60px rgba(168, 85, 247, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(0, 255, 255, 0.7), 0 0 80px rgba(168, 85, 247, 0.5), 0 0 100px rgba(236, 72, 153, 0.3);
+            }
         }
         .glitch::before, .glitch::after {
             content: attr(data-text); position: absolute; top: 0; width: 100%; height: 100%; opacity: 0.8;
@@ -295,9 +305,9 @@
         }
         .subdomain-btn:hover::after { transform: translateX(100%); }
         .subdomain-btn:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 0 35px rgba(34, 211, 238, 0.8), inset 0 0 25px rgba(34, 211, 238, 0.25);
-            border-color: rgba(34, 211, 238, 0.8) !important;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 40px rgba(34, 211, 238, 0.9), inset 0 0 30px rgba(34, 211, 238, 0.3);
+            border-color: rgba(34, 211, 238, 0.9) !important;
         }
 
         @keyframes subdomain-pulse {
@@ -309,10 +319,11 @@
         .universe-btn {
             position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, rgba(249, 115, 22, 0.25), rgba(236, 72, 153, 0.25));
-            border: 2px solid rgba(249, 115, 22, 0.6);
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.3), rgba(236, 72, 153, 0.3));
+            border: 2px solid rgba(249, 115, 22, 0.7);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             animation: btn-pulse 3s ease-in-out infinite, rainbow-border 4s linear infinite;
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.5), inset 0 0 15px rgba(249, 115, 22, 0.1);
         }
         .universe-btn::before {
             content: '';
@@ -337,9 +348,9 @@
         .universe-btn:hover::before { transform: translateX(100%) skewX(-15deg); }
         .universe-btn:hover::after { opacity: 0.5; }
         .universe-btn:hover {
-            transform: scale(1.07);
-            box-shadow: 0 0 45px rgba(249, 115, 22, 0.9), inset 0 0 30px rgba(249, 115, 22, 0.35), 0 0 60px rgba(0, 255, 255, 0.5);
-            border-color: rgba(249, 115, 22, 0.9);
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 0 50px rgba(249, 115, 22, 1), inset 0 0 35px rgba(249, 115, 22, 0.4), 0 0 70px rgba(0, 255, 255, 0.6);
+            border-color: rgba(249, 115, 22, 1);
         }
 
         @keyframes btn-pulse {
@@ -395,14 +406,74 @@
             pointer-events: none;
         }
 
+        /* Shooting Stars Animation */
+        .shooting-star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+            border-radius: 50%;
+            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+            animation: shoot 3s linear infinite;
+            opacity: 0;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        @keyframes shoot {
+            0% {
+                opacity: 0;
+                transform: translateX(0) translateY(0) rotate(-45deg) scaleX(0);
+            }
+            10% {
+                opacity: 1;
+                transform: translateX(50px) translateY(50px) rotate(-45deg) scaleX(20);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(600px) translateY(600px) rotate(-45deg) scaleX(40);
+            }
+        }
+
+        /* Pulse Animation for Elements */
+        @keyframes cosmic-pulse {
+            0%, 100% {
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            50% {
+                transform: scale(1.02);
+                filter: brightness(1.15);
+            }
+        }
+
+        /* Border Glow Animation */
+        @keyframes border-glow {
+            0%, 100% {
+                border-color: rgba(255, 255, 255, 0.1);
+                box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+            }
+            50% {
+                border-color: rgba(0, 255, 255, 0.3);
+                box-shadow: 0 0 25px rgba(0, 255, 255, 0.4), 0 0 50px rgba(168, 85, 247, 0.2);
+            }
+        }
+
+        /* Apply subtle pulse to main container */
+        .pointer-events-auto {
+            animation: border-glow 4s ease-in-out infinite;
+        }
+
         /* Mobile Optimizations */
         @media (max-width: 768px) {
-            .glitch { font-size: 2rem !important; }
-            .greeting-word { font-size: 0.85rem !important; }
-            .info-chip { font-size: 0.6rem !important; padding: 0.2rem 0.5rem !important; }
-            .typing-text { font-size: 0.65rem !important; }
-            .social-btn { padding: 0.4rem !important; }
-            .construction-banner { padding: 0.3rem !important; font-size: 0.7rem !important; }
+            .glitch { font-size: 2.25rem !important; }
+            .greeting-word { font-size: 1rem !important; }
+            .info-chip { font-size: 0.65rem !important; padding: 0.25rem 0.6rem !important; }
+            .typing-text { font-size: 0.7rem !important; }
+            .social-btn { padding: 0.5rem !important; }
+            .construction-banner { padding: 0.4rem !important; font-size: 0.75rem !important; }
+            body { overflow-y: auto; }
+            main { min-height: 100vh; }
         }
     </style>
 </head>
@@ -410,9 +481,19 @@
 
     <div id="canvas-container" class="absolute inset-0 z-0 bg-black cursor-move"></div>
 
-    <main id="ui-layer" class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-2 py-1 pointer-events-none overflow-hidden">
+    <!-- Shooting Stars -->
+    <div class="shooting-star" style="top: 10%; left: 15%; animation-delay: 0s;"></div>
+    <div class="shooting-star" style="top: 25%; left: 70%; animation-delay: 1.5s;"></div>
+    <div class="shooting-star" style="top: 50%; left: 30%; animation-delay: 3s;"></div>
+    <div class="shooting-star" style="top: 65%; left: 80%; animation-delay: 4.5s;"></div>
+    <div class="shooting-star" style="top: 35%; left: 45%; animation-delay: 6s;"></div>
+    <div class="shooting-star" style="top: 80%; left: 20%; animation-delay: 7.5s;"></div>
+    <div class="shooting-star" style="top: 5%; left: 60%; animation-delay: 2.2s;"></div>
+    <div class="shooting-star" style="top: 70%; left: 50%; animation-delay: 5.8s;"></div>
 
-        <div class="pointer-events-auto bg-black/75 backdrop-blur-xl border border-white/10 p-1.5 md:p-2 rounded-lg max-w-5xl w-full shadow-2xl relative overflow-hidden">
+    <main id="ui-layer" class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-2 pointer-events-none overflow-hidden">
+
+        <div class="pointer-events-auto bg-black/75 backdrop-blur-xl border border-white/10 p-2 md:p-3 rounded-lg max-w-6xl w-full shadow-2xl relative overflow-hidden">
 
             <div class="scanline"></div>
 
@@ -426,8 +507,8 @@
             <div class="particle" style="bottom: 35%; left: 10%; animation-delay: 0.5s; background: radial-gradient(circle, rgba(34, 211, 238, 0.8), transparent);"></div>
             <div class="particle" style="top: 50%; right: 8%; animation-delay: 3.5s; background: radial-gradient(circle, rgba(249, 115, 22, 0.8), transparent);"></div>
 
-            <!-- Construction Banner with v1.6 -->
-            <div class="construction-banner rounded px-3 py-1.5 mb-1 backdrop-blur-sm">
+            <!-- Construction Banner with v1.7 -->
+            <div class="construction-banner rounded px-3 py-1.5 md:py-1.5 mb-2 md:mb-1 backdrop-blur-sm">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <span class="construction-icon text-base">🚧</span>
@@ -436,22 +517,22 @@
                             Work in Progress
                         </p>
                     </div>
-                    <div class="font-['Orbitron'] text-orange-400 text-xs font-bold">v1.6</div>
+                    <div class="font-['Orbitron'] text-orange-400 text-xs font-bold">v1.7</div>
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-1.5 md:gap-2">
+            <div class="grid md:grid-cols-2 gap-2 md:gap-3">
 
                 <!-- Left Column: Main Info -->
-                <div class="space-y-0.5">
+                <div class="space-y-1 md:space-y-0.5">
 
                     <!-- Name -->
-                    <h1 class="glitch text-3xl md:text-5xl font-black tracking-tighter font-['Orbitron'] text-center mb-0.5" data-text="FARES KHIARY">
+                    <h1 class="glitch text-4xl md:text-7xl font-black tracking-tighter font-['Orbitron'] text-center mb-0.5" data-text="FARES KHIARY">
                         FARES KHIARY
                     </h1>
 
                     <!-- Greetings -->
-                    <div class="relative h-10 md:h-12 flex items-center justify-center mb-0.5">
+                    <div class="relative h-12 md:h-14 flex items-center justify-center mb-1 md:mb-0.5">
                         <div class="absolute inset-0 flex items-center justify-center">
                             <span class="greeting-word">Bonjour</span>
                             <span class="greeting-word">مرحبا</span>
@@ -536,7 +617,7 @@
                 </div>
 
                 <!-- Right Column: Subdomains & Universe -->
-                <div class="space-y-1 flex flex-col justify-center">
+                <div class="space-y-2 md:space-y-1 flex flex-col justify-center">
 
                     <div class="text-center">
                         <p class="font-['Rajdhani'] text-gray-300 text-xs md:text-sm font-medium leading-relaxed">
