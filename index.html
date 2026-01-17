@@ -1005,6 +1005,31 @@
             animation: container-glow 4s ease-in-out infinite alternate;
         }
 
+        .flashing-text {
+            animation: flash-opacity 1s ease-in-out infinite alternate;
+        }
+
+        .popup-brain-container {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 10px;
+            opacity: 0.8;
+        }
+
+        .popup-brain-container.typing svg {
+            filter: drop-shadow(0 0 5px rgba(0, 217, 255, 0.4));
+        }
+
+        @keyframes flash-opacity {
+            from {
+                opacity: 0.4;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
         @keyframes container-glow {
             from {
                 box-shadow: 0 0 20px rgba(0, 217, 255, 0.05);
@@ -1263,6 +1288,27 @@
         <div class="popup-content">
             <span id="close-popup" class="close-popup">&times;</span>
             <div class="popup-title">Frequency Received</div>
+
+            <div id="popup-brain" class="popup-brain-container">
+                <svg class="brain-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M50 10C30 10 15 25 15 45C15 55 20 65 30 75C30 85 40 90 50 90C60 90 70 85 70 75C80 65 85 55 85 45C85 25 70 10 50 10Z"
+                        stroke="#00d9ff" stroke-width="2" />
+                    <path class="neural-line" d="M35 30Q40 25 50 25Q60 25 65 30" style="animation-delay: 0s" />
+                    <path class="neural-line" d="M25 45Q35 40 50 40Q65 40 75 45" style="animation-delay: 0.5s" />
+                    <path class="neural-line" d="M30 60Q40 65 50 65Q60 65 70 60" style="animation-delay: 1.2s" />
+                    <path class="neural-line" d="M50 15V85" style="animation-duration: 2s; opacity: 0.3;" />
+                    <circle class="neuron" cx="35" cy="30" r="2" style="animation-delay: 0.1s" />
+                    <circle class="neuron" cx="65" cy="30" r="2" style="animation-delay: 0.7s" />
+                    <circle class="neuron" cx="25" cy="45" r="2" style="animation-delay: 0.3s" />
+                    <circle class="neuron" cx="75" cy="45" r="2" style="animation-delay: 0.9s" />
+                    <circle class="neuron" cx="50" cy="40" r="2" style="animation-delay: 0.5s" />
+                    <circle class="neuron" cx="30" cy="60" r="2" style="animation-delay: 0s" />
+                    <circle class="neuron" cx="70" cy="60" r="2" style="animation-delay: 1.1s" />
+                    <circle class="neuron" cx="50" cy="75" r="2" style="animation-delay: 1.4s" />
+                </svg>
+            </div>
+
             <div id="popup-question" class="popup-body hide">
                 <span id="question-wrapper">
                     <span>Question:</span>
@@ -1961,6 +2007,7 @@
         const popupQuestionInput = document.getElementById('popup-question-input');
         const submitPopupBtn = document.getElementById('submit-popup-question');
         const popupInternalInputContainer = document.getElementById('internal-input-popup');
+        const popupBrain = document.getElementById('popup-brain');
 
         const thinkingPhrases = [
             "Fares is accessing the neural network",
@@ -2096,6 +2143,8 @@
             let i = 0;
             element.innerText = '';
             element.classList.add('typing-cursor');
+            element.classList.remove('flashing-text');
+            if (popupBrain) popupBrain.classList.add('typing');
 
             if (questionText) {
                 questionText.classList.remove('hide');
@@ -2155,7 +2204,9 @@
 
             if (isInternal) {
                 // Clear text for better UX if asking from within the popup
-                popupText.innerText = 'Fares is deep in thought...';
+                popupText.innerText = 'Fares is deep in thought 🧠...';
+                popupText.classList.add('flashing-text');
+                if (popupBrain) popupBrain.classList.add('typing');
                 if (popupQuestionInput) popupQuestionInput.value = '';
                 popupQuestionInput.blur();
             }
@@ -2225,6 +2276,8 @@
                         if (popupInternalInputContainer) {
                             popupInternalInputContainer.classList.add('fade-in');
                         }
+                        // Remove typing glow
+                        if (popupBrain) popupBrain.classList.remove('typing');
                     }, 1500);
                 });
             } catch (error) {
