@@ -579,6 +579,25 @@
             margin-left: 2px;
         }
 
+        .hide {
+            display: none;
+        }
+
+        #popup-question {
+            margin-bottom: 20px;
+        }
+
+        #popup-question #question-wrapper {
+            border-bottom: 1px solid;
+            border-image: linear-gradient(to right, #aaa, transparent) 1;
+            padding-right: 10px;
+            font-weight: normal;
+        }
+
+        #popup-question #question-wrapper>span {
+            font-weight: bold;
+        }
+
         @keyframes cursor-blink {
 
             0%,
@@ -793,6 +812,11 @@
         <div class="popup-content">
             <span id="close-popup" class="close-popup">&times;</span>
             <div class="popup-title">Frequency Received</div>
+            <div id="popup-question" class="popup-body hide">
+                <span id="question-wrapper">
+                    <span>Question:</span>
+                </span>
+            </div>
             <div id="popup-text" class="popup-body">
                 Connecting to deep space network...
             </div>
@@ -1442,6 +1466,7 @@
         const loader = document.getElementById('loader-container');
         const popup = document.getElementById('space-popup');
         const popupText = document.getElementById('popup-text');
+        const questionText = document.getElementById('popup-question');
         const closePopup = document.getElementById('close-popup');
 
         let typeTimeout;
@@ -1461,10 +1486,15 @@
             } catch (e) { }
         };
 
-        const typeMessage = (text, element, speed = 30) => {
+        const typeMessage = (text, element, question = '', questionText = null, speed = 30) => {
             let i = 0;
             element.innerText = '';
             element.classList.add('typing-cursor');
+
+            if (questionText) {
+                questionText.classList.remove('hide')
+                questionText.innerHTML = `<span id="question-wrapper"><span>Question:</span> "${question}"</span>`
+            }
 
             if (typeTimeout) clearTimeout(typeTimeout);
 
@@ -1491,7 +1521,7 @@
             submitBtn.disabled = true;
 
             try {
-                const webhookUrl = `https://n8n.fares-khiary.com/webhook/886cf54c-6c18-4ea3-8f3c-c8215751748f?question=${encodeURIComponent(question)}`;
+                const webhookUrl = `https://n8n.fares-khiary.com/webhook-test/886cf54c-6c18-4ea3-8f3c-c8215751748f?question=${encodeURIComponent(question)}`;
                 const response = await fetch(webhookUrl);
 
                 if (!response.ok) throw new Error('Network response was not ok');
@@ -1500,7 +1530,7 @@
                 const message = data.output || data.response || data.message || (typeof data === 'string' ? data : JSON.stringify(data));
 
                 popup.style.display = 'flex';
-                typeMessage(message, popupText);
+                typeMessage(message, popupText, question, questionText);
             } catch (error) {
                 console.error('Error fetching webhook:', error);
                 popup.style.display = 'flex';
@@ -1518,13 +1548,21 @@
             if (e.key === 'Enter') askQuestion();
         });
 
+        // empty question block
+        function emptyQuestionBlock() {
+            const questionText = document.getElementById('popup-question');
+            questionText?.classList.add('hide')
+        }
+
         closePopup.addEventListener('click', () => {
             popup.style.display = 'none';
             if (typeTimeout) clearTimeout(typeTimeout);
+            emptyQuestionBlock()
         });
 
         window.addEventListener('click', (e) => {
             if (e.target === popup) popup.style.display = 'none';
+            emptyQuestionBlock()
         });
 
         window.addEventListener('resize', () => {
