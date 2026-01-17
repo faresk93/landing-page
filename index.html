@@ -1576,7 +1576,7 @@
             submitBtn.disabled = true;
 
             try {
-                const webhookUrl = `https://n8n.fares-khiary.com/webhook-test/886cf54c-6c18-4ea3-8f3c-c8215751748f?question=${encodeURIComponent(question)}`;
+                const webhookUrl = `https://n8n.fares-khiary.com/webhook/886cf54c-6c18-4ea3-8f3c-c8215751748f?question=${encodeURIComponent(question)}`;
                 const response = await fetch(webhookUrl);
 
                 if (!response.ok) throw new Error('Network response was not ok');
