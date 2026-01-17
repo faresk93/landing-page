@@ -15,9 +15,12 @@
     <style>
         body {
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             background-color: #000;
-            touch-action: none;
+            touch-action: pan-y;
+            min-height: 200vh;
+            /* Enable scrolling for journey */
         }
 
         /* UI Animations */
@@ -878,6 +881,92 @@
             }
         }
 
+        /* Neural Trace Terminal */
+        .neural-trace-container {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            font-family: 'monospace';
+            font-size: 0.75rem;
+            color: rgba(0, 217, 255, 0.6);
+            text-align: left;
+            max-height: 80px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .neural-trace-line {
+            line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+            margin-bottom: 2px;
+            opacity: 0.8;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .follow-up-container {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            min-height: 40px;
+            /* Ensure space for chips */
+            width: 100%;
+        }
+
+        .follow-up-chip {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 15px;
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #00d9ff;
+            font-family: 'Rajdhani', sans-serif;
+            opacity: 0;
+            /* Managed by animation */
+        }
+
+        .follow-up-chip:hover {
+            background: rgba(0, 217, 255, 0.2);
+            transform: translateY(-2px);
+            border-color: rgba(0, 217, 255, 0.6);
+        }
+
+        .follow-up-chip.fade-in {
+            animation: chip-fade-in 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        @keyframes chip-fade-in {
+            0% {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .holographic-glow {
+            animation: container-glow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes container-glow {
+            from {
+                box-shadow: 0 0 20px rgba(0, 217, 255, 0.05);
+            }
+
+            to {
+                box-shadow: 0 0 40px rgba(168, 85, 247, 0.2);
+            }
+        }
+
         @media (max-width: 768px) {
             .loader-container {
                 position: relative;
@@ -899,7 +988,7 @@
         class="ui-transition relative z-10 flex flex-col items-center justify-center h-screen w-full px-2 pointer-events-none overflow-hidden">
 
         <div
-            class="pointer-events-auto bg-black/90 border border-white/10 p-3 md:p-4 rounded-lg max-w-4xl w-full shadow-2xl relative">
+            class="holographic-glow pointer-events-auto bg-black/90 border border-white/10 p-3 md:p-4 rounded-lg max-w-4xl w-full shadow-2xl relative">
 
             <!-- Construction Banner with v1.7 -->
             <div class="construction-banner rounded px-3 py-1.5 md:py-1.5 mb-2 md:mb-1">
@@ -967,6 +1056,9 @@
                             </svg>
                         </div>
                         <div id="thinking-text">Fares is thinking...</div>
+                        <div id="neural-trace" class="neural-trace-container">
+                            <!-- Trace lines will be injected here -->
+                        </div>
                     </div>
                 </div>
 
@@ -1131,6 +1223,7 @@
             <div id="popup-text" class="popup-body">
                 Connecting to deep space network...
             </div>
+            <div id="follow-up-container" class="follow-up-container"></div>
         </div>
     </div>
 
@@ -1444,6 +1537,30 @@
         nebula3.material.color.setHex(0xec4899);
         nebula3.position.set(0, 150, 100);
         scene.add(nebula3);
+
+        // --- AMBIENT PARTICLES (Space Dust) ---
+        const particleCount = 2000;
+        const particleGeo = new THREE.BufferGeometry();
+        const posArray = new Float32Array(particleCount * 3);
+        const velocityArray = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 500;
+            velocityArray[i] = (Math.random() - 0.5) * 0.05;
+        }
+
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particleMat = new THREE.PointsMaterial({
+            size: 0.6,
+            map: createTexture('particle'),
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
+        });
+
+        const particles = new THREE.Points(particleGeo, particleMat);
+        scene.add(particles);
 
         // --- INTERACTION ---
         let isDragging = false;
@@ -1784,6 +1901,7 @@
         const submitBtn = document.getElementById('submit-question');
         const loadingPopup = document.getElementById('loading-popup');
         const thinkingTextElement = document.getElementById('thinking-text');
+        const neuralTraceElement = document.getElementById('neural-trace');
         const popup = document.getElementById('space-popup');
         const popupText = document.getElementById('popup-text');
         const questionText = document.getElementById('popup-question');
@@ -1792,20 +1910,34 @@
         const thinkingPhrases = [
             "Fares is accessing the neural network",
             "Fares is consulting the digital oracle",
-            "Analyzing the fabric of your query",
-            "Fares is deep in thought",
+            "Analyzing high-dimensional thought vectors",
+            "Fares is deep in digital meditation",
             "Syncing with Fares's consciousness",
-            "Decentralizing the problem",
+            "Decentralizing the knowledge base",
             "Searching the creative collective",
-            "Fares is tapping into the mainframe",
-            "Processing your request via brainwaves",
-            "Fares is weaving a response"
+            "Tapping into the cosmic mainframe",
+            "Processing request via neural waves",
+            "Fares is weaving a digital response"
+        ];
+
+        const tracePhrases = [
+            "> Initializing neural handshake...",
+            "> Scanning Tunisian heritage archives...",
+            "> Loading Web3 expertise module...",
+            "> Correlating UX design principles...",
+            "> Analyzing user query intent...",
+            "> Accessing creative memory banks...",
+            "> Optimizing response parameters...",
+            "> Bypassing silicon constraints...",
+            "> Synchronizing parallel thought streams...",
+            "> Finalizing cognitive synthesis..."
         ];
 
         let thinkingInterval;
+        let traceInterval;
 
         const startThinkingAnimation = () => {
-            let index = 0;
+            neuralTraceElement.innerHTML = '';
             const updateText = () => {
                 thinkingTextElement.style.opacity = '0';
                 setTimeout(() => {
@@ -1814,12 +1946,25 @@
                     thinkingTextElement.style.opacity = '1';
                 }, 300);
             };
+
+            const addTraceLine = () => {
+                const line = document.createElement('div');
+                line.className = 'neural-trace-line';
+                line.textContent = tracePhrases[Math.floor(Math.random() * tracePhrases.length)];
+                neuralTraceElement.prepend(line);
+                if (neuralTraceElement.children.length > 5) {
+                    neuralTraceElement.removeChild(neuralTraceElement.lastChild);
+                }
+            };
+
             updateText();
             thinkingInterval = setInterval(updateText, 2500);
+            traceInterval = setInterval(addTraceLine, 800);
         };
 
         const stopThinkingAnimation = () => {
             clearInterval(thinkingInterval);
+            clearInterval(traceInterval);
         };
 
         // --- PLACEHOLDER ANIMATION ---
@@ -1887,14 +2032,19 @@
             } catch (e) { }
         };
 
-        const typeMessage = (text, element, question = '', questionText = null, speed = 30) => {
+        const typeMessage = (text = '', element, question = '', questionText = null, speed = 30, callback = null) => {
+            if (!element) {
+                if (callback) callback();
+                return;
+            }
+
             let i = 0;
             element.innerText = '';
             element.classList.add('typing-cursor');
 
             if (questionText) {
-                questionText.classList.remove('hide')
-                questionText.innerHTML = `<span id="question-wrapper"><span>Question:</span> "${question}"</span>`
+                questionText.classList.remove('hide');
+                questionText.innerHTML = `<span id="question-wrapper"><span>Question:</span> "${question}"</span>`;
             }
 
             if (typeTimeout) clearTimeout(typeTimeout);
@@ -1907,14 +2057,28 @@
                     typeTimeout = setTimeout(internalTyping, speed + Math.random() * 20);
                 } else {
                     element.classList.remove('typing-cursor');
+                    if (callback) {
+                        // Ensure callback is called after typing finishes
+                        setTimeout(callback, 100);
+                    }
                 }
             };
-            internalTyping();
+
+            if (text.length === 0) {
+                element.classList.remove('typing-cursor');
+                if (callback) callback();
+            } else {
+                internalTyping();
+            }
         };
 
-        const askQuestion = async () => {
-            const question = questionInput.value.trim();
-            if (!question) return;
+        const askQuestion = async (customQuestion = null) => {
+            // Fix: check if customQuestion is a string (not an event object)
+            const question = (typeof customQuestion === 'string') ? customQuestion : questionInput.value.trim();
+            if (!question || (typeof customQuestion !== 'string' && !questionInput.value.trim())) return;
+
+            // Clear follow-up chips
+            document.getElementById('follow-up-container').innerHTML = '';
 
             // Blur input to hide keyboard on mobile
             questionInput.blur();
@@ -1926,6 +2090,7 @@
             submitBtn.disabled = true;
 
             try {
+                // Use the webhook selected by the user
                 const webhookUrl = `https://n8n.fares-khiary.com/webhook/886cf54c-6c18-4ea3-8f3c-c8215751748f?question=${encodeURIComponent(question)}`;
                 const response = await fetch(webhookUrl);
 
@@ -1933,13 +2098,60 @@
 
                 const data = await response.json();
                 const message = data.output || data.response || data.message || (typeof data === 'string' ? data : JSON.stringify(data));
+                const suggestions = data.suggestions || [
+                    "Tell me more about your projects",
+                    "What are your top skills?",
+                    "How can I contact you?",
+                    "What's your vision for the future?"
+                ];
 
                 // Hide loading popup before showing result
                 loadingPopup.style.display = 'none';
                 stopThinkingAnimation();
 
                 popup.style.display = 'flex';
-                typeMessage(message, popupText, question, questionText);
+
+                if (questionText) {
+                    questionText.classList.remove('hide');
+                    questionText.innerHTML = `<span id="question-wrapper"><span>Question:</span> "${question}"</span>`;
+                }
+
+                focusOnPlanet(message);
+
+                // Restore initial state: Use typeMessage instead of decryptMessage
+                // Use callback to show follow-up questions after typing ends
+                typeMessage(message, popupText, question, null, 30, () => {
+                    const container = document.getElementById('follow-up-container');
+                    if (!container) return;
+                    container.innerHTML = '';
+
+                    const rawSuggestions = (data && Array.isArray(data.suggestions)) ? data.suggestions :
+                        (Array.isArray(suggestions) ? suggestions : []);
+
+                    let followUps = rawSuggestions
+                        .map(s => (typeof s === 'string' ? s : s.text || s.suggestion || JSON.stringify(s)))
+                        .filter(q => q && q.toLowerCase() !== question.toLowerCase())
+                        .slice(0, 3);
+
+                    if (followUps.length === 0) {
+                        followUps = ["Tell me more about your projects", "What are your top skills?", "How can I contact you?"]
+                            .filter(d => d.toLowerCase() !== question.toLowerCase())
+                            .slice(0, 3);
+                    }
+
+                    followUps.forEach((q, index) => {
+                        const chip = document.createElement('div');
+                        chip.className = 'follow-up-chip fade-in';
+                        chip.style.animationDelay = `${index * 0.1}s`;
+                        chip.textContent = q;
+                        chip.onclick = () => {
+                            popup.style.display = 'none';
+                            emptyQuestionBlock();
+                            askQuestion(q);
+                        };
+                        container.appendChild(chip);
+                    });
+                });
             } catch (error) {
                 console.error('Error fetching webhook:', error);
                 loadingPopup.style.display = 'none';
@@ -1961,7 +2173,8 @@
         // empty question block
         function emptyQuestionBlock() {
             const questionText = document.getElementById('popup-question');
-            questionText?.classList.add('hide')
+            questionText?.classList.add('hide');
+            targetFocusPoint = new THREE.Vector3(0, 0, 0); // Reset focus
         }
 
         closePopup.addEventListener('click', () => {
@@ -1988,6 +2201,43 @@
             camera.position.y = isMob ? 10 : 20;
         });
 
+        // --- SCROLL JOURNEY & MOUSE PARALLAX ---
+        let currentScroll = 0;
+        let targetScroll = 0;
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetFocusPoint = new THREE.Vector3(0, 0, 0);
+
+        window.addEventListener('scroll', () => {
+            targetScroll = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) - 0.5;
+            mouseY = (e.clientY / window.innerHeight) - 0.5;
+
+            // UI Tilt effect
+            const uiLayer = document.querySelector('.pointer-events-auto.bg-black/90');
+            if (uiLayer) {
+                const tiltX = mouseY * 10;
+                const tiltY = -mouseX * 10;
+                uiLayer.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+            }
+        });
+
+        const focusOnPlanet = (techName) => {
+            const planet = planets.find(p => p.label.material.map.image ? techName.includes(techLabels[planets.indexOf(p)]) : false);
+            // Simpler keyword matching for tech labels
+            const index = techLabels.findIndex(l => techName.toLowerCase().includes(l.toLowerCase()));
+            if (index !== -1) {
+                const p = planets[index];
+                targetFocusPoint = p.mesh.position;
+                state = 'UNLOCKED'; // Switch to unlocked to allow camera movement
+                cameraDistance = p.dist + 15;
+                cameraOffset = { x: 0, y: 5, z: 0 };
+            }
+        };
+
         // --- ANIMATION LOOP ---
         const clock = new THREE.Clock();
 
@@ -1996,6 +2246,18 @@
 
             const delta = clock.getDelta();
             const time = clock.getElapsedTime();
+
+            // Smooth scroll
+            currentScroll += (targetScroll - currentScroll) * 0.05;
+
+            // Update particles
+            const positions = particles.geometry.attributes.position.array;
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3 + 1] += Math.sin(time + i) * 0.01;
+                positions[i * 3] += Math.cos(time + i) * 0.01;
+            }
+            particles.geometry.attributes.position.needsUpdate = true;
+            particles.rotation.y += 0.001;
 
             // Rotate Solar System
             solarSystem.rotation.y += 0.001;
@@ -2011,7 +2273,6 @@
                 if (p.label) {
                     p.label.position.copy(p.mesh.position);
                     p.label.position.y += p.size + 2;
-                    // Add slight bobbing to label
                     p.label.position.y += Math.sin(time * 2) * 0.5;
                 }
             });
@@ -2040,11 +2301,14 @@
             // Camera movement
             if (state === 'MENU') {
                 const isMob = window.innerWidth < 768;
-                const baseZ = isMob ? 140 : 100;
                 const baseY = isMob ? 10 : 20;
 
-                camera.position.x = Math.sin(time * 0.15) * 25;
-                camera.position.y = baseY + Math.cos(time * 0.15) * 12;
+                // Incorporate scroll into menu camera
+                const scrollEffect = currentScroll * 50;
+                const baseZ = (isMob ? 140 : 100) - scrollEffect;
+
+                camera.position.x = Math.sin(time * 0.15) * 25 + (mouseX * 20);
+                camera.position.y = baseY + Math.cos(time * 0.15) * 12 + (mouseY * 20);
                 camera.position.z = baseZ + Math.sin(time * 0.1) * 10;
                 camera.lookAt(0, 0, 0);
             } else {
@@ -2053,8 +2317,15 @@
                     cameraOffset.y,
                     cameraDistance
                 );
-                camera.position.lerp(targetPos, 0.1);
-                camera.lookAt(0, 0, 0);
+                camera.position.lerp(targetPos, 0.05);
+
+                // If we have a focus point (contextual AI feedback)
+                if (targetFocusPoint.length() > 0) {
+                    const lookPoint = new THREE.Vector3().lerpVectors(new THREE.Vector3(0, 0, 0), targetFocusPoint, 0.5);
+                    camera.lookAt(lookPoint);
+                } else {
+                    camera.lookAt(0, 0, 0);
+                }
             }
 
             renderer.render(scene, camera);
