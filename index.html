@@ -667,11 +667,13 @@
 
                 <!-- Question Input -->
                 <div class="question-input-container pointer-events-auto">
-                    <input type="text" id="user-question" class="question-input" placeholder="Ask Fares anything..."
-                        autocomplete="off">
-                    <button id="submit-question" class="send-btn">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
+                    <div class="relative w-full">
+                        <input type="text" id="user-question" class="question-input" placeholder="Ask Fares anything..."
+                            autocomplete="off">
+                        <button id="submit-question" class="send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
                     <div id="loader-container" class="loader-container">
                         <div class="gpt-loader"></div>
                         <span>Thinking... 🧠</span>
