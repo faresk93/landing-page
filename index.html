@@ -648,7 +648,7 @@
                             Work in Progress
                         </p>
                     </div>
-                    <div class="font-['Orbitron'] text-orange-400 text-xs font-bold">v2.2</div>
+                    <div class="font-['Orbitron'] text-orange-400 text-xs font-bold">v2.3</div>
                 </div>
             </div>
 
@@ -1634,8 +1634,10 @@
         });
 
         window.addEventListener('click', (e) => {
-            if (e.target === popup) popup.style.display = 'none';
-            emptyQuestionBlock()
+            if (e.target === popup) {
+                popup.style.display = 'none';
+                emptyQuestionBlock();
+            }
         });
 
         window.addEventListener('resize', () => {
