@@ -60,6 +60,10 @@
             text-shadow: 0 0 20px rgba(0, 255, 255, 0.4), 0 0 40px rgba(168, 85, 247, 0.2);
         }
 
+        .glitch#fares {
+            margin: 20px 0;
+        }
+
         .glitch::before,
         .glitch::after {
             content: attr(data-text);
@@ -650,7 +654,8 @@
             <div class="space-y-3">
 
                 <!-- Name -->
-                <h1 class="glitch text-4xl md:text-6xl font-black tracking-tighter font-['Orbitron'] text-center"
+                <h1 id="fares"
+                    class="glitch text-4xl md:text-6xl font-black tracking-tighter font-['Orbitron'] text-center"
                     data-text="FARES KHIARY">
                     FARES KHIARY
                 </h1>
@@ -1469,6 +1474,53 @@
         const questionText = document.getElementById('popup-question');
         const closePopup = document.getElementById('close-popup');
 
+        // --- PLACEHOLDER ANIMATION ---
+        const placeholderPhrases = [
+            "Ask me anything...",
+            "Pose-moi une question...",
+            "اسألني أي شيء..."
+        ];
+        let placeholderIndex = 0;
+        let placeholderCharIndex = 0;
+        let isPlaceholderDeleting = false;
+
+        function animatePlaceholder() {
+            if (!questionInput) return;
+
+            // Pause animation if user is focused on input or has typed something
+            if (document.activeElement === questionInput || questionInput.value !== "") {
+                setTimeout(animatePlaceholder, 300);
+                return;
+            }
+
+            const currentPhrase = placeholderPhrases[placeholderIndex];
+
+            if (isPlaceholderDeleting) {
+                placeholderCharIndex--;
+            } else {
+                placeholderCharIndex++;
+            }
+
+            questionInput.placeholder = currentPhrase.substring(0, placeholderCharIndex);
+
+            // Faster speeds: 60ms typing, 30ms deleting
+            let typingSpeed = isPlaceholderDeleting ? 10 : 40;
+
+            if (!isPlaceholderDeleting && placeholderCharIndex === currentPhrase.length) {
+                typingSpeed = 1000; // Pause at the end for 1.5s
+                isPlaceholderDeleting = true;
+            } else if (isPlaceholderDeleting && placeholderCharIndex === 0) {
+                isPlaceholderDeleting = false;
+                placeholderIndex = (placeholderIndex + 1) % placeholderPhrases.length;
+                typingSpeed = 300; // Short pause before typing next phrase
+            }
+
+            setTimeout(animatePlaceholder, typingSpeed);
+        }
+
+        // Start placeholder animation
+        animatePlaceholder();
+
         let typeTimeout;
         const playTypeSound = () => {
             if (!audioContext || isMuted) return;
@@ -1515,13 +1567,16 @@
             const question = questionInput.value.trim();
             if (!question) return;
 
+            // Blur input to hide keyboard on mobile
+            questionInput.blur();
+
             // Show loader
             loader.style.display = 'flex';
             submitBtn.style.opacity = '0.5';
             submitBtn.disabled = true;
 
             try {
-                const webhookUrl = `https://n8n.fares-khiary.com/webhook/886cf54c-6c18-4ea3-8f3c-c8215751748f?question=${encodeURIComponent(question)}`;
+                const webhookUrl = `https://n8n.fares-khiary.com/webhook-test/886cf54c-6c18-4ea3-8f3c-c8215751748f?question=${encodeURIComponent(question)}`;
                 const response = await fetch(webhookUrl);
 
                 if (!response.ok) throw new Error('Network response was not ok');
