@@ -127,7 +127,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: greeting-zoom 8s ease-in-out infinite;
+            animation: greeting-zoom 6s ease-in-out infinite;
         }
 
         .greeting-word:nth-child(1) {
@@ -135,15 +135,15 @@
         }
 
         .greeting-word:nth-child(2) {
-            animation-delay: 2s;
+            animation-delay: 1.5s;
         }
 
         .greeting-word:nth-child(3) {
-            animation-delay: 4s;
+            animation-delay: 3s;
         }
 
         .greeting-word:nth-child(4) {
-            animation-delay: 6s;
+            animation-delay: 4.5s;
         }
 
         @keyframes greeting-zoom {
@@ -511,6 +511,10 @@
             overflow: hidden;
         }
 
+        #start-btn {
+            font-size: 0.8rem !important;
+        }
+
         @keyframes popup-glow {
             from {
                 box-shadow: 0 0 30px rgba(74, 144, 226, 0.2);
@@ -753,7 +757,7 @@
                 <div class="flex flex-col items-center gap-3">
                     <!-- Enter My Universe Button -->
                     <button id="start-btn"
-                        class="universe-btn relative flex items-center justify-center px-6 py-4 font-bold text-white cursor-pointer group uppercase font-['Orbitron'] text-base tracking-widest rounded-lg w-full max-w-lg shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_30px_rgba(249,115,22,0.5)]">
+                        class="universe-btn relative flex items-center justify-center px-6 py-3 font-bold text-white cursor-pointer group uppercase font-['Orbitron'] text-base tracking-widest rounded-lg w-full max-w-lg shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_30px_rgba(249,115,22,0.5)]">
                         <span class="relative z-10 mr-3 text-2xl">🌌</span>
                         <span class="relative z-10">Enter My Universe</span>
                         <svg class="relative z-10 w-5 h-5 ml-3 transition-transform group-hover:translate-x-1"
@@ -1496,7 +1500,8 @@
         const placeholderPhrases = [
             "Ask Fares anything...",
             "Pose une question à Fares...",
-            "إسأل فارس أيّ شيء..."
+            "إسأل فارس أيّ شيء...",
+            "Frag Fares alles..."
         ];
         let placeholderIndex = 0;
         let placeholderCharIndex = 0;
