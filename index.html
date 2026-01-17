@@ -953,6 +953,54 @@
             }
         }
 
+        .internal-input-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            /* Hidden by default */
+            pointer-events: none;
+        }
+
+        .internal-input-container.fade-in {
+            animation: chip-fade-in 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            pointer-events: auto;
+        }
+
+        .internal-input-container:focus-within {
+            border-color: rgba(0, 217, 255, 0.5);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.1);
+        }
+
+        .internal-input-container input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            width: 100%;
+            outline: none;
+        }
+
+        .internal-input-container button {
+            background: transparent;
+            border: none;
+            color: #00d9ff;
+            cursor: pointer;
+            padding: 5px;
+            transition: transform 0.2s ease;
+        }
+
+        .internal-input-container button:hover {
+            transform: scale(1.1);
+            color: #fff;
+        }
+
         .holographic-glow {
             animation: container-glow 4s ease-in-out infinite alternate;
         }
@@ -1001,7 +1049,7 @@
                             Work in Progress..
                         </p>
                     </div>
-                    <div class="font-['Orbitron'] text-orange-400 text-xs font-bold">v2.4</div>
+                    <div class="font-['Orbitron'] text-orange-400 text-xs font-bold">v2.5</div>
                 </div>
             </div>
 
@@ -1224,6 +1272,10 @@
                 Connecting to deep space network...
             </div>
             <div id="follow-up-container" class="follow-up-container"></div>
+            <div id="internal-input-popup" class="internal-input-container">
+                <input type="text" id="popup-question-input" placeholder="Ask a follow-up..." autocomplete="off">
+                <button id="submit-popup-question"><i class="fas fa-paper-plane"></i></button>
+            </div>
         </div>
     </div>
 
@@ -1906,6 +1958,9 @@
         const popupText = document.getElementById('popup-text');
         const questionText = document.getElementById('popup-question');
         const closePopup = document.getElementById('close-popup');
+        const popupQuestionInput = document.getElementById('popup-question-input');
+        const submitPopupBtn = document.getElementById('submit-popup-question');
+        const popupInternalInputContainer = document.getElementById('internal-input-popup');
 
         const thinkingPhrases = [
             "Fares is accessing the neural network",
@@ -2072,13 +2127,38 @@
             }
         };
 
-        const askQuestion = async (customQuestion = null) => {
+        const askQuestion = async (customQuestion = null, isInternal = false) => {
             // Fix: check if customQuestion is a string (not an event object)
-            const question = (typeof customQuestion === 'string') ? customQuestion : questionInput.value.trim();
-            if (!question || (typeof customQuestion !== 'string' && !questionInput.value.trim())) return;
+            let question = (typeof customQuestion === 'string') ? customQuestion : "";
 
-            // Clear follow-up chips
+            if (!question) {
+                if (isInternal && popupQuestionInput) {
+                    question = popupQuestionInput.value.trim();
+                } else if (questionInput) {
+                    question = questionInput.value.trim();
+                }
+            }
+
+            if (!question) return;
+
+            // Immediately update the question display if available
+            if (questionText) {
+                questionText.classList.remove('hide');
+                questionText.innerHTML = `<span id="question-wrapper"><span>Question:</span> "${question}"</span>`;
+            }
+
+            // Clear follow-up chips and input container
             document.getElementById('follow-up-container').innerHTML = '';
+            if (popupInternalInputContainer) {
+                popupInternalInputContainer.classList.remove('fade-in');
+            }
+
+            if (isInternal) {
+                // Clear text for better UX if asking from within the popup
+                popupText.innerText = 'Connecting to deep space network...';
+                if (popupQuestionInput) popupQuestionInput.value = '';
+                popupQuestionInput.blur();
+            }
 
             // Blur input to hide keyboard on mobile
             questionInput.blur();
@@ -2098,12 +2178,9 @@
 
                 const data = await response.json();
                 const message = data.output || data.response || data.message || (typeof data === 'string' ? data : JSON.stringify(data));
-                const suggestions = data.suggestions || [
-                    "Tell me more about your projects",
-                    "What are your top skills?",
-                    "How can I contact you?",
-                    "What's your vision for the future?"
-                ];
+
+                // Re-fetch suggestions from data or fallback
+                const suggestions = (data && Array.isArray(data.suggestions)) ? data.suggestions : [];
 
                 // Hide loading popup before showing result
                 loadingPopup.style.display = 'none';
@@ -2111,46 +2188,44 @@
 
                 popup.style.display = 'flex';
 
-                if (questionText) {
-                    questionText.classList.remove('hide');
-                    questionText.innerHTML = `<span id="question-wrapper"><span>Question:</span> "${question}"</span>`;
-                }
-
                 focusOnPlanet(message);
 
                 // Restore initial state: Use typeMessage instead of decryptMessage
                 // Use callback to show follow-up questions after typing ends
                 typeMessage(message, popupText, question, null, 30, () => {
-                    const container = document.getElementById('follow-up-container');
-                    if (!container) return;
-                    container.innerHTML = '';
+                    // Wait 1.5 seconds after typing finishes
+                    setTimeout(() => {
+                        const container = document.getElementById('follow-up-container');
+                        if (!container) return;
+                        container.innerHTML = '';
 
-                    const rawSuggestions = (data && Array.isArray(data.suggestions)) ? data.suggestions :
-                        (Array.isArray(suggestions) ? suggestions : []);
-
-                    let followUps = rawSuggestions
-                        .map(s => (typeof s === 'string' ? s : s.text || s.suggestion || JSON.stringify(s)))
-                        .filter(q => q && q.toLowerCase() !== question.toLowerCase())
-                        .slice(0, 3);
-
-                    if (followUps.length === 0) {
-                        followUps = ["Tell me more about your projects", "What are your top skills?", "How can I contact you?"]
-                            .filter(d => d.toLowerCase() !== question.toLowerCase())
+                        let followUps = suggestions
+                            .map(s => (typeof s === 'string' ? s : s.text || s.suggestion || JSON.stringify(s)))
+                            .filter(q => q && q.toLowerCase() !== question.toLowerCase())
                             .slice(0, 3);
-                    }
 
-                    followUps.forEach((q, index) => {
-                        const chip = document.createElement('div');
-                        chip.className = 'follow-up-chip fade-in';
-                        chip.style.animationDelay = `${index * 0.1}s`;
-                        chip.textContent = q;
-                        chip.onclick = () => {
-                            popup.style.display = 'none';
-                            emptyQuestionBlock();
-                            askQuestion(q);
-                        };
-                        container.appendChild(chip);
-                    });
+                        if (followUps.length === 0) {
+                            followUps = ["Tell me more about your projects", "What are your top skills?", "How can I contact you?"]
+                                .filter(d => d.toLowerCase() !== question.toLowerCase())
+                                .slice(0, 3);
+                        }
+
+                        followUps.forEach((q, index) => {
+                            const chip = document.createElement('div');
+                            chip.className = 'follow-up-chip fade-in';
+                            chip.style.animationDelay = `${index * 0.1}s`;
+                            chip.textContent = q;
+                            chip.onclick = () => {
+                                askQuestion(q, true);
+                            };
+                            container.appendChild(chip);
+                        });
+
+                        // Also show the internal input container
+                        if (popupInternalInputContainer) {
+                            popupInternalInputContainer.classList.add('fade-in');
+                        }
+                    }, 1500);
                 });
             } catch (error) {
                 console.error('Error fetching webhook:', error);
@@ -2165,15 +2240,21 @@
             }
         };
 
-        submitBtn.addEventListener('click', askQuestion);
+        submitBtn.addEventListener('click', () => askQuestion());
         questionInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') askQuestion();
+        });
+
+        submitPopupBtn.addEventListener('click', () => askQuestion(null, true));
+        popupQuestionInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') askQuestion(null, true);
         });
 
         // empty question block
         function emptyQuestionBlock() {
             const questionText = document.getElementById('popup-question');
             questionText?.classList.add('hide');
+            if (popupQuestionInput) popupQuestionInput.value = '';
             targetFocusPoint = new THREE.Vector3(0, 0, 0); // Reset focus
         }
 
