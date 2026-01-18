@@ -11,7 +11,7 @@ const App: React.FC = () => {
     <div className="h-screen w-full relative flex items-center justify-center overflow-hidden">
       <Background3D showSolarSystem={view === 'solar-system'} />
 
-      <main className="w-full max-w-lg relative z-10 flex items-center justify-center p-4 pt-0 pointer-events-none">
+      <main className="w-full relative z-10 flex items-center justify-center p-4 pointer-events-none">
         {view === 'profile' ? (
           <ProfileCard onEnterUniverse={() => setView('solar-system')} />
         ) : (
