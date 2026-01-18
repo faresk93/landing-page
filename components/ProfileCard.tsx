@@ -76,18 +76,18 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
             <span>Full-Stack Web Developer</span>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-3 text-[10px] font-rajdhani font-bold tracking-widest text-gray-400 uppercase">
-            <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/5 shadow-inner">
-              <span className="text-sm">🇹🇳</span> Tunisia
+          <div className="flex justify-center gap-1.5 text-[8px] font-rajdhani font-bold tracking-wider text-gray-400 uppercase whitespace-nowrap">
+            <span className="flex items-center gap-1 bg-white/5 px-1.5 py-1 rounded-md border border-white/5 shadow-inner">
+              <span className="text-xs">🇹🇳</span> Tunisia
             </span>
-            <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/5 shadow-inner">
-              <span className="text-sm">🇫🇷</span> France
+            <span className="flex items-center gap-1 bg-white/5 px-1.5 py-1 rounded-md border border-white/5 shadow-inner">
+              <span className="text-xs">🇫🇷</span> France
             </span>
-            <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/5 shadow-inner">
-              <span className="text-sm">🇴🇲</span> Oman
+            <span className="flex items-center gap-1 bg-white/5 px-1.5 py-1 rounded-md border border-white/5 shadow-inner">
+              <span className="text-xs">🇴🇲</span> Oman
             </span>
-            <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/5 shadow-inner">
-              <Cake className="w-3 h-3 text-pink-400" /> 32
+            <span className="flex items-center gap-1 bg-white/5 px-1.5 py-1 rounded-md border border-white/5 shadow-inner">
+              <Cake className="w-2.5 h-2.5 text-pink-400" /> 32
             </span>
           </div>
         </div>
