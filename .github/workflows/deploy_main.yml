@@ -21,11 +21,31 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
           script: |
+            set -e
             cd ${{ secrets.VPS_PROJECT_PATH }}
+            echo "Current directory: $(pwd)"
+            
             git fetch origin
             git reset --hard origin/main
+            
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            
+            echo "Installing dependencies..."
             npm install
+            
+            echo "Building application..."
+            # Ensure a clean build
+            rm -rf dist
             npm run build
+            
+            echo "Checking build output..."
+            if [ -d "dist" ]; then
+              echo "Contents of dist directory:"
+              ls -la dist
+            else
+              echo "ERROR: dist directory was not created!"
+              exit 1
+            fi
+            
             echo "Deployment completed successfully at $(date)"
