@@ -1,40 +1,20 @@
-# landing-page
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-Space VPS landing page with interactive 3D solar system visualization.
+# Run and deploy your AI Studio app
 
-## Deployment
+This contains everything you need to run your app locally.
 
-This project is configured to automatically deploy to a VPS via GitHub Actions when changes are pushed to the `main` branch.
+View your app in AI Studio: https://ai.studio/apps/drive/10U4pncr0jsm3PMLxGcpHW11wfIYcqt_Q
 
-### Setup Instructions
+## Run Locally
 
-To enable automatic deployment, configure the following secrets in your GitHub repository settings (Settings → Secrets and variables → Actions):
+**Prerequisites:**  Node.js
 
-1. **VPS_HOST** - Your VPS IP address or domain name
-2. **VPS_USERNAME** - SSH username for your VPS
-3. **VPS_SSH_KEY** - Private SSH key for authentication (entire key content)
-4. **VPS_PORT** - SSH port (optional, defaults to 22)
-5. **VPS_PROJECT_PATH** - Absolute path to the project directory on your VPS
 
-### VPS Setup
-
-On your VPS, ensure:
-1. Git is installed
-2. The project repository is cloned to the path specified in `VPS_PROJECT_PATH`
-3. SSH key authentication is configured
-4. Your web server (nginx/apache) is configured to serve from the project directory
-
-Example commands on VPS:
-```bash
-cd /var/www
-git clone <your-repo-url> landing-page
-```
-
-### Manual Deployment
-
-To deploy manually:
-```bash
-ssh user@your-vps
-cd /path/to/landing-page
-git pull origin main
-```
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
