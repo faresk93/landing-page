@@ -27,13 +27,9 @@ jobs:
             
             git pull origin main
             
-            echo "Installing dependencies and building app..."
-            npm install
-            npm run build
-            
             echo "Building and restarting Docker containers..."
-            # Using --build ensures Docker builds the fresh code from the Dockerfile
-            docker compose up -d --build static-website
+            # Build and run using the docker-compose.yml from the repo
+            docker compose -f docker-compose.yml up -d --build static-website
             
             # Optional: Clean up old images to save space
             docker image prune -f

@@ -1,0 +1,47 @@
+services:
+  static-website:
+    image: nginx:alpine
+    container_name: static_website
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # FIXED LINE BELOW: Added Host()
+      - "traefik.http.routers.fares.rule=Host(`www.${DOMAIN_NAME}`) || Host(`${DOMAIN_NAME}`) || Host(`${SUBDOMAIN}.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.fares.entrypoints=websecure"
+      - "traefik.http.routers.fares.tls=true"
+      # Make sure 'mytlschallenge' matches the name defined in your N8N Traefik command!
+      - "traefik.http.routers.fares.tls.certresolver=mytlschallenge"
+      - "traefik.http.services.fares.loadbalancer.server.port=80"
+    volumes:
+      - /opt/static-website/dist:/usr/share/nginx/html:ro
+    networks:
+      - n8n_default
+
+  chicha-website:
+    image: nginx:alpine
+    container_name: chicha_website
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # FIXED LINE BELOW: Added Host()
+      - "traefik.http.routers.chicha.rule=Host(`${CHICHA_SUBDOMAIN}.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.chicha.entrypoints=websecure"
+      - "traefik.http.routers.chicha.tls=true"
+      # Make sure 'mytlschallenge' matches the name defined in your N8N Traefik command!
+      - "traefik.http.routers.chicha.tls.certresolver=mytlschallenge"
+      - "traefik.http.services.chicha.loadbalancer.server.port=80"
+    volumes:
+      - /opt/chicha-website:/usr/share/nginx/html:ro
+    networks:
+      - n8n_default
+
+networks:
+  n8n_default:
+    external: true
+
+
+#DOMAIN_NAME=fares-khiary.com
+#SUBDOMAIN=fares
+#CHICHA_SUBDOMAIN=chicha
+#GENERIC_TIMEZONE=Europe/Berlin
+#SSL_EMAIL=user@srv1267645.hstgr.cloud

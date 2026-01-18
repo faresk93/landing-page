@@ -1,0 +1,20 @@
+services:
+  static-website:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: static_website
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fares.rule=Host(`www.${DOMAIN_NAME}`) || Host(`${DOMAIN_NAME}`) || Host(`${SUBDOMAIN}.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.fares.entrypoints=websecure"
+      - "traefik.http.routers.fares.tls=true"
+      - "traefik.http.routers.fares.tls.certresolver=mytlschallenge"
+      - "traefik.http.services.fares.loadbalancer.server.port=80"
+    networks:
+      - n8n_default
+
+networks:
+  n8n_default:
+    external: true
