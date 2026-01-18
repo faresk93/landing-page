@@ -2,6 +2,8 @@ name: Deploy to VPS
 
 on:
   push:
+    branches:
+      - main
     tags:
       - '*'
 
@@ -21,16 +23,24 @@ jobs:
             set -e
             cd /opt/static-website
             echo "Current directory: $(pwd)"
-            echo "Deploying version: ${{ github.ref_name }}"
+            echo "Deploying ref: ${{ github.ref_name }}"
 
-            git fetch --tags
-            git checkout ${{ github.ref_name }}
+            git fetch --all --tags
+
+            # Check if this is a tag or branch
+            if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+              echo "Deploying tag: ${{ github.ref_name }}"
+              git checkout ${{ github.ref_name }}
+            else
+              echo "Deploying branch: ${{ github.ref_name }}"
+              git checkout main
+              git pull origin main
+            fi
 
             echo "Building and restarting Docker containers..."
-            # Build and run using the docker-compose.yml from the repo
             docker compose -f docker-compose.yml up -d --build static-website
-            
-            # Optional: Clean up old images to save space
+
+            # Clean up old images to save space
             docker image prune -f
-            
-            echo "Deployment of version ${{ github.ref_name }} completed successfully at $(date)"
+
+            echo "Deployment completed successfully at $(date)"
