@@ -39,6 +39,7 @@ jobs:
 
             echo "Building and restarting Docker containers..."
             docker compose -f docker-compose.yml up -d --build static-website
+            docker compose -f docker-compose.yml up -d chicha-website
 
             # Clean up old images to save space
             docker image prune -f
