@@ -22,7 +22,7 @@ jobs:
           port: ${{ secrets.VPS_PORT || 22 }}
           script: |
             set -e
-            cd ${{ secrets.VPS_PROJECT_PATH }}
+            cd /opt/static-website
             echo "Current directory: $(pwd)"
             
             git fetch origin
@@ -31,5 +31,8 @@ jobs:
             echo "Building and restarting Docker containers..."
             # Using --build ensures Docker builds the fresh code from the Dockerfile
             docker compose up -d --build static-website
+            
+            # Optional: Clean up old images to save space
+            docker image prune -f
             
             echo "Deployment completed successfully at $(date)"
