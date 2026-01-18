@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Code2, MapPin, Home, Flag, Mail, Linkedin, Instagram, Github, ArrowRight, Settings, MessageSquare, Bot } from 'lucide-react';
+import { Code2, Cake, Mail, Linkedin, Instagram, Github, ArrowRight, Settings, MessageSquare, Bot } from 'lucide-react';
 import { SOCIAL_LINKS } from '../constants';
 import { ChatInterface } from './ChatInterface';
 
@@ -78,13 +78,16 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
 
           <div className="flex flex-wrap justify-center gap-3 text-[10px] font-rajdhani font-bold tracking-widest text-gray-400 uppercase">
             <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/5 shadow-inner">
-              <MapPin className="w-3 h-3 text-neonOrange" /> Paris
+              <span className="text-sm">🇹🇳</span> Tunisia
             </span>
             <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/5 shadow-inner">
-              <Home className="w-3 h-3 text-neonBlue" /> Oman
+              <span className="text-sm">🇫🇷</span> France
             </span>
             <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/5 shadow-inner">
-              <Flag className="w-3 h-3 text-red-500" /> Tunisia
+              <span className="text-sm">🇴🇲</span> Oman
+            </span>
+            <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/5 shadow-inner">
+              <Cake className="w-3 h-3 text-pink-400" /> 32
             </span>
           </div>
         </div>
