@@ -46,8 +46,7 @@ landing-page/
 ├── docker-compose.yml        # Docker Compose with Traefik integration
 └── .github/
     └── workflows/
-        ├── ci.yml                    # CI pipeline (test, build, docker)
-        └── merge_claude_to_main.yml  # Auto-merge workflow with tests
+        └── merge_claude_to_main.yml  # Auto-merge workflow
 ```
 
 ## Tech Stack
@@ -64,7 +63,6 @@ landing-page/
 | Icons | Lucide React |
 | Container | Docker with Nginx |
 | Reverse Proxy | Traefik (via Docker Compose) |
-| CI/CD | GitHub Actions |
 
 ## Prerequisites
 
@@ -246,37 +244,23 @@ docker-compose up -d
 | `SUBDOMAIN` | Subdomain for portfolio (e.g., `portfolio`) |
 | `CHICHA_SUBDOMAIN` | Additional subdomain for secondary site |
 
-## CI/CD Workflows
+## CI/CD Workflow
 
-### CI Pipeline (`.github/workflows/ci.yml`)
+### Auto-Merge Claude Branches
 
-Triggered on pushes to `main` and `claude/**` branches, and on pull requests.
+The repository includes a GitHub Actions workflow that automatically merges branches prefixed with `claude/` into `main`:
 
-**Jobs:**
-
-1. **Test** - Runs on Node.js 18 and 20
-   - Install dependencies
-   - TypeScript type checking
-   - Run unit tests
-   - Generate coverage report
-
-2. **Build** - Runs after tests pass
-   - Build production bundle
-   - Upload artifacts
-
-3. **Docker Build** - Verify Docker image builds correctly
-
-### Auto-Merge Claude Branches (`.github/workflows/merge_claude_to_main.yml`)
-
-Automatically merges `claude/**` branches into `main` after tests pass.
-
-**Process:**
-1. Run TypeScript checks
-2. Run all tests
-3. Build application
-4. If all checks pass, merge into main
+**File:** `.github/workflows/merge_claude_to_main.yml`
 
 **Trigger:** Push to any `claude/**` branch
+
+**Process:**
+1. Checkout repository with full history
+2. Fetch and verify the Claude branch
+3. Merge into main with `--no-ff` flag
+4. Push changes to origin
+
+This enables seamless integration of AI-assisted development branches.
 
 ## Configuration Files
 
