@@ -58,7 +58,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
             <Settings className="w-4 h-4 animate-spin-slow" />
             <span className="font-orbitron font-bold text-xs tracking-widest uppercase text-yellow-500/80">Neural Link Active</span>
           </div>
-          <span className="font-orbitron text-[10px] text-white/40 tracking-[0.2em]">V3.3</span>
+          <span className="font-orbitron text-[10px] text-white/40 tracking-[0.2em]">V3.4</span>
         </div>
 
         {/* Name Title with Glow Effect */}
