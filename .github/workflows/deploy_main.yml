@@ -27,6 +27,10 @@ jobs:
 
             git fetch --all --tags
 
+            # Stash any local changes (like .env, package-lock.json)
+            echo "Stashing local changes..."
+            git stash --include-untracked || true
+
             # Check if this is a tag or branch
             if [[ "${{ github.ref }}" == refs/tags/* ]]; then
               echo "Deploying tag: ${{ github.ref_name }}"
@@ -36,6 +40,10 @@ jobs:
               git checkout main
               git pull origin main
             fi
+
+            # Restore stashed changes (preserves .env and other local files)
+            echo "Restoring local changes..."
+            git stash pop || true
 
             echo "Building and restarting Docker containers..."
             docker compose -f docker-compose.yml up -d --build static-website
