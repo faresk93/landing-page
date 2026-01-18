@@ -17,29 +17,36 @@ interface ChatInterfaceProps {
   onClose: () => void;
 }
 
-const SUGGESTIONS = [
-  "What is your tech stack?",
-  "Tell me about your projects",
-  "How can I contact you?",
-  "Show me your resume"
-];
+const SUGGESTIONS: string[] = [];
 
-const TypingMessage: React.FC<{ text: string; onComplete?: () => void }> = ({ text, onComplete }) => {
+const TypingMessage: React.FC<{ text: string; onUpdate?: () => void; onComplete?: () => void }> = ({ text, onUpdate, onComplete }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [index, setIndex] = useState(0);
+  const onCompleteRef = useRef(onComplete);
+  const onUpdateRef = useRef(onUpdate);
+  const timerStarted = useRef(false);
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+    onUpdateRef.current = onUpdate;
+  }, [onComplete, onUpdate]);
 
   useEffect(() => {
     if (index < text.length) {
       const timeout = setTimeout(() => {
         setDisplayedText(prev => prev + text[index]);
         setIndex(prev => prev + 1);
-      }, 20); // Fast typing speed
+        if (onUpdateRef.current) onUpdateRef.current();
+      }, 15);
       return () => clearTimeout(timeout);
-    } else if (onComplete) {
-      const finalTimeout = setTimeout(onComplete, 1000); // 1s delay before showing suggestions
-      return () => clearTimeout(finalTimeout);
+    } else if (onCompleteRef.current && !timerStarted.current) {
+      timerStarted.current = true;
+      const timeout = setTimeout(() => {
+        if (onCompleteRef.current) onCompleteRef.current();
+      }, 1000);
+      return () => clearTimeout(timeout);
     }
-  }, [index, text, onComplete]);
+  }, [index, text.length]);
 
   return <span>{displayedText}</span>;
 };
@@ -185,7 +192,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [activeSuggestions, setActiveSuggestions] = useState<string[]>(SUGGESTIONS);
+  const [activeSuggestions, setActiveSuggestions] = useState<string[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -230,7 +237,18 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
 
   // Auto-focus removed to prevent keyboard auto-open on mobile
   useEffect(() => {
-    // Hidden functionality - can be restored if needed
+    if (!isOpen) {
+      setMessages([{
+        id: 'init',
+        role: 'ai',
+        text: INITIAL_GREETING,
+        timestamp: Date.now()
+      }]);
+      setActiveSuggestions([]);
+      setShowSuggestions(false);
+      setInput('');
+      setLoading(false);
+    }
   }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -281,7 +299,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, loading]);
+  }, [messages, loading, showSuggestions]);
 
   return (
     <AnimatePresence>
@@ -330,9 +348,15 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                   }`}>
                   {msg.isError ? (
                     <DisconnectedMind />
-                  ) : msg.role === 'ai' ? (
+                  ) : msg.role === 'ai' && msg.id !== 'init' ? (
                     <TypingMessage
+                      key={msg.id}
                       text={msg.text}
+                      onUpdate={() => {
+                        if (scrollRef.current) {
+                          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+                        }
+                      }}
                       onComplete={msg.id === messages[messages.length - 1].id ? () => setShowSuggestions(true) : undefined}
                     />
                   ) : (
@@ -347,14 +371,15 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  className="flex flex-wrap gap-2 pt-4"
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="flex flex-wrap gap-2 pt-4 pb-2"
                 >
                   {activeSuggestions.map((suggestion, i) => (
                     <button
                       key={i}
                       onClick={() => handleSuggestionClick(suggestion)}
-                      className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400 hover:text-white hover:bg-white/10 hover:border-neonPurple/50 transition-all duration-300"
+                      className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400 hover:text-white hover:bg-white/10 hover:border-neonPurple/50 transition-all duration-300 backdrop-blur-sm"
                     >
                       {suggestion}
                     </button>
