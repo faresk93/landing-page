@@ -16,8 +16,11 @@ A modern, interactive portfolio landing page featuring 3D graphics, AI-powered c
 - **Comprehensive Testing** - Unit, component, and integration tests with Vitest
 
 ### AI Chat Assistant
-- **N8N Webhook Integration** - Real-time AI conversations powered by custom N8N workflows
-- **Smart Suggestions** - AI provides contextual follow-up questions
+- **N8N Webhook Integration** - Real-time AI conversations powered by GPT-4.1-mini via N8N
+- **Multi-language Support** - Auto-detects and responds in the same language as the question
+- **Sentiment Analysis** - Classifies questions as Positive 😊, Negative 🙁, Professional 🌐, or Neutral 😐
+- **Smart Suggestions** - AI provides 3 contextual follow-up questions
+- **Conversation Analytics** - All interactions logged to Google Sheets with metadata
 - **Graceful Fallback** - Mock responses when webhook is unavailable
 
 ### Private Notes System
@@ -314,60 +317,120 @@ This enables seamless integration of AI-assisted development branches.
 
 ## AI Chat Integration (N8N Workflow)
 
-The portfolio includes an AI chat assistant powered by a custom N8N workflow that processes visitor questions and returns AI-generated responses.
+The portfolio includes an AI chat assistant powered by a self-hosted N8N workflow that processes visitor questions with GPT-4.1-mini, performs sentiment analysis, and logs all conversations.
 
 ### N8N Workflow Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         N8N AI CHAT WORKFLOW                                │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  ┌──────────┐    ┌──────────────┐    ┌─────────────┐    ┌───────────────┐  │
-│  │ Webhook  │───>│ AI Agent     │───>│ Process     │───>│ Return JSON   │  │
-│  │ Trigger  │    │ (Claude/GPT) │    │ Response    │    │ Response      │  │
-│  └──────────┘    └──────────────┘    └─────────────┘    └───────────────┘  │
-│       │                 │                   │                   │          │
-│       │                 │                   │                   │          │
-│       ▼                 ▼                   ▼                   ▼          │
-│  Receives        Processes query      Formats output      Sends back       │
-│  visitor         with context         and generates       response with    │
-│  question        about portfolio      suggestions         AI output        │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│                              N8N AI CHAT WORKFLOW                                    │
+│                                   "My Website"                                       │
+├──────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  ┌──────────┐   ┌─────────────┐   ┌───────────────────────┐   ┌──────────────────┐  │
+│  │ Webhook  │──>│ Edit Fields │──>│      AI Agent         │──>│ Code (JavaScript)│  │
+│  │ Trigger  │   │             │   │   (GPT-4.1-mini)      │   │ Response Parser  │  │
+│  └──────────┘   └─────────────┘   └───────────────────────┘   └──────────────────┘  │
+│       │               │                     │                          │            │
+│       │               │              ┌──────┴──────┐                   │            │
+│       │               │              │             │                   │            │
+│       │               │         ┌────┴────┐  ┌─────┴─────┐             │            │
+│       │               │         │ Simple  │  │  OpenAI   │             │            │
+│       │               │         │ Memory  │  │   Model   │             │            │
+│       │               │         └─────────┘  └───────────┘             │            │
+│       │               │                                                │            │
+│       ▼               ▼                                                ▼            │
+│  ?question=       Injects:                                     Extracts from AI:    │
+│  "user query"     • Resume (JSON)                              • Response text      │
+│                   • Personal infos                             • Sentiment emoji    │
+│                                                                • 3 suggestions      │
+│                                                                                      │
+│  ┌──────────────────────────────────────────────────────────────────────────────┐   │
+│  │                                                                              │   │
+│  │   ┌────────┐   ┌────────────────────┐   ┌──────────────────────────────────┐ │   │
+│  │   │  Wait  │──>│ Respond to Webhook │──>│   Google Sheets Logger           │ │   │
+│  │   │  (1s)  │   │    (JSON)          │   │   (Analytics & Monitoring)       │ │   │
+│  │   └────────┘   └────────────────────┘   └──────────────────────────────────┘ │   │
+│  │                         │                              │                     │   │
+│  │                         ▼                              ▼                     │   │
+│  │               Returns to frontend:           Logs conversation:              │   │
+│  │               {                              • Timestamp                     │   │
+│  │                 "output": "...",             • Question & Response           │   │
+│  │                 "suggestions": [...]         • Visitor IP & Country          │   │
+│  │               }                              • User Agent & OS               │   │
+│  │                                              • Sentiment Analysis            │   │
+│  └──────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                      │
+└──────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Workflow Components
+### Workflow Nodes
 
-| Node | Purpose |
-|------|---------|
-| **Webhook Trigger** | Receives incoming chat requests from the portfolio |
-| **AI Agent** | Processes the question using LLM with portfolio context |
-| **Response Formatter** | Structures the AI output with suggestions |
-| **HTTP Response** | Returns JSON to the portfolio frontend |
+| Node | Type | Purpose |
+|------|------|---------|
+| **Webhook** | `n8n-nodes-base.webhook` | Receives GET requests with `?question=` parameter |
+| **Edit Fields** | `n8n-nodes-base.set` | Injects resume JSON and personal info context |
+| **AI Agent** | `@n8n/n8n-nodes-langchain.agent` | Processes questions with custom system prompt |
+| **Simple Memory** | `@n8n/n8n-nodes-langchain.memoryBufferWindow` | Maintains conversation context |
+| **OpenAI Chat Model** | `@n8n/n8n-nodes-langchain.lmChatOpenAi` | GPT-4.1-mini language model |
+| **Code in JavaScript** | `n8n-nodes-base.code` | Parses AI output into structured response |
+| **Wait** | `n8n-nodes-base.wait` | 1-second processing delay |
+| **Respond to Webhook** | `n8n-nodes-base.respondToWebhook` | Returns JSON response to frontend |
+| **Google Sheets** | `n8n-nodes-base.googleSheets` | Logs all conversations for analytics |
+
+### AI Agent Behavior
+
+The AI is configured to:
+- **Respond as Fares** in first person with direct, concise answers
+- **Detect language** automatically and respond in the same language
+- **Analyze sentiment**: Positive 😊 | Negative 🙁 | Professional 🌐 | Neutral 😐
+- **Handle sensitive questions** politely with refusal
+- **Counter insults** with witty, ironic comebacks
+- **Generate 3 follow-up suggestions** based on context
+
+### Response Format
+
+**AI Agent Raw Output:**
+```
+{response} | {sentiment emoji} | {question1}? {question2}? {question3}?
+```
+
+**Parsed JSON Response:**
+```json
+{
+  "output": "AI response text",
+  "suggestions": ["Follow-up question 1?", "Follow-up question 2?", "Follow-up question 3?"]
+}
+```
+
+### Analytics (Google Sheets Logging)
+
+| Field | Data |
+|-------|------|
+| `time` | Request timestamp |
+| `question` | User's original question |
+| `response` | AI-generated response |
+| `sentiment` | Detected sentiment with emoji |
+| `ip` | Visitor IP (via `x-real-ip` header) |
+| `country` | Country code (via Cloudflare `cf-ipcountry`) |
+| `infos` | User agent string |
+| `os` | Operating system (via `sec-ch-ua-platform`) |
 
 ### Configuration
 
-Set `VITE_N8N_WEBHOOK_URL` in your environment.
+Set `VITE_N8N_WEBHOOK_URL` in your environment pointing to your N8N instance.
 
-### Endpoint Format
+### Endpoint
 ```
 GET {WEBHOOK_URL}?question={user_message}
 ```
 
-### Expected Response
-```json
-{
-  "output": "AI response text",
-  "suggestions": ["Follow-up question 1", "Follow-up question 2"]
-}
-```
-
 ### Features
-- Real-time conversation with AI
-- Contextual follow-up suggestions
+- Multi-language support (auto-detects and responds in same language)
+- Sentiment analysis with emoji indicators
+- Conversation memory for context awareness
+- Real-time analytics logging to Google Sheets
 - Graceful fallback to mock responses when webhook is unavailable
-- Error handling with user-friendly messages
 
 ---
 
