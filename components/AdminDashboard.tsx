@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Database, UserCircle, Clock, Trash2, X, RefreshCw,
-    ChevronRight, ArrowUpDown, MessageSquare
+    ChevronRight, ArrowUpDown, MessageSquare, AlertTriangle
 } from 'lucide-react';
 import { supabase } from '../services/supabase';
 
@@ -23,6 +23,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose 
     const [notes, setNotes] = useState<Note[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
     const fetchNotes = async () => {
         setIsLoading(true);
@@ -176,7 +177,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose 
                                                         </td>
                                                         <td className="px-4 py-4 rounded-r-xl border-y border-r border-white/10 group-hover:border-blue-500/30 text-right">
                                                             <button
-                                                                onClick={() => deleteNote(note.id)}
+                                                                onClick={() => setDeleteConfirmId(note.id)}
                                                                 className="p-2 text-gray-600 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all"
                                                             >
                                                                 <Trash2 className="w-4 h-4" />
@@ -212,7 +213,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose 
                                                         </div>
                                                     </div>
                                                     <button
-                                                        onClick={() => deleteNote(note.id)}
+                                                        onClick={() => setDeleteConfirmId(note.id)}
                                                         className="p-2 text-gray-600 hover:text-red-500 bg-white/5 rounded-lg"
                                                     >
                                                         <Trash2 className="w-4 h-4" />
@@ -248,6 +249,65 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose 
                     </motion.div>
                 </div>
             )}
+
+            {/* Delete Confirmation Popup */}
+            <AnimatePresence>
+                {deleteConfirmId && (
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setDeleteConfirmId(null)}
+                            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="relative w-full max-w-sm bg-[#0d0d15] border border-white/10 rounded-3xl p-6 shadow-2xl overflow-hidden"
+                        >
+                            {/* Decorative Background Element */}
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 blur-3xl rounded-full -mr-16 -mt-16" />
+
+                            <div className="flex flex-col items-center text-center gap-6 relative z-10">
+                                <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/20">
+                                    <AlertTriangle className="w-8 h-8 text-red-500" />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <h3 className="font-orbitron text-sm font-black text-white uppercase tracking-[0.2em]">
+                                        Purge Fragment?
+                                    </h3>
+                                    <p className="font-rajdhani text-sm text-gray-400 leading-relaxed">
+                                        This action will permanently delete this note from the archive. This process is irreversible.
+                                    </p>
+                                </div>
+
+                                <div className="flex gap-3 w-full">
+                                    <button
+                                        onClick={() => setDeleteConfirmId(null)}
+                                        className="flex-1 py-3.5 rounded-xl bg-white/5 border border-white/10 text-gray-400 font-orbitron text-[10px] uppercase tracking-[0.2em] hover:bg-white/10 hover:text-white transition-all active:scale-[0.98]"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (deleteConfirmId) {
+                                                deleteNote(deleteConfirmId);
+                                                setDeleteConfirmId(null);
+                                            }
+                                        }}
+                                        className="flex-1 py-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 font-orbitron text-[10px] uppercase tracking-[0.2em] font-black hover:bg-red-500 hover:text-white transition-all shadow-[0_0_20px_-5px_rgba(239,68,68,0.4)] active:scale-[0.98]"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </AnimatePresence>
     );
 };
