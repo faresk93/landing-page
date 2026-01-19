@@ -7,23 +7,45 @@ A modern, interactive portfolio landing page featuring 3D graphics, AI-powered c
 
 ## Features
 
+### Core Features
 - **Interactive 3D Background** - Immersive space-themed visuals using Three.js with React Three Fiber
-- **AI Chat Assistant** - Conversational AI powered by N8N webhook integration
 - **Solar System View** - Interactive 3D solar system exploration mode
-- **Responsive Design** - Fully responsive layout with Tailwind CSSf
+- **Responsive Design** - Fully responsive layout with Tailwind CSS
 - **Smooth Animations** - Fluid transitions and effects with Framer Motion
 - **Modern Stack** - Built with React 19, TypeScript, and Vite
 - **Comprehensive Testing** - Unit, component, and integration tests with Vitest
+
+### AI Chat Assistant
+- **N8N Webhook Integration** - Real-time AI conversations powered by GPT-4.1-mini via N8N
+- **Multi-language Support** - Auto-detects and responds in the same language as the question
+- **Sentiment Analysis** - Classifies questions as Positive 😊, Negative 🙁, Professional 🌐, or Neutral 😐
+- **Smart Suggestions** - AI provides 3 contextual follow-up questions
+- **Conversation Analytics** - All interactions logged to Google Sheets with metadata
+- **Graceful Fallback** - Mock responses when webhook is unavailable
+
+### Private Notes System
+- **Anonymous Notes** - Visitors can send private notes without signing in
+- **Identified Notes** - Authenticated users can send notes with their identity
+- **Admin Dashboard** - Secure admin panel to view, manage, and delete notes
+- **Real-time Storage** - Notes stored securely in Supabase database
+
+### Authentication (OAuth via Supabase)
+- **Google OAuth** - Seamless one-click sign-in with Google
+- **Session Persistence** - Authentication state maintained across page reloads
+- **User Profile Display** - Shows logged-in user's name and avatar
 
 ## Project Structure
 
 ```
 landing-page/
 ├── components/
+│   ├── AdminDashboard.tsx    # Admin panel for managing private notes
 │   ├── Background3D.tsx      # Three.js 3D space background & solar system
 │   ├── ChatInterface.tsx     # AI chat assistant component
+│   ├── NotePopup.tsx         # Private note submission modal
 │   └── ProfileCard.tsx       # Main profile card with info & navigation
 ├── services/
+│   ├── supabase.ts           # Supabase client initialization
 │   └── webhookService.ts     # N8N webhook integration for AI responses
 ├── tests/
 │   ├── setup.ts              # Test setup and global mocks
@@ -64,6 +86,8 @@ landing-page/
 | Animations | Framer Motion |
 | Styling | Tailwind CSS |
 | Icons | Lucide React |
+| Backend/Auth | Supabase (PostgreSQL, OAuth) |
+| AI Workflow | N8N (Self-hosted) |
 | Container | Docker with Nginx |
 | Reverse Proxy | Traefik (via Docker Compose) |
 
@@ -87,6 +111,8 @@ Create a `.env` file in the project root:
 
 ```env
 VITE_N8N_WEBHOOK_URL=your_n8n_webhook_url
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### 3. Start Development Server
@@ -289,30 +315,212 @@ This enables seamless integration of AI-assisted development branches.
 - Setup file for mocks
 - V8 coverage provider
 
-## AI Chat Integration
+## AI Chat Integration (N8N Workflow)
 
-The portfolio includes an AI chat assistant that communicates via N8N webhook:
+The portfolio includes an AI chat assistant powered by a self-hosted N8N workflow that processes visitor questions with GPT-4.1-mini, performs sentiment analysis, and logs all conversations.
 
-**Configuration:** Set `VITE_N8N_WEBHOOK_URL` in your environment
+### N8N Workflow Architecture
 
-**Features:**
-- Real-time conversation with AI
-- Suggested follow-up questions
-- Graceful fallback to mock responses when webhook is unavailable
-- Error handling with user-friendly messages
+```
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│                              N8N AI CHAT WORKFLOW                                    │
+│                                   "My Website"                                       │
+├──────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  ┌──────────┐   ┌─────────────┐   ┌───────────────────────┐   ┌──────────────────┐  │
+│  │ Webhook  │──>│ Edit Fields │──>│      AI Agent         │──>│ Code (JavaScript)│  │
+│  │ Trigger  │   │             │   │   (GPT-4.1-mini)      │   │ Response Parser  │  │
+│  └──────────┘   └─────────────┘   └───────────────────────┘   └──────────────────┘  │
+│       │               │                     │                          │            │
+│       │               │              ┌──────┴──────┐                   │            │
+│       │               │              │             │                   │            │
+│       │               │         ┌────┴────┐  ┌─────┴─────┐             │            │
+│       │               │         │ Simple  │  │  OpenAI   │             │            │
+│       │               │         │ Memory  │  │   Model   │             │            │
+│       │               │         └─────────┘  └───────────┘             │            │
+│       │               │                                                │            │
+│       ▼               ▼                                                ▼            │
+│  ?question=       Injects:                                     Extracts from AI:    │
+│  "user query"     • Resume (JSON)                              • Response text      │
+│                   • Personal infos                             • Sentiment emoji    │
+│                                                                • 3 suggestions      │
+│                                                                                      │
+│  ┌──────────────────────────────────────────────────────────────────────────────┐   │
+│  │                                                                              │   │
+│  │   ┌────────┐   ┌────────────────────┐   ┌──────────────────────────────────┐ │   │
+│  │   │  Wait  │──>│ Respond to Webhook │──>│   Google Sheets Logger           │ │   │
+│  │   │  (1s)  │   │    (JSON)          │   │   (Analytics & Monitoring)       │ │   │
+│  │   └────────┘   └────────────────────┘   └──────────────────────────────────┘ │   │
+│  │                         │                              │                     │   │
+│  │                         ▼                              ▼                     │   │
+│  │               Returns to frontend:           Logs conversation:              │   │
+│  │               {                              • Timestamp                     │   │
+│  │                 "output": "...",             • Question & Response           │   │
+│  │                 "suggestions": [...]         • Visitor IP & Country          │   │
+│  │               }                              • User Agent & OS               │   │
+│  │                                              • Sentiment Analysis            │   │
+│  └──────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                      │
+└──────────────────────────────────────────────────────────────────────────────────────┘
+```
 
-**Endpoint Format:**
+### Workflow Nodes
+
+| Node | Type | Purpose |
+|------|------|---------|
+| **Webhook** | `n8n-nodes-base.webhook` | Receives GET requests with `?question=` parameter |
+| **Edit Fields** | `n8n-nodes-base.set` | Injects resume JSON and personal info context |
+| **AI Agent** | `@n8n/n8n-nodes-langchain.agent` | Processes questions with custom system prompt |
+| **Simple Memory** | `@n8n/n8n-nodes-langchain.memoryBufferWindow` | Maintains conversation context |
+| **OpenAI Chat Model** | `@n8n/n8n-nodes-langchain.lmChatOpenAi` | GPT-4.1-mini language model |
+| **Code in JavaScript** | `n8n-nodes-base.code` | Parses AI output into structured response |
+| **Wait** | `n8n-nodes-base.wait` | 1-second processing delay |
+| **Respond to Webhook** | `n8n-nodes-base.respondToWebhook` | Returns JSON response to frontend |
+| **Google Sheets** | `n8n-nodes-base.googleSheets` | Logs all conversations for analytics |
+
+### AI Agent Behavior
+
+The AI is configured to:
+- **Respond as Fares** in first person with direct, concise answers
+- **Detect language** automatically and respond in the same language
+- **Analyze sentiment**: Positive 😊 | Negative 🙁 | Professional 🌐 | Neutral 😐
+- **Handle sensitive questions** politely with refusal
+- **Counter insults** with witty, ironic comebacks
+- **Generate 3 follow-up suggestions** based on context
+
+### Response Format
+
+**AI Agent Raw Output:**
+```
+{response} | {sentiment emoji} | {question1}? {question2}? {question3}?
+```
+
+**Parsed JSON Response:**
+```json
+{
+  "output": "AI response text",
+  "suggestions": ["Follow-up question 1?", "Follow-up question 2?", "Follow-up question 3?"]
+}
+```
+
+### Analytics (Google Sheets Logging)
+
+| Field | Data |
+|-------|------|
+| `time` | Request timestamp |
+| `question` | User's original question |
+| `response` | AI-generated response |
+| `sentiment` | Detected sentiment with emoji |
+| `ip` | Visitor IP (via `x-real-ip` header) |
+| `country` | Country code (via Cloudflare `cf-ipcountry`) |
+| `infos` | User agent string |
+| `os` | Operating system (via `sec-ch-ua-platform`) |
+
+### Configuration
+
+Set `VITE_N8N_WEBHOOK_URL` in your environment pointing to your N8N instance.
+
+### Endpoint
 ```
 GET {WEBHOOK_URL}?question={user_message}
 ```
 
-**Expected Response:**
-```json
-{
-  "output": "AI response text",
-  "suggestions": ["Suggestion 1", "Suggestion 2"]
-}
+### Features
+- Multi-language support (auto-detects and responds in same language)
+- Sentiment analysis with emoji indicators
+- Conversation memory for context awareness
+- Real-time analytics logging to Google Sheets
+- Graceful fallback to mock responses when webhook is unavailable
+
+---
+
+## Authentication (Supabase OAuth)
+
+The portfolio uses Supabase for authentication, providing a seamless Google OAuth sign-in experience.
+
+### Setup
+
+1. Create a [Supabase](https://supabase.com) project
+2. Enable Google OAuth in Authentication > Providers
+3. Configure your Google Cloud OAuth credentials
+4. Add your site URL to the allowed redirect URLs
+
+### Environment Variables
+
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
 ```
+
+### Authentication Flow
+
+```
+┌─────────┐     ┌──────────┐     ┌────────────┐     ┌──────────┐
+│  User   │────>│ Portfolio│────>│   Google   │────>│ Supabase │
+│ Clicks  │     │ Redirects│     │   OAuth    │     │ Session  │
+│ Sign In │     │ to Google│     │  Consent   │     │ Created  │
+└─────────┘     └──────────┘     └────────────┘     └──────────┘
+                                       │
+                                       ▼
+                              User metadata stored:
+                              - Full name
+                              - Avatar URL
+                              - Email
+```
+
+### Features
+- One-click Google sign-in
+- Session persistence across page reloads
+- User profile display (name & avatar)
+- Secure token management via Supabase
+
+---
+
+## Private Notes System
+
+Visitors can send private notes to the portfolio owner, with optional anonymous submission.
+
+### Features
+
+- **Anonymous Notes**: Send notes without signing in
+- **Identified Notes**: Authenticated users can attach their identity
+- **Admin Dashboard**: Secure panel to view and manage all notes
+- **Delete Confirmation**: Protected delete operations with confirmation dialog
+
+### Database Schema (Supabase)
+
+```sql
+CREATE TABLE notes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  content TEXT NOT NULL,
+  sender_name TEXT,
+  user_email TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+### Note Submission Flow
+
+```
+┌─────────────┐     ┌─────────────┐     ┌──────────────┐
+│  Visitor    │────>│ Note Popup  │────>│   Supabase   │
+│ Clicks Send │     │  Modal      │     │   Database   │
+└─────────────┘     └─────────────┘     └──────────────┘
+                          │
+                          ▼
+               Options:
+               - Anonymous (no auth required)
+               - Identified (uses Google session)
+```
+
+### Admin Access
+
+The admin dashboard is restricted to the portfolio owner's email. Features include:
+- View all notes with sender info and timestamps
+- Sort notes by date (ascending/descending)
+- Delete notes with confirmation
+- Responsive design (table on desktop, cards on mobile)
 
 ## Customization
 
