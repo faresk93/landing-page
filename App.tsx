@@ -39,10 +39,13 @@ const App: React.FC = () => {
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setView('profile')}
-            className="fixed bottom-10 left-1/2 -translate-x-1/2 px-8 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full font-orbitron text-sm tracking-widest text-white hover:bg-white/20 transition-all z-20 pointer-events-auto"
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 px-5 py-2.5 xs:px-8 xs:py-3 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full font-orbitron text-[9px] xs:text-xs tracking-[0.3em] text-white hover:border-neonBlue/50 hover:bg-black/60 transition-all z-20 pointer-events-auto flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
           >
-            ← BACK TO PROFILE
+            <div className="w-1.5 h-1.5 rounded-full bg-neonBlue animate-pulse" />
+            BACK TO PROFILE
           </motion.button>
         )}
       </main>
