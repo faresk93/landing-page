@@ -14,10 +14,11 @@ interface NotePopupProps {
 export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, userEmail, userName }) => {
     const [note, setNote] = useState('');
     const [name, setName] = useState('');
+    const [isAnonymous, setIsAnonymous] = useState(false);
     const [isSending, setIsSending] = useState(false);
     const [isSent, setIsSent] = useState(false);
 
-    const isValid = note.trim().length >= 3 && (userId ? true : name.trim().length > 0);
+    const isValid = note.trim().length >= 3 && (userId ? true : (isAnonymous || name.trim().length > 0));
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,8 +29,8 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
             {
                 user_id: userId || null,
                 content: note.trim(),
-                user_email: userEmail || 'Guest',
-                sender_name: userName || name.trim()
+                user_email: userEmail || (isAnonymous ? 'anonymous@hidden.com' : 'Guest'),
+                sender_name: userId ? userName : (isAnonymous ? 'anonymous' : name.trim())
             },
         ]);
 
@@ -38,6 +39,7 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
             setIsSent(true);
             setNote('');
             setName('');
+            setIsAnonymous(false);
             setTimeout(() => {
                 setIsSent(false);
                 onClose();
@@ -99,18 +101,38 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                             ) : (
                                 <form onSubmit={handleSubmit} className="space-y-4">
                                     {!userId && (
-                                        <div className="space-y-2">
-                                            <label className="font-orbitron text-[10px] text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-1">
-                                                Name (Necessary)
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={name}
-                                                onChange={(e) => setName(e.target.value)}
-                                                placeholder="Enter your name"
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl p-3 font-rajdhani text-white placeholder:text-gray-600 focus:outline-none focus:border-neonPurple/50 transition-all text-sm"
-                                                disabled={isSending}
-                                            />
+                                        <div className="space-y-4">
+                                            <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl hover:border-neonPurple/30 transition-all cursor-pointer group/anon" onClick={() => setIsAnonymous(!isAnonymous)}>
+                                                <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${isAnonymous ? 'bg-neonPurple border-neonPurple' : 'border-white/20'}`}>
+                                                    {isAnonymous && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
+                                                </div>
+                                                <span className="font-orbitron text-[10px] text-gray-400 uppercase tracking-widest group-hover/anon:text-neonPurple transition-colors">
+                                                    Send Anonymously
+                                                </span>
+                                            </div>
+
+                                            <AnimatePresence>
+                                                {!isAnonymous && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, height: 0 }}
+                                                        animate={{ opacity: 1, height: 'auto' }}
+                                                        exit={{ opacity: 0, height: 0 }}
+                                                        className="space-y-2 overflow-hidden"
+                                                    >
+                                                        <label className="font-orbitron text-[10px] text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-1">
+                                                            Name (Necessary)
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            value={name}
+                                                            onChange={(e) => setName(e.target.value)}
+                                                            placeholder="Enter your name"
+                                                            className="w-full bg-white/5 border border-white/10 rounded-xl p-3 font-rajdhani text-white placeholder:text-gray-600 focus:outline-none focus:border-neonPurple/50 transition-all text-sm"
+                                                            disabled={isSending}
+                                                        />
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
                                         </div>
                                     )}
                                     <div className="relative group">
