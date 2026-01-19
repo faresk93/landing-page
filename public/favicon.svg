@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Rounded background -->
+  <rect width="100" height="100" rx="22" fill="#050510" />
+  
+  <!-- Centered Block -->
+  <g transform="translate(50, 50)">
+    <!-- F Letter centered relative to its middle -->
+    <text x="-15" y="26" font-family="Arial, sans-serif" font-weight="900" font-size="80" fill="#bc13fe" text-anchor="middle">F</text>
+    
+    <!-- Blinking "I" (Cursor) with a small space from F -->
+    <rect x="12" y="-28" width="12" height="56" fill="#00f3ff">
+      <animate 
+        attributeName="opacity" 
+        values="1;0" 
+        dur="0.8s" 
+        calcMode="discrete" 
+        repeatCount="indefinite" 
+      />
+    </rect>
+  </g>
+</svg>
