@@ -37,10 +37,6 @@ jobs:
             git merge --abort || true
             git reset --hard HEAD
 
-            # Stash any local changes
-            echo "Stashing local changes..."
-            git stash --include-untracked || true
-
             # Pull latest changes
             if [[ "${{ github.ref }}" == refs/tags/* ]]; then
               echo "Deploying tag: ${{ github.ref_name }}"
@@ -51,19 +47,23 @@ jobs:
               git pull origin main
             fi
 
-            # Restore stashed changes. Use --ours to prioritize the repo's version (the pull) 
-            # for tracked files like .env and package-lock.json if conflicts occur.
-            echo "Restoring local changes..."
-            if ! git stash pop; then
-              echo "Conflict detected during stash pop. Favoring repo's updated files to avoid corruption."
-              # Force theRepo version (ours) for .env and package-lock.json to avoid markers
-              git checkout --ours .env || true
-              git checkout --ours package-lock.json || true
-              # For everything else, repo also wins
-              git checkout --ours . || true
-              git add .
-              echo "Conflicts resolved by prioritizing repo version."
+            # Create/Overwrite .env from GitHub Secrets
+            echo "Generating .env from GitHub Secrets..."
+            printf "VITE_N8N_WEBHOOK_URL=%s\nVITE_SUPABASE_URL=%s\nVITE_SUPABASE_ANON_KEY=%s\nDOMAIN_NAME=%s\nSUBDOMAIN=%s\nCHICHA_SUBDOMAIN=%s\n" \
+              "${{ secrets.VITE_N8N_WEBHOOK_URL }}" \
+              "${{ secrets.VITE_SUPABASE_URL }}" \
+              "${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
+              "${{ secrets.DOMAIN_NAME }}" \
+              "${{ secrets.SUBDOMAIN }}" \
+              "${{ secrets.CHICHA_SUBDOMAIN }}" > .env
+            
+            # Verify required variables are not empty (to avoid Traefik routing issues)
+            if [ -z "${{ secrets.DOMAIN_NAME }}" ]; then
+              echo "ERROR: DOMAIN_NAME secret is missing. Traefik routing will fail."
+              exit 1
             fi
+
+            echo ".env generated successfully."
 
             # Robust Dependency Sync (Host-side)
             if [ -f package.json ]; then
