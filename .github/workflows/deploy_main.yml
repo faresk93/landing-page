@@ -49,8 +49,9 @@ jobs:
 
             # Create/Overwrite .env from GitHub Secrets
             echo "Generating .env from GitHub Secrets..."
-            printf "VITE_N8N_WEBHOOK_URL=%s\nVITE_SUPABASE_URL=%s\nVITE_SUPABASE_ANON_KEY=%s\nDOMAIN_NAME=%s\nSUBDOMAIN=%s\nCHICHA_SUBDOMAIN=%s\n" \
+            printf "VITE_N8N_WEBHOOK_URL=%s\nVITE_NOTES_WEBHOOK_URL=%s\nVITE_SUPABASE_URL=%s\nVITE_SUPABASE_ANON_KEY=%s\nDOMAIN_NAME=%s\nSUBDOMAIN=%s\nCHICHA_SUBDOMAIN=%s\n" \
               "${{ secrets.VITE_N8N_WEBHOOK_URL }}" \
+              "${{ secrets.VITE_NOTES_WEBHOOK_URL }}" \
               "${{ secrets.VITE_SUPABASE_URL }}" \
               "${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
               "${{ secrets.DOMAIN_NAME }}" \

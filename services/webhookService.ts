@@ -15,8 +15,8 @@ export const sendMessageToWebhook = async (message: string): Promise<WebhookResp
   }
 
   try {
-    // If no webhook is configured (default state), return a mock response for demo purposes
-    if (!AI_WEBHOOK_URL.includes("n8n.fares-khiary.com")) {
+    // If no webhook is configured, return a mock response for demo purposes
+    if (!AI_WEBHOOK_URL) {
       await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
       return {
         output: "I am a simulated AI response. Please configure the AI_WEBHOOK_URL in constants.ts to connect to your real backend!",
@@ -26,6 +26,8 @@ export const sendMessageToWebhook = async (message: string): Promise<WebhookResp
 
     const url = new URL(AI_WEBHOOK_URL);
     url.searchParams.append('question', message);
+
+    if (import.meta.env.DEV) console.log('Attempting AI Chat webhook call to:', url.toString());
 
     const response = await fetch(url.toString(), {
       method: 'GET'
@@ -43,6 +45,7 @@ export const sendMessageToWebhook = async (message: string): Promise<WebhookResp
 
   } catch (error) {
     console.error("Failed to send message:", error);
+
     return {
       output: "Connection to Fares's neural network lost. Unable to retrieve data from his digital mind right now.",
       suggestions: []

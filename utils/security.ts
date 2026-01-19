@@ -26,6 +26,11 @@ export const sanitizeInput = (input: string): string => {
  * @returns { boolean } True if the action is allowed, false if rate limited
  */
 export const checkRateLimit = (key: string, limit: number, windowMs: number): boolean => {
+    // Allow unlimited transmissions in development environment
+    if (import.meta.env.DEV) {
+        return true;
+    }
+
     try {
         if (typeof window === 'undefined' || !window.localStorage) {
             return true;

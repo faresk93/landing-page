@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, X, ShieldCheck, Sparkles, AlertCircle } from 'lucide-react';
+import { Send, X, ShieldCheck, Sparkles, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../services/supabase';
 import { sanitizeInput, checkRateLimit } from '../utils/security';
+import { NOTES_WEBHOOK_URL } from '../constants';
 
 interface NotePopupProps {
     isOpen: boolean;
@@ -19,6 +20,8 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
     const [isSending, setIsSending] = useState(false);
     const [isSent, setIsSent] = useState(false);
     const [rateLimited, setRateLimited] = useState(false);
+    const [webhookResponse, setWebhookResponse] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
 
     const isValid = note.trim().length >= 3 && (userId ? true : (isAnonymous || name.trim().length > 0));
 
@@ -50,18 +53,69 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
             },
         ]);
 
-        setIsSending(false);
         if (!error) {
-            setIsSent(true);
-            setNote('');
-            setName('');
-            setIsAnonymous(false);
-            setTimeout(() => {
-                setIsSent(false);
-                onClose();
-            }, 2000);
+            console.log('Supabase insert successful');
+            let responseMsg = '';
+            let webhookSuccess = true;
+
+            console.log('NOTES_WEBHOOK_URL value:', NOTES_WEBHOOK_URL);
+
+            // Second step: Call n8n webhook in succession
+            if (NOTES_WEBHOOK_URL) {
+                try {
+                    const url = new URL(NOTES_WEBHOOK_URL);
+                    url.searchParams.append('note', sanitizedNote);
+                    url.searchParams.append('sender', sanitizedName);
+                    url.searchParams.append('email', finalEmail);
+                    url.searchParams.append('isAnonymous', String(isAnonymous));
+
+                    if (import.meta.env.DEV) console.log('Attempting webhook call to:', url.toString());
+                    const response = await fetch(url.toString());
+                    if (response.ok) {
+                        try {
+                            const data = await response.json();
+                            responseMsg = data.message || data.output || data.comment || '';
+                        } catch (e) {
+                            console.warn('Could not parse webhook JSON response');
+                        }
+                    } else {
+                        console.error('Webhook response not OK:', response.status, response.statusText);
+                        webhookSuccess = false;
+                    }
+                } catch (webhookErr) {
+                    console.error('Webhook error:', webhookErr);
+                    webhookSuccess = false;
+                }
+            } else {
+                console.warn('NOTES_WEBHOOK_URL is missing or empty. Skipping webhook call.');
+            }
+
+            if (webhookSuccess) {
+                setIsSending(false);
+                setIsSent(true);
+                setWebhookResponse(responseMsg);
+                setNote('');
+                setName('');
+                setIsAnonymous(false);
+
+                // Wait longer if there's a webhook response to allow reading it
+                const displayDuration = responseMsg ? 6000 : 3000;
+
+                setTimeout(() => {
+                    setIsSent(false);
+                    setWebhookResponse('');
+                    onClose();
+                }, displayDuration);
+            } else {
+                setIsSending(false);
+                setErrorMsg("Neural link disrupted. Your note couldn't be transmitted to Fares's digital mind right now.");
+                setTimeout(() => setErrorMsg(''), 5000);
+            }
         } else {
+            setIsSending(false);
+            setErrorMsg("Archive connection failed. Your note couldn't be stored in Fares's database.");
             console.error('Error sending note:', error.message);
+            setTimeout(() => setErrorMsg(''), 5000);
         }
     };
 
@@ -101,18 +155,63 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
 
                         {/* Content */}
                         <div className="p-6">
-                            {isSent ? (
+                            {isSending ? (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="flex flex-col items-center justify-center py-20 gap-6"
+                                >
+                                    <div className="relative">
+                                        <div className="absolute inset-0 bg-neonPurple/20 blur-2xl rounded-full animate-pulse" />
+                                        <Loader2 className="w-12 h-12 text-neonPurple animate-spin relative z-10" />
+                                    </div>
+                                    <div className="flex flex-col items-center gap-2">
+                                        <p className="font-orbitron text-[10px] font-bold text-white tracking-[0.3em] uppercase animate-pulse">
+                                            Initializing Neural Transfer
+                                        </p>
+                                        <div className="h-[1px] w-24 bg-gradient-to-r from-transparent via-neonPurple/50 to-transparent" />
+                                    </div>
+                                </motion.div>
+                            ) : isSent ? (
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.5 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className="flex flex-col items-center justify-center py-10 gap-4"
+                                    className="flex flex-col items-center justify-center py-10 gap-6"
                                 >
-                                    <div className="w-16 h-16 rounded-full bg-green-500/20 border border-green-500/30 flex items-center justify-center">
-                                        <Sparkles className="w-8 h-8 text-green-400" />
+                                    <motion.div
+                                        initial={{ scale: 0, rotate: -180 }}
+                                        animate={{ scale: 1, rotate: 0 }}
+                                        transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                                        className="w-20 h-20 rounded-full bg-green-500/20 border-2 border-green-500/30 flex items-center justify-center shadow-[0_0_30px_-5px_rgba(34,197,94,0.4)]"
+                                    >
+                                        <CheckCircle className="w-10 h-10 text-green-400" />
+                                    </motion.div>
+
+                                    <div className="text-center space-y-2">
+                                        <p className="font-orbitron text-sm font-black text-green-400 tracking-[0.2em] uppercase">
+                                            Note Transmitted to Fares
+                                        </p>
+                                        <p className="font-rajdhani text-[10px] text-gray-500 uppercase tracking-widest">
+                                            Handshake Confirmed • Data Encrypted
+                                        </p>
                                     </div>
-                                    <p className="font-orbitron text-sm font-bold text-green-400 tracking-widest uppercase text-center">
-                                        Note Transmitted Successfully
-                                    </p>
+
+                                    {webhookResponse && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.5 }}
+                                            className="w-full mt-4 p-4 rounded-2xl bg-white/5 border border-white/10 relative overflow-hidden group"
+                                        >
+                                            <div className="absolute top-0 left-0 w-1 h-full bg-green-500/50" />
+                                            <p className="font-rajdhani text-sm text-gray-300 leading-relaxed italic text-center">
+                                                "{webhookResponse}"
+                                            </p>
+                                            <div className="mt-2 flex justify-center">
+                                                <Sparkles className="w-3 h-3 text-green-500/40" />
+                                            </div>
+                                        </motion.div>
+                                    )}
                                 </motion.div>
                             ) : (
                                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -175,7 +274,22 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                         >
                                             <AlertCircle className="w-4 h-4 text-red-400" />
                                             <p className="font-rajdhani text-[10px] text-red-400 uppercase tracking-widest">
-                                                Slow down! Too many neural transmissions. Please wait a moment.
+                                                Slow down! Too many neural transmissions for Fares. Please wait a moment.
+                                            </p>
+                                        </motion.div>
+                                    )}
+
+                                    {errorMsg && (
+                                        <motion.div
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl"
+                                        >
+                                            <div className="p-1.5 rounded-lg bg-red-500/20">
+                                                <AlertCircle className="w-4 h-4 text-red-500" />
+                                            </div>
+                                            <p className="font-rajdhani text-sm text-red-400 leading-tight">
+                                                {errorMsg}
                                             </p>
                                         </motion.div>
                                     )}

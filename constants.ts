@@ -1,4 +1,5 @@
 export const AI_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL;
+export const NOTES_WEBHOOK_URL = import.meta.env.VITE_NOTES_WEBHOOK_URL;
 
 export const SOCIAL_LINKS = {
   LINKEDIN: "https://www.linkedin.com/in/fares-khiary",
