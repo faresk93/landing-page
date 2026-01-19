@@ -97,7 +97,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
       <div className="bg-[#0a0a12]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-4 md:p-6 shadow-2xl relative">
 
         {/* Top Header Strip */}
-        <div className="flex items-center justify-between gap-1 mb-6 border-b border-white/5 pb-3">
+        <div className="flex items-center justify-between gap-1 mb-4 border-b border-white/5 pb-2">
           <div className="flex items-center gap-1.5 text-yellow-500/80 shrink-0">
             <Settings className="w-3 h-3 animate-spin-slow hidden xs:block" />
             <div className="flex items-center gap-1">
@@ -237,7 +237,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
         </div>
 
         {/* Action Row */}
-        <div className="flex flex-col gap-4 mb-6">
+        <div className="flex flex-col gap-4 mb-4">
           <div className="flex flex-wrap justify-center items-center gap-3">
             {[
               { Icon: Mail, href: `mailto:${SOCIAL_LINKS.EMAIL}`, color: 'hover:text-neonOrange' },
@@ -287,7 +287,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
         </div>
 
         {/* Footer */}
-        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-[10px] font-rajdhani font-bold tracking-[0.2em] text-gray-500 border-t border-white/5 pt-4">
+        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] font-rajdhani font-bold tracking-[0.2em] text-gray-500 border-t border-white/5 pt-3">
           <div className="flex items-center gap-1.5 uppercase text-center w-full md:w-auto justify-center">
             Made with <span className="text-red-500/80 animate-pulse text-xs">❤</span> by <span className="text-white">Fares KHIARY</span>
           </div>
