@@ -44,73 +44,74 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
         const sanitizedName = userId ? userName : (isAnonymous ? 'anonymous' : sanitizeInput(name));
         const finalEmail = userEmail || (isAnonymous ? 'anonymous@hidden.com' : 'Guest');
 
+        let responseMsg = '';
+        let webhookSuccess = true;
+
+        // Step 1: Call n8n webhook IN ADVANCE to get the response/comment
+        if (NOTES_WEBHOOK_URL) {
+            try {
+                const url = new URL(NOTES_WEBHOOK_URL);
+                url.searchParams.append('note', sanitizedNote);
+                url.searchParams.append('sender', sanitizedName);
+                url.searchParams.append('email', finalEmail);
+                url.searchParams.append('isAnonymous', String(isAnonymous));
+
+                if (import.meta.env.DEV) console.log('Attempting webhook call to:', url.toString());
+                const response = await fetch(url.toString());
+                if (response.ok) {
+                    try {
+                        const data = await response.json();
+                        responseMsg = data.message || data.output || data.comment || '';
+                    } catch (e) {
+                        console.warn('Could not parse webhook JSON response');
+                    }
+                } else {
+                    console.error('Webhook response not OK:', response.status, response.statusText);
+                    webhookSuccess = false;
+                }
+            } catch (webhookErr) {
+                console.error('Webhook error:', webhookErr);
+                webhookSuccess = false;
+            }
+        } else {
+            console.warn('NOTES_WEBHOOK_URL is missing or empty. Proceeding without webhook.');
+        }
+
+        if (!webhookSuccess) {
+            setIsSending(false);
+            setErrorMsg("Neural link disrupted. Your note couldn't be transmitted to Fares's digital mind right now.");
+            setTimeout(() => setErrorMsg(''), 5000);
+            return;
+        }
+
+        // Step 2: Save to Supabase (now including the comment received from the webhook)
         const { error } = await supabase.from('notes').insert([
             {
                 user_id: userId || null,
                 content: sanitizedNote,
                 user_email: finalEmail,
-                sender_name: sanitizedName
+                sender_name: sanitizedName,
+                ai_comment: responseMsg
             },
         ]);
 
         if (!error) {
             console.log('Supabase insert successful');
-            let responseMsg = '';
-            let webhookSuccess = true;
+            setIsSending(false);
+            setIsSent(true);
+            setWebhookResponse(responseMsg);
+            setNote('');
+            setName('');
+            setIsAnonymous(false);
 
-            console.log('NOTES_WEBHOOK_URL value:', NOTES_WEBHOOK_URL);
+            // Wait longer if there's a webhook response to allow reading it
+            const displayDuration = responseMsg ? 6000 : 3000;
 
-            // Second step: Call n8n webhook in succession
-            if (NOTES_WEBHOOK_URL) {
-                try {
-                    const url = new URL(NOTES_WEBHOOK_URL);
-                    url.searchParams.append('note', sanitizedNote);
-                    url.searchParams.append('sender', sanitizedName);
-                    url.searchParams.append('email', finalEmail);
-                    url.searchParams.append('isAnonymous', String(isAnonymous));
-
-                    if (import.meta.env.DEV) console.log('Attempting webhook call to:', url.toString());
-                    const response = await fetch(url.toString());
-                    if (response.ok) {
-                        try {
-                            const data = await response.json();
-                            responseMsg = data.message || data.output || data.comment || '';
-                        } catch (e) {
-                            console.warn('Could not parse webhook JSON response');
-                        }
-                    } else {
-                        console.error('Webhook response not OK:', response.status, response.statusText);
-                        webhookSuccess = false;
-                    }
-                } catch (webhookErr) {
-                    console.error('Webhook error:', webhookErr);
-                    webhookSuccess = false;
-                }
-            } else {
-                console.warn('NOTES_WEBHOOK_URL is missing or empty. Skipping webhook call.');
-            }
-
-            if (webhookSuccess) {
-                setIsSending(false);
-                setIsSent(true);
-                setWebhookResponse(responseMsg);
-                setNote('');
-                setName('');
-                setIsAnonymous(false);
-
-                // Wait longer if there's a webhook response to allow reading it
-                const displayDuration = responseMsg ? 6000 : 3000;
-
-                setTimeout(() => {
-                    setIsSent(false);
-                    setWebhookResponse('');
-                    onClose();
-                }, displayDuration);
-            } else {
-                setIsSending(false);
-                setErrorMsg("Neural link disrupted. Your note couldn't be transmitted to Fares's digital mind right now.");
-                setTimeout(() => setErrorMsg(''), 5000);
-            }
+            setTimeout(() => {
+                setIsSent(false);
+                setWebhookResponse('');
+                onClose();
+            }, displayDuration);
         } else {
             setIsSending(false);
             setErrorMsg("Archive connection failed. Your note couldn't be stored in Fares's database.");

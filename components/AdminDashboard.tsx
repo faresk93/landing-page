@@ -12,6 +12,7 @@ interface Note {
     content: string;
     user_email: string;
     sender_name: string;
+    ai_comment?: string;
 }
 
 interface AdminDashboardProps {
@@ -135,6 +136,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose 
                                                 <tr className="text-left font-orbitron text-[9px] text-gray-500 tracking-[0.2em] uppercase">
                                                     <th className="px-4 pb-2">Identity</th>
                                                     <th className="px-4 pb-2">Payload</th>
+                                                    <th className="px-4 pb-2">Transmission Response</th>
                                                     <th className="px-4 pb-2">Timestamp</th>
                                                     <th className="px-4 pb-2 text-right">Delete</th>
                                                 </tr>
@@ -165,6 +167,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose 
                                                             <p className="font-rajdhani text-sm text-gray-300 leading-relaxed italic line-clamp-2 max-w-md">
                                                                 "{note.content}"
                                                             </p>
+                                                        </td>
+                                                        <td className="px-4 py-4 border-y border-white/10 group-hover:border-blue-500/30">
+                                                            {note.ai_comment ? (
+                                                                <p className="font-rajdhani text-sm text-blue-400 leading-relaxed italic line-clamp-2 max-w-md">
+                                                                    "{note.ai_comment}"
+                                                                </p>
+                                                            ) : (
+                                                                <span className="font-rajdhani text-[10px] text-gray-600 uppercase tracking-widest italic">No Response</span>
+                                                            )}
                                                         </td>
                                                         <td className="px-4 py-4 border-y border-white/10 group-hover:border-blue-500/30">
                                                             <div className="flex flex-col font-rajdhani text-[11px] font-medium text-gray-500 uppercase tracking-tight">
@@ -222,6 +233,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose 
                                                 <div className="bg-white/5 rounded-xl p-3 border border-white/5 font-rajdhani text-sm text-gray-300 italic">
                                                     "{note.content}"
                                                 </div>
+                                                {note.ai_comment && (
+                                                    <div className="bg-blue-500/5 rounded-xl p-3 border border-blue-500/10 font-rajdhani text-sm text-blue-400 italic">
+                                                        "{note.ai_comment}"
+                                                    </div>
+                                                )}
                                                 <div className="flex items-center justify-between font-rajdhani text-[10px] text-gray-500 uppercase tracking-widest pt-1">
                                                     <div className="flex items-center gap-1.5">
                                                         <Clock className="w-3 h-3" />
