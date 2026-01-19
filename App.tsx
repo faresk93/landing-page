@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Background3D } from './components/Background3D';
 import { ProfileCard } from './components/ProfileCard';
+import { CookieConsent } from './components/CookieConsent';
 import { motion } from 'framer-motion';
 
 const App: React.FC = () => {
@@ -29,6 +30,7 @@ const App: React.FC = () => {
   return (
     <div className="min-h-[100dvh] w-full relative flex flex-col items-center justify-start md:justify-center py-6 md:py-8 overflow-y-auto overflow-x-hidden">
       <Background3D showSolarSystem={view === 'solar-system'} />
+      <CookieConsent onViewPolicy={() => window.dispatchEvent(new CustomEvent('view-privacy'))} />
 
       <main className="w-full relative z-10 flex flex-col items-center justify-center p-4 pt-0 pointer-events-none">
         {view === 'profile' ? (

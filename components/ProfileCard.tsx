@@ -51,6 +51,12 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const handleViewPrivacy = () => setIsPrivacyOpen(true);
+    window.addEventListener('view-privacy', handleViewPrivacy);
+    return () => window.removeEventListener('view-privacy', handleViewPrivacy);
+  }, []);
+
   const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -239,7 +245,8 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
 
         {/* Action Row */}
         <div className="flex flex-col gap-4 mb-4">
-          <div className="flex flex-wrap justify-center items-center gap-3">
+          {/* Social Links */}
+          <div className="flex justify-center items-center gap-3">
             {[
               { Icon: Mail, href: `mailto:${SOCIAL_LINKS.EMAIL}`, color: 'hover:text-neonOrange' },
               { Icon: Linkedin, href: SOCIAL_LINKS.LINKEDIN, color: 'hover:text-blue-400' },
@@ -251,37 +258,40 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
                 href={href}
                 target={href.startsWith('mailto') ? '_self' : '_blank'}
                 rel="noopener noreferrer"
-                className={`p-3.5 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 hover:bg-white/10 ${color} shadow-lg`}
+                className={`p-3 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 hover:bg-white/10 ${color} shadow-lg`}
               >
-                <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
+                <Icon className="w-4 h-4 transition-transform group-hover:scale-110" />
               </a>
             ))}
+          </div>
+
+          {/* Primary Action Buttons - Forced Inline */}
+          <div className="flex items-center gap-2 px-1">
             {/* Inline Enter Universe Button */}
             <motion.button
               onClick={onEnterUniverse}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative group px-6 rounded-xl bg-gradient-to-r from-orange-600/20 to-purple-600/20 border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden shadow-lg"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="flex-1 relative group rounded-xl bg-gradient-to-r from-orange-600/20 to-purple-600/20 border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden shadow-lg h-11"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 via-red-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative flex items-center gap-2.5 py-3">
-                <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse shadow-[0_0_10px_rgba(249,115,22,0.8)]" />
-                <span className="font-orbitron font-bold text-[10px] tracking-[0.2em] text-white">MY UNIVERSE</span>
-                <ArrowRight className="w-3 h-3 text-white/70 group-hover:translate-x-1.5 transition-transform" />
+              <div className="absolute inset-x-0 bottom-0 h-[2px] bg-orange-500/50" />
+              <div className="relative flex items-center justify-center gap-1.5 px-2">
+                <span className="font-orbitron font-bold text-[8px] xs:text-[9px] tracking-widest text-white whitespace-nowrap">MY UNIVERSE</span>
+                <ArrowRight className="w-3 h-3 text-white/70 group-hover:translate-x-1 transition-transform" />
               </div>
             </motion.button>
 
             {/* Neural Note Button */}
             <motion.button
               onClick={() => setIsNoteOpen(true)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative group px-6 rounded-xl bg-gradient-to-r from-neonPurple/20 to-blue-600/20 border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden shadow-lg"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="flex-1 relative group rounded-xl bg-gradient-to-r from-neonPurple/20 to-blue-600/20 border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden shadow-lg h-11 animate-flash-border"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-neonPurple/10 via-blue-500/10 to-neonPurple/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative flex items-center gap-2.5 py-3">
-                <ShieldCheck className="w-3 h-3 text-neonPurple group-hover:rotate-12 transition-transform" />
-                <span className="font-orbitron font-bold text-[10px] tracking-[0.2em] text-white uppercase">SEND ME A NOTE</span>
+              <div className="absolute inset-x-0 bottom-0 h-[2px] bg-neonPurple/50" />
+              <div className="relative flex items-center justify-center gap-1.5 px-2">
+                <ShieldCheck className="w-3 h-3 text-neonPurple group-hover:rotate-12 transition-transform shrink-0" />
+                <span className="font-orbitron font-bold text-[8px] xs:text-[9px] tracking-widest text-white uppercase whitespace-nowrap">SEND NOTE</span>
               </div>
             </motion.button>
           </div>
@@ -289,20 +299,16 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
 
         {/* Footer */}
         <div className="flex flex-col items-center gap-3 border-t border-white/5 pt-4">
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] font-rajdhani font-bold tracking-[0.2em] text-gray-500">
-            <div className="flex items-center gap-1.5 uppercase">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[9px] font-rajdhani font-bold tracking-[0.15em] text-gray-500 uppercase">
+            <div className="flex items-center gap-1.5">
               Made with <span className="text-red-500/80 animate-pulse text-xs">❤</span> by <span className="text-white">Fares KHIARY</span>
             </div>
-            <div className="w-1 h-1 rounded-full bg-white/10 hidden md:block" />
-            <div className="flex items-center gap-1 uppercase text-yellow-500/50">
+            <div className="w-1 h-1 rounded-full bg-white/10" />
+            <button onClick={() => setIsPrivacyOpen(true)} className="text-neonBlue/60 hover:text-neonBlue transition-colors tracking-[0.2em]">Privacy Policy</button>
+            <div className="w-1 h-1 rounded-full bg-white/10" />
+            <div className="flex items-center gap-1 text-yellow-500/50">
               ✨ Enhanced with AI
             </div>
-          </div>
-
-          <div className="flex items-center gap-4 text-[8px] font-orbitron font-bold tracking-[0.3em] text-gray-600 uppercase">
-            <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-neonBlue transition-colors">Privacy Policy</button>
-            <span className="opacity-20">|</span>
-            <span className="cursor-default">© 2026 Secured By Supabase</span>
           </div>
         </div>
       </div>
