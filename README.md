@@ -10,7 +10,7 @@ A modern, interactive portfolio landing page featuring 3D graphics, AI-powered c
 - **Interactive 3D Background** - Immersive space-themed visuals using Three.js with React Three Fiber
 - **AI Chat Assistant** - Conversational AI powered by N8N webhook integration
 - **Solar System View** - Interactive 3D solar system exploration mode
-- **Responsive Design** - Fully responsive layout with Tailwind CSS
+- **Responsive Design** - Fully responsive layout with Tailwind CSSf
 - **Smooth Animations** - Fluid transitions and effects with Framer Motion
 - **Modern Stack** - Built with React 19, TypeScript, and Vite
 - **Comprehensive Testing** - Unit, component, and integration tests with Vitest
@@ -86,7 +86,6 @@ npm install
 Create a `.env` file in the project root:
 
 ```env
-GEMINI_API_KEY=your_gemini_api_key
 VITE_N8N_WEBHOOK_URL=your_n8n_webhook_url
 ```
 
