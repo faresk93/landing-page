@@ -154,7 +154,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
                 className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all group whitespace-nowrap scale-90 xs:scale-100"
               >
                 <LogIn className="w-2.5 h-2.5 text-neonBlue group-hover:scale-110 transition-transform" />
-                <span className="font-orbitron text-[7px] xs:text-[8px] font-bold tracking-widest text-white/70 group-hover:text-white uppercase truncate max-w-[80px] xs:max-w-none">Continue with Google</span>
+                <span className="font-orbitron text-[7px] xs:text-[8px] font-bold tracking-widest text-white/70 group-hover:text-white uppercase truncate max-w-[80px] xs:max-w-none">Login</span>
               </button>
             )}
             <span className="font-orbitron text-[8px] text-white/20 tracking-tighter sm:tracking-[0.2em] shrink-0">v4.7</span>
@@ -189,8 +189,8 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
 
         {/* Badges / Tags */}
         <div className="flex flex-col gap-4 items-center mb-6">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-neonPurple/30 bg-neonPurple/5 text-neonBlue font-rajdhani font-semibold tracking-wide shadow-[0_0_20px_-5px_rgba(188,19,254,0.2)]">
-            <Code2 className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-neonPurple/30 bg-neonPurple/5 text-neonBlue font-rajdhani font-semibold tracking-wide shadow-[0_0_20px_-5px_rgba(188,19,254,0.2)] text-sm">
+            <Code2 className="w-3.5 h-3.5" />
             <span>Full-Stack Web Developer</span>
           </div>
 
