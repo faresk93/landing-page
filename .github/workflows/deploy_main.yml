@@ -65,6 +65,12 @@ jobs:
               echo "Conflicts resolved by prioritizing repo version."
             fi
 
+            # Sync host node_modules to allow manual builds/debugging on the VPS host
+            if [ -f package.json ]; then
+              echo "Syncing host node_modules..."
+              npm install --no-audit --no-fund || echo "Warning: npm install failed on host, but continuing to Docker build..."
+            fi
+
             echo "Building and restarting Docker containers..."
             docker compose -f docker-compose.yml up -d --build static-website
             docker compose -f docker-compose.yml up -d chicha-website
