@@ -27,11 +27,21 @@ jobs:
 
             git fetch --all --tags
 
-            # Stash any local changes (like .env, package-lock.json)
+            # Save a backup of the current .env in case we need to recover secrets
+            if [ -f .env ]; then
+              cp .env .env.bak
+              echo "Backup of .env created as .env.bak"
+            fi
+
+            # Clean any previous failed states
+            git merge --abort || true
+            git reset --hard HEAD
+
+            # Stash any local changes
             echo "Stashing local changes..."
             git stash --include-untracked || true
 
-            # Check if this is a tag or branch
+            # Pull latest changes
             if [[ "${{ github.ref }}" == refs/tags/* ]]; then
               echo "Deploying tag: ${{ github.ref_name }}"
               git checkout ${{ github.ref_name }}
@@ -41,9 +51,19 @@ jobs:
               git pull origin main
             fi
 
-            # Restore stashed changes (preserves .env and other local files)
+            # Restore stashed changes. Use --ours to prioritize the repo's version (the pull) 
+            # for tracked files like .env and package-lock.json if conflicts occur.
             echo "Restoring local changes..."
-            git stash pop || true
+            if ! git stash pop; then
+              echo "Conflict detected during stash pop. Favoring repo's updated files to avoid corruption."
+              # Force theRepo version (ours) for .env and package-lock.json to avoid markers
+              git checkout --ours .env || true
+              git checkout --ours package-lock.json || true
+              # For everything else, repo also wins
+              git checkout --ours . || true
+              git add .
+              echo "Conflicts resolved by prioritizing repo version."
+            fi
 
             echo "Building and restarting Docker containers..."
             docker compose -f docker-compose.yml up -d --build static-website
