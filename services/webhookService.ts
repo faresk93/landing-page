@@ -6,6 +6,14 @@ export interface WebhookResponse {
 }
 
 export const sendMessageToWebhook = async (message: string): Promise<WebhookResponse> => {
+  // Extra safety check: prevent ridiculously long messages
+  if (message.length > 2000) {
+    return {
+      output: "Message exceeds neural processing capacity. Please keep it under 2000 characters.",
+      suggestions: []
+    };
+  }
+
   try {
     // If no webhook is configured (default state), return a mock response for demo purposes
     if (!AI_WEBHOOK_URL.includes("n8n.fares-khiary.com")) {

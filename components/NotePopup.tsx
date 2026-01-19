@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, X, ShieldCheck, Sparkles } from 'lucide-react';
+import { Send, X, ShieldCheck, Sparkles, AlertCircle } from 'lucide-react';
 import { supabase } from '../services/supabase';
+import { sanitizeInput, checkRateLimit } from '../utils/security';
 
 interface NotePopupProps {
     isOpen: boolean;
@@ -17,6 +18,7 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
     const [isAnonymous, setIsAnonymous] = useState(false);
     const [isSending, setIsSending] = useState(false);
     const [isSent, setIsSent] = useState(false);
+    const [rateLimited, setRateLimited] = useState(false);
 
     const isValid = note.trim().length >= 3 && (userId ? true : (isAnonymous || name.trim().length > 0));
 
@@ -24,13 +26,27 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
         e.preventDefault();
         if (!isValid) return;
 
+        // Check rate limit: Max 5 notes per 10 minutes
+        if (!checkRateLimit('notes_submission', 5, 10 * 60 * 1000)) {
+            setRateLimited(true);
+            setIsSending(false);
+            setTimeout(() => setRateLimited(false), 5000);
+            return;
+        }
+
         setIsSending(true);
+
+        // Sanitize inputs
+        const sanitizedNote = sanitizeInput(note);
+        const sanitizedName = userId ? userName : (isAnonymous ? 'anonymous' : sanitizeInput(name));
+        const finalEmail = userEmail || (isAnonymous ? 'anonymous@hidden.com' : 'Guest');
+
         const { error } = await supabase.from('notes').insert([
             {
                 user_id: userId || null,
-                content: note.trim(),
-                user_email: userEmail || (isAnonymous ? 'anonymous@hidden.com' : 'Guest'),
-                sender_name: userId ? userName : (isAnonymous ? 'anonymous' : name.trim())
+                content: sanitizedNote,
+                user_email: finalEmail,
+                sender_name: sanitizedName
             },
         ]);
 
@@ -151,9 +167,22 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                         </div>
                                     </div>
 
+                                    {rateLimited && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl"
+                                        >
+                                            <AlertCircle className="w-4 h-4 text-red-400" />
+                                            <p className="font-rajdhani text-[10px] text-red-400 uppercase tracking-widest">
+                                                Slow down! Too many neural transmissions. Please wait a moment.
+                                            </p>
+                                        </motion.div>
+                                    )}
+
                                     <button
                                         type="submit"
-                                        disabled={isSending || !isValid}
+                                        disabled={isSending || !isValid || rateLimited}
                                         className="w-full py-4 rounded-xl bg-gradient-to-r from-neonPurple/80 to-blue-600/80 text-white font-orbitron text-xs font-black tracking-[0.3em] uppercase hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-30 disabled:hover:scale-100 flex items-center justify-center gap-3 group"
                                     >
                                         {isSending ? (

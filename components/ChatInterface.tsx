@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Loader2, Brain, Bot } from 'lucide-react';
+import { X, Send, Loader2, Brain, Bot, AlertTriangle } from 'lucide-react';
 import { sendMessageToWebhook } from '../services/webhookService';
+import { sanitizeInput, checkRateLimit } from '../utils/security';
 import { INITIAL_GREETING } from '../constants';
 
 interface Message {
@@ -193,6 +194,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
   const [isDeleting, setIsDeleting] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeSuggestions, setActiveSuggestions] = useState<string[]>([]);
+  const [rateLimited, setRateLimited] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -255,10 +257,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
     e.preventDefault();
     if (!input.trim() || loading) return;
 
+    // Check rate limit: Max 20 messages per 10 minutes
+    if (!checkRateLimit('chat_messages', 20, 10 * 60 * 1000)) {
+      setRateLimited(true);
+      setTimeout(() => setRateLimited(false), 5000);
+      return;
+    }
+
+    const sanitizedInputText = sanitizeInput(input);
+
     const userMsg: Message = {
       id: Date.now().toString(),
       role: 'user',
-      text: input,
+      text: input, // We show the original input to user but send sanitized to backend
       timestamp: Date.now()
     };
 
@@ -266,7 +277,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
     setInput('');
     setLoading(true);
 
-    const response = await sendMessageToWebhook(userMsg.text);
+    const response = await sendMessageToWebhook(sanitizedInputText);
     const isError = response.output.includes("neural network lost");
 
     const aiMsg: Message = {
@@ -319,7 +330,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                 <h2 className="font-orbitron font-black text-[10px] md:text-sm tracking-[0.2em] text-white">FARES_AI_MIND_CLONE</h2>
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)] animate-pulse" />
-                  <span className="text-[10px] font-rajdhani font-bold tracking-[0.3em] text-gray-400 uppercase">Neural Connection Stable</span>
+                  <span className="text-[10px] font-rajdhani font-bold tracking-[0.3em] text-gray-400 uppercase">Neural Link Active</span>
                 </div>
               </div>
             </div>
@@ -433,7 +444,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                 />
                 <button
                   type="submit"
-                  disabled={loading || !input.trim()}
+                  disabled={loading || !input.trim() || rateLimited}
                   className="p-4 bg-neonPurple/20 hover:bg-neonPurple/30 text-neonPurple rounded-full border border-neonPurple/30 transition-all duration-300 disabled:opacity-20 group/btn m-1"
                 >
                   {loading ? (
@@ -443,6 +454,18 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                   )}
                 </button>
               </div>
+              {rateLimited && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute -top-12 left-0 right-0 flex items-center justify-center pointer-events-none"
+                >
+                  <div className="flex items-center gap-2 px-4 py-2 bg-red-500/20 border border-red-500/30 rounded-full backdrop-blur-md">
+                    <AlertTriangle className="w-4 h-4 text-red-400" />
+                    <span className="font-rajdhani text-[10px] text-red-400 uppercase tracking-[0.2em] font-bold"> Neural link congested. Please wait.</span>
+                  </div>
+                </motion.div>
+              )}
             </form>
           </footer>
         </motion.div >
