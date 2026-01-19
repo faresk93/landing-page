@@ -240,6 +240,8 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            name="sender_name"
+                                                            autoComplete="name"
                                                             value={name}
                                                             onChange={(e) => setName(e.target.value)}
                                                             placeholder="Enter your name"
@@ -256,6 +258,8 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                             Your Message <span className="text-red-500/50 text-[8px]">* Min 3 chars</span>
                                         </label>
                                         <textarea
+                                            name="note_content"
+                                            autoComplete="off"
                                             value={note}
                                             onChange={(e) => setNote(e.target.value)}
                                             placeholder="Type your message for Fares here..."

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Code2, Cake, Mail, Linkedin, Instagram, Github, ArrowRight, Settings,
-  MessageSquare, Bot, LogIn, LogOut, User as UserIcon
+  MessageSquare, Bot, LogIn, LogOut, User as UserIcon, X
 } from 'lucide-react';
 import { SOCIAL_LINKS } from '../constants';
 import { ChatInterface } from './ChatInterface';
@@ -32,6 +32,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
   const [imgError, setImgError] = useState(false);
   const [isNoteOpen, setIsNoteOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
   const isAdmin = user?.email === 'khiary.fares@gmail.com';
 
@@ -144,10 +145,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
             ) : (
               <button
                 onClick={handleGoogleLogin}
-                className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all group whitespace-nowrap scale-90 xs:scale-100"
+                className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all group whitespace-nowrap scale-90 xs:scale-100"
               >
                 <LogIn className="w-2.5 h-2.5 text-neonBlue group-hover:scale-110 transition-transform" />
-                <span className="font-orbitron text-[7px] xs:text-[8px] font-bold tracking-widest text-white/70 group-hover:text-white uppercase">Sign In</span>
+                <span className="font-orbitron text-[7px] xs:text-[8px] font-bold tracking-widest text-white/70 group-hover:text-white uppercase truncate max-w-[80px] xs:max-w-none">Continue with Google</span>
               </button>
             )}
             <span className="font-orbitron text-[8px] text-white/20 tracking-tighter sm:tracking-[0.2em] shrink-0">v4.6</span>
@@ -287,16 +288,81 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
         </div>
 
         {/* Footer */}
-        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] font-rajdhani font-bold tracking-[0.2em] text-gray-500 border-t border-white/5 pt-3">
-          <div className="flex items-center gap-1.5 uppercase text-center w-full md:w-auto justify-center">
-            Made with <span className="text-red-500/80 animate-pulse text-xs">❤</span> by <span className="text-white">Fares KHIARY</span>
+        <div className="flex flex-col items-center gap-3 border-t border-white/5 pt-4">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] font-rajdhani font-bold tracking-[0.2em] text-gray-500">
+            <div className="flex items-center gap-1.5 uppercase">
+              Made with <span className="text-red-500/80 animate-pulse text-xs">❤</span> by <span className="text-white">Fares KHIARY</span>
+            </div>
+            <div className="w-1 h-1 rounded-full bg-white/10 hidden md:block" />
+            <div className="flex items-center gap-1 uppercase text-yellow-500/50">
+              ✨ Enhanced with AI
+            </div>
           </div>
-          <div className="w-1 h-1 rounded-full bg-white/10 hidden md:block" />
-          <div className="flex items-center gap-1 uppercase text-yellow-500/50">
-            ✨ Enhanced with AI
+
+          <div className="flex items-center gap-4 text-[8px] font-orbitron font-bold tracking-[0.3em] text-gray-600 uppercase">
+            <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-neonBlue transition-colors">Privacy Policy</button>
+            <span className="opacity-20">|</span>
+            <span className="cursor-default">© 2026 Secured By Supabase</span>
           </div>
         </div>
       </div>
+
+      {/* Privacy Policy Modal */}
+      <AnimatePresence>
+        {isPrivacyOpen && (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsPrivacyOpen(false)}
+              className="absolute inset-0 bg-black/90 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-lg bg-[#0d0d15] border border-white/10 rounded-3xl p-8 shadow-2xl overflow-hidden max-h-[80vh] flex flex-col"
+            >
+              <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-5 h-5 text-neonBlue" />
+                  <h3 className="font-orbitron text-sm font-black text-white uppercase tracking-widest">Privacy Protocol</h3>
+                </div>
+                <button onClick={() => setIsPrivacyOpen(false)} className="p-2 hover:bg-white/5 rounded-full transition-colors">
+                  <X className="w-5 h-5 text-gray-500" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto font-rajdhani text-sm text-gray-400 space-y-6 pr-4">
+                <section>
+                  <h4 className="font-orbitron text-[10px] text-neonBlue uppercase mb-2">1. Data Collection</h4>
+                  <p>We only collect the name and message you voluntarily provide in the contact section. If you sign in with Google, we access only your basic profile information (name and email) to offer a personalized interface.</p>
+                </section>
+                <section>
+                  <h4 className="font-orbitron text-[10px] text-neonBlue uppercase mb-2">2. Data Security</h4>
+                  <p>Your messages are encrypted and stored securely using Supabase. We do not share your personal information with third parties or use it for advertising.</p>
+                </section>
+                <section>
+                  <h4 className="font-orbitron text-[10px] text-neonBlue uppercase mb-2">3. Transparency</h4>
+                  <p>This site is a professional portfolio. All data flows are initiated by the user. Signing in with Google is optional and not required to view the content.</p>
+                </section>
+                <section>
+                  <h4 className="font-orbitron text-[10px] text-neonBlue uppercase mb-2">4. User Rights</h4>
+                  <p>You can request the deletion of any messages you have sent by contacting Fares directly via LinkedIn or email.</p>
+                </section>
+              </div>
+
+              <button
+                onClick={() => setIsPrivacyOpen(false)}
+                className="w-full mt-8 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-orbitron text-[10px] tracking-widest uppercase hover:bg-white/10 transition-all"
+              >
+                Close Protocol
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Stunning Fullscreen Popup Chat */}
       <ChatInterface isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
