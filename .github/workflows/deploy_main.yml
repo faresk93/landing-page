@@ -66,24 +66,6 @@ jobs:
 
             echo ".env generated successfully."
 
-            # Robust Dependency Sync (Host-side)
-            if [ -f package.json ]; then
-              echo "Ensuring host dependencies are in sync..."
-              # Detect if package.json has changed in the last update
-              PACKAGE_CHANGED=$(git diff --name-only HEAD@{1} HEAD | grep "package.json" || true)
-              
-              if [ -n "$PACKAGE_CHANGED" ] || [ ! -d "node_modules" ]; then
-                echo "Package change detected or node_modules missing. Starting install..."
-                if ! npm install --no-audit --no-fund; then
-                  echo "npm install failed. Attempting clean install (mimicking manual fix)..."
-                  rm -rf node_modules package-lock.json
-                  npm install --no-audit --no-fund
-                fi
-              else
-                echo "No package changes detected. Skipping host npm install for speed."
-              fi
-            fi
-
             echo "Building and restarting Docker containers..."
             docker compose -f docker-compose.yml up -d --build static-website
             docker compose -f docker-compose.yml up -d chicha-website
