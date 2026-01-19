@@ -11,7 +11,7 @@
     --color-deepSpace: #050510;
 
     --animate-spin-slow: spin 4s linear infinite;
-    --animate-flash-border: flash-border 2s ease-in-out infinite;
+    --animate-flash-border: flash-border 1.2s ease-in-out infinite;
 
     @keyframes flash-border {
 

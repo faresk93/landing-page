@@ -267,17 +267,18 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
 
           {/* Primary Action Buttons - Forced Inline */}
           <div className="flex items-center gap-2 px-1">
-            {/* Inline Enter Universe Button */}
+            {/* Inline Enter Universe Button - Yellow/Gold Theme */}
             <motion.button
               onClick={onEnterUniverse}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="flex-1 relative group rounded-xl bg-gradient-to-r from-orange-600/20 to-purple-600/20 border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden shadow-lg h-11"
+              className="flex-1 relative group rounded-xl bg-gradient-to-r from-yellow-600/20 via-orange-600/20 to-yellow-600/20 border border-white/10 hover:border-yellow-500/30 transition-all duration-500 overflow-hidden shadow-lg h-11"
             >
-              <div className="absolute inset-x-0 bottom-0 h-[2px] bg-orange-500/50" />
+              <div className="absolute inset-x-0 bottom-0 h-[2px] bg-yellow-500/50 shadow-[0_0_10px_rgba(234,179,8,0.5)]" />
               <div className="relative flex items-center justify-center gap-1.5 px-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse shadow-[0_0_8px_rgba(234,179,8,0.8)]" />
                 <span className="font-orbitron font-bold text-[8px] xs:text-[9px] tracking-widest text-white whitespace-nowrap">MY UNIVERSE</span>
-                <ArrowRight className="w-3 h-3 text-white/70 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-3 h-3 text-yellow-500 group-hover:translate-x-1 transition-transform" />
               </div>
             </motion.button>
 
