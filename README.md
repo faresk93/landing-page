@@ -36,6 +36,9 @@ A modern, interactive portfolio landing page featuring 3D graphics, AI-powered c
 
 ## Project Structure
 
+Nano Banana Pro 🍌 generated digram of the application workflow/arechitecture using a resume of this Readme file
+<img width="2816" height="1536" alt="Gemini_Generated_Image_gsh0fwgsh0fwgsh0" src="https://github.com/user-attachments/assets/9c2950f3-1f88-461c-8355-acf6fee8b49b" />
+
 ```
 landing-page/
 ├── components/
