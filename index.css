@@ -1,6 +1,28 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+    --font-orbitron: "Orbitron", sans-serif;
+    --font-rajdhani: "Rajdhani", sans-serif;
+    --font-inter: "Inter", sans-serif;
+
+    --color-neonBlue: #00f3ff;
+    --color-neonPurple: #bc13fe;
+    --color-neonOrange: #ff9e00;
+    --color-deepSpace: #050510;
+
+    --animate-spin-slow: spin 4s linear infinite;
+
+    --breakpoint-xs: 475px;
+}
+
+/* Custom Utilities for Glow Effects */
+@utility neon-shadow-purple {
+    box-shadow: 0 0 20px -5px rgba(188, 19, 254, 0.4);
+}
+
+@utility neon-glow-text {
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
 
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
