@@ -36,7 +36,7 @@ const App: React.FC = () => {
 
       <CookieConsent onViewPolicy={() => window.dispatchEvent(new CustomEvent('view-privacy'))} />
 
-      <main className={`w-full relative z-10 flex flex-col items-center justify-center transition-all duration-1000 ${view === 'profile' ? 'md:items-start p-6 md:p-12 md:pl-[8%] lg:pl-[12%]' : 'md:items-center p-0'
+      <main className={`w-full relative z-10 flex flex-col items-center justify-center transition-all duration-1000 ${view === 'profile' ? 'md:items-start p-3 xs:p-6 md:p-12 md:pl-[8%] lg:pl-[12%]' : 'md:items-center p-0'
         } pointer-events-none min-h-[100dvh]`}>
         {view === 'profile' ? (
           <div className="w-full max-w-md md:max-w-none pointer-events-auto">

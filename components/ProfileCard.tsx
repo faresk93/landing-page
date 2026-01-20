@@ -98,10 +98,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="relative z-10 w-full max-w-md md:max-w-4xl mx-auto md:mx-0 pointer-events-auto px-2"
+      className="relative z-10 w-full max-w-md md:max-w-4xl mx-auto md:mx-0 pointer-events-auto px-1 xs:px-2"
     >
       {/* Main Glass Card */}
-      <div className="bg-[#0a0a12]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
+      <div className="bg-[#0a0a12]/80 backdrop-blur-xl border border-white/10 rounded-2xl xs:rounded-3xl p-5 xs:p-8 md:p-10 shadow-2xl relative overflow-hidden">
         {/* Background glow for the whole card on desktop */}
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-neonBlue/5 blur-[120px] pointer-events-none hidden md:block" />
         <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-neonPurple/5 blur-[120px] pointer-events-none hidden md:block" />
@@ -188,14 +188,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
             {/* Name Title with Glow Effect */}
             <div className="text-center md:text-left mb-8 relative group cursor-default w-full">
               <div className="absolute -inset-4 bg-gradient-to-r from-neonBlue/10 to-neonPurple/10 blur-2xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
-              <h1 className="relative font-orbitron font-black text-3xl md:text-4xl lg:text-5xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white drop-shadow-[0_0_15px_rgba(0,255,255,0.2)] leading-none whitespace-nowrap">
+              <h1 className="relative font-orbitron font-black text-2xl xs:text-3xl md:text-4xl lg:text-5xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white drop-shadow-[0_0_15px_rgba(0,255,255,0.2)] leading-none whitespace-nowrap">
                 Fares KHIARY
               </h1>
             </div>
 
             {/* Badges / Tags */}
             <div className="flex flex-col gap-4 items-center md:items-start mb-8 w-full">
-              <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-neonPurple/30 bg-neonPurple/5 text-neonBlue font-rajdhani font-bold tracking-widest shadow-[0_0_30px_-5px_rgba(188,19,254,0.3)] text-sm md:text-base transition-all hover:scale-105">
+              <div className="inline-flex items-center gap-2 px-4 xs:px-6 py-2 rounded-full border border-neonPurple/30 bg-neonPurple/5 text-neonBlue font-rajdhani font-bold tracking-widest shadow-[0_0_30px_-5px_rgba(188,19,254,0.3)] text-xs xs:text-sm md:text-base transition-all hover:scale-105">
                 <Code2 className="w-4 h-4 md:w-5 md:h-5" />
                 <span>Full-Stack Web Developer</span>
               </div>
