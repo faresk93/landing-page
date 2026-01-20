@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
   Code2, Cake, Mail, Linkedin, Instagram, Github, ArrowRight, Settings,
-  MessageSquare, Bot, LogIn, LogOut, User as UserIcon, X
+  MessageSquare, Bot, LogIn, LogOut, User as UserIcon, X, Sun, Moon, Construction
 } from 'lucide-react';
+
+
 import { SOCIAL_LINKS } from '../constants';
 import { ChatInterface } from './ChatInterface';
 import { supabase } from '../services/supabase';
@@ -16,9 +18,13 @@ import { LayoutDashboard, ShieldCheck } from 'lucide-react';
 
 interface ProfileCardProps {
   onEnterUniverse: () => void;
+  isLightMode: boolean;
+  setIsLightMode: (val: boolean) => void;
 }
 
-export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => {
+
+export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLightMode, setIsLightMode }) => {
+
   const { t, i18n } = useTranslation();
 
   const PLACEHOLDERS = [
@@ -38,7 +44,9 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
+
   const isAdmin = user?.email === 'khiary.fares@gmail.com';
+
 
   useEffect(() => {
     // Get initial session
@@ -102,36 +110,50 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="relative z-10 w-full max-w-md md:max-w-5xl mx-auto md:mx-0 pointer-events-auto px-1 xs:px-2"
+      className={`relative z-10 w-full max-w-md md:max-w-5xl mx-auto md:mx-0 pointer-events-auto px-1 xs:px-2`}
+
       dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
     >
 
+
       {/* Main Glass Card */}
-      <div className="bg-[#0a0a12]/80 backdrop-blur-xl border border-white/10 rounded-2xl xs:rounded-3xl p-5 xs:p-8 md:p-10 shadow-2xl relative overflow-hidden">
+      <div className="my-glass-card bg-[var(--card-bg)] backdrop-blur-xl border border-[var(--card-border)] rounded-2xl xs:rounded-3xl p-5 xs:p-8 md:p-10 shadow-2xl relative overflow-hidden transition-colors duration-500">
+
         {/* Background glow for the whole card on desktop */}
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-neonBlue/5 blur-[120px] pointer-events-none hidden md:block" />
         <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-neonPurple/5 blur-[120px] pointer-events-none hidden md:block" />
 
         {/* Top Header Strip */}
-        <div className={`flex items-center justify-between gap-1 mb-4 md:mb-8 border-b border-white/5 pb-2 md:pb-4 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+        <div className={`flex items-center justify-between gap-1 mb-4 md:mb-8 border-b border-[var(--header-border)] pb-2 md:pb-4 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+
           <div className="flex items-center gap-1.5 text-yellow-500/80 shrink-0">
             <Settings className="w-3 h-3 animate-spin-slow hidden xs:block" />
             <div className="flex items-center gap-1">
               <span className="font-orbitron font-bold text-[8px] xs:text-[9px] tracking-tighter xs:tracking-widest uppercase text-yellow-500/80 whitespace-nowrap">{t('common.fares_link')}</span>
-              <motion.span
-                animate={{ opacity: [0.2, 1, 0.2] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="font-orbitron font-black text-[6px] tracking-tighter text-yellow-500/40 uppercase hidden sm:block"
+              {/* Enhanced WIP Note */}
+              <div className="flex items-center gap-1 md:gap-1.5 px-1.5 py-0.5 rounded-full bg-yellow-500/5 border border-yellow-500/10">
+                <motion.div
+                  animate={{ opacity: [1, 0, 1] }}
+                  transition={{ duration: 0.8, repeat: Infinity }}
+                >
+                  <Construction className="w-2 h-2 md:w-2.5 md:h-2.5 text-yellow-500/80" />
+                </motion.div>
+                <span className="font-orbitron font-black text-[6px] tracking-tighter text-yellow-500/60 uppercase">
+                  {t('common.wip')}
+                </span>
+              </div>
+
+              <div className="w-[1px] h-3 bg-white/10 mx-1 hidden xs:block" />
+              <motion.button
+
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setIsLightMode(!isLightMode)}
+                className="text-[10px] cursor-pointer p-1 rounded-md hover:bg-white/5 transition-colors"
+                title={isLightMode ? "Switch to Dark Mode" : "Switch to Light Mode"}
               >
-                {t('common.wip')}
-              </motion.span>
-              <motion.span
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                className="text-[10px]"
-              >
-                🧠
-              </motion.span>
+                {isLightMode ? "🌙" : "☀️"}
+              </motion.button>
             </div>
           </div>
 

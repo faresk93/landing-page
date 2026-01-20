@@ -12,6 +12,19 @@
     --color-neonOrange: #ff9e00;
     --color-deepSpace: #050510;
 
+    --card-bg: rgba(10, 10, 18, 0.8);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --card-text: rgba(255, 255, 255, 0.87);
+    --card-text-dim: rgba(156, 163, 175, 1);
+    --header-border: rgba(255, 255, 255, 0.05);
+
+    --pop-bg: #0d0d15;
+    --pop-border: rgba(255, 255, 255, 0.1);
+    --pop-text: #ffffff;
+    --pop-overlay: rgba(0, 0, 0, 0.6);
+
+
+
     --animate-spin-slow: spin 4s linear infinite;
     --animate-flash-border: flash-border 1.2s ease-in-out infinite;
 
@@ -136,4 +149,135 @@ button {
 #root {
     width: 100%;
     height: 100%;
+}
+
+.light-theme {
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --card-border: rgba(0, 0, 0, 0.1);
+    --card-text: #111827;
+    --card-text-dim: #4b5563;
+    --header-border: rgba(0, 0, 0, 0.05);
+
+    --pop-bg: #ffffff;
+    --pop-border: rgba(0, 0, 0, 0.1);
+    --pop-text: #111827;
+    --pop-overlay: rgba(255, 255, 255, 0.6);
+    background-color: #f8fafc;
+}
+
+
+
+.light-theme .my-glass-card {
+    background-color: var(--card-bg);
+    border-color: var(--card-border);
+    color: var(--card-text);
+}
+
+.light-theme .my-glass-card h1 {
+    background: none;
+    -webkit-text-fill-color: initial;
+    color: #111827;
+    background-clip: unset;
+}
+
+.light-theme .ai-description {
+    color: var(--card-text-dim);
+}
+
+.light-theme a,
+.light-theme .flex-wrap span {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
+    color: #374151;
+}
+
+.light-theme .cursor-text {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .cursor-text span {
+    color: #111827;
+}
+
+.light-theme .text-gray-400,
+.light-theme .text-white\/60,
+.light-theme .text-white\/20,
+.light-theme .text-gray-500 {
+    color: #4b5563;
+}
+
+.light-theme .border-white\/5,
+.light-theme .border-white\/10 {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .bg-white\/5,
+.light-theme .bg-white\/10,
+.light-theme .bg-white\/\[0\.03\] {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.light-theme .text-neonBlue {
+    color: #0369a1;
+    /* Darker blue for visibility */
+}
+
+.light-theme .text-neonPurple {
+    color: #7e22ce;
+    /* Darker purple */
+}
+
+/* Modal and Interface Styles */
+.light-theme .fixed.inset-0.bg-black\/60,
+.light-theme .fixed.inset-0.bg-black\/90,
+.light-theme .fixed.inset-0.bg-black\/95 {
+    background-color: var(--pop-overlay);
+}
+
+.light-theme .fixed.inset-0.bg-\[\#050510\]\/95 {
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.light-theme .bg-\[\#0d0d15\],
+.light-theme .bg-\[\#11111d\]\/80,
+.light-theme .bg-\[\#11111d\] {
+    background-color: var(--pop-bg);
+}
+
+.light-theme h2,
+.light-theme h3,
+.light-theme h4 {
+    color: var(--pop-text);
+}
+
+.light-theme input,
+.light-theme textarea {
+    background-color: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: var(--pop-text);
+}
+
+.light-theme .bg-white\/5,
+.light-theme .bg-white\/\[0\.03\],
+.light-theme .bg-neonPurple\/20 {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.light-theme .mr-12.bg-white\/5 {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.light-theme .ml-12.bg-neonPurple\/20 {
+    background-color: #e9d5ff;
+    color: #7e22ce;
+}
+
+.light-theme .border-b.border-white\/5 {
+    border-bottom-color: var(--pop-border);
+}
+
+.light-theme .text-gray-300 {
+    color: #374151;
 }

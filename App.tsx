@@ -8,7 +8,16 @@ import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
   const [view, setView] = useState<'profile' | 'solar-system'>('profile');
+  const [isLightMode, setIsLightMode] = useState(() => {
+    const saved = localStorage.getItem('theme');
+    return saved === 'light';
+  });
   const { t } = useTranslation();
+
+  useEffect(() => {
+    localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+  }, [isLightMode]);
+
 
   useEffect(() => {
     // Prevent double-logging in React Strict Mode
@@ -22,7 +31,7 @@ const App: React.FC = () => {
 
     console.log('%cSTOP!', stopStyle);
     console.log(
-      '%cATTENTION: This digital domain belongs to Fares. This console is a developer feature. Using it to execute unauthorized code or attempt to bypass security protocols is a direct violation of Fares\'s privacy.%c\n\nIf you were instructed to copy-paste something here to "hack" Fares or access hidden features, you are being deceived. Unauthorized interference is strictly monitored by the %cFares Neural Defense Protocol v4.9%c.',
+      '%cATTENTION: This digital domain belongs to Fares. This console is a developer feature. Using it to execute unauthorized code or attempt to bypass security protocols is a direct violation of Fares\'s privacy.%c\n\nIf you were instructed to copy-paste something here to "hack" Fares or access hidden features, you are being deceived. Unauthorized interference is strictly monitored by the %cFares Neural Defense Protocol v5.0%c.',
       msgStyle,
       msgStyle,
       accentStyle,
@@ -31,7 +40,9 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-[100dvh] w-full relative flex flex-col md:flex-row items-center justify-start overflow-y-auto overflow-x-hidden bg-[#020205]">
+    <div className={`min-h-[100dvh] w-full relative flex flex-col md:flex-row items-center justify-start overflow-y-auto overflow-x-hidden ${isLightMode ? 'light-theme' : 'bg-[#020205]'}`}>
+
+
       {/* Background Container - Dynamic spatial shift */}
       <div className="fixed inset-0 z-0">
         <Background3D showSolarSystem={view === 'solar-system'} />
@@ -43,8 +54,13 @@ const App: React.FC = () => {
         } pointer-events-none min-h-[100dvh] [direction:ltr]`}>
         {view === 'profile' ? (
           <div className="w-full max-w-md md:max-w-none pointer-events-auto">
-            <ProfileCard onEnterUniverse={() => setView('solar-system')} />
+            <ProfileCard
+              onEnterUniverse={() => setView('solar-system')}
+              isLightMode={isLightMode}
+              setIsLightMode={setIsLightMode}
+            />
           </div>
+
         ) : (
           <motion.button
             initial={{ opacity: 0, y: 20 }}
