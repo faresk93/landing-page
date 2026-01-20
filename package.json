@@ -17,6 +17,7 @@
     "@react-three/fiber": "^9.5.0",
     "@react-three/postprocessing": "^3.0.4",
     "@supabase/supabase-js": "^2.90.1",
+    "@tailwindcss/vite": "^4.1.18",
     "framer-motion": "^12.26.2",
     "i18next": "^25.7.4",
     "i18next-browser-languagedetector": "^8.2.0",
