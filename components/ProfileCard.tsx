@@ -235,15 +235,23 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
 
               <div className="flex flex-wrap justify-center md:justify-start gap-2 text-[9px] md:text-[11px] font-rajdhani font-bold tracking-[0.15em] text-gray-400 uppercase">
                 {[
-                  { icon: "🇹🇳", label: t('common.tunisia') },
-                  { icon: "🇫🇷", label: t('common.france') },
-                  { icon: "🇴🇲", label: t('common.oman') },
+                  { country: "tn", label: t('common.tunisia') },
+                  { country: "fr", label: t('common.france') },
+                  { country: "om", label: t('common.oman') },
                   { icon: <Cake className="w-3 h-3 text-pink-400" />, label: "32" }
                 ].map((item, idx) => (
                   <span key={idx} className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 shadow-inner hover:bg-white/10 transition-colors">
-                    {item.icon} {item.label}
+                    {item.country ? (
+                      <img
+                        src={`https://flagcdn.com/w40/${item.country}.png`}
+                        width="16"
+                        alt={item.label}
+                        className="rounded-[2px] shadow-sm"
+                      />
+                    ) : item.icon} {item.label}
                   </span>
                 ))}
+
               </div>
             </div>
 

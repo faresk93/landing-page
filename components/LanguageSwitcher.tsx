@@ -5,10 +5,11 @@ import { Globe, ChevronDown } from 'lucide-react';
 
 const LANGUAGES = [
     { code: 'en', label: 'English', flag: '🌐' },
-    { code: 'fr', label: 'Français', flag: '🇫🇷' },
-    { code: 'ar', label: '(تونسي)', flag: '🇹🇳' },
-    { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+    { code: 'fr', label: 'Français', countryCode: 'fr' },
+    { code: 'ar', label: '(تونسي)', countryCode: 'tn' },
+    { code: 'de', label: 'Deutsch', countryCode: 'de' },
 ];
+
 
 export const LanguageSwitcher: React.FC = () => {
     const { i18n } = useTranslation();
@@ -40,7 +41,20 @@ export const LanguageSwitcher: React.FC = () => {
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-white/[0.03] border border-white/5 hover:bg-white/10 transition-all group pointer-events-auto cursor-pointer"
             >
-                <span className="text-xs xs:text-sm">{currentLanguage.flag}</span>
+                <span className="text-xs xs:text-sm flex items-center">
+                    {currentLanguage.countryCode ? (
+                        <img
+                            src={`https://flagcdn.com/w40/${currentLanguage.countryCode}.png`}
+                            srcSet={`https://flagcdn.com/w80/${currentLanguage.countryCode}.png 2x`}
+                            width="16"
+                            alt={currentLanguage.label}
+                            className="rounded-[2px] shadow-sm"
+                        />
+                    ) : (
+                        currentLanguage.flag
+                    )}
+                </span>
+
                 <span className="font-orbitron text-[7px] xs:text-[9px] font-bold tracking-widest text-white/50 group-hover:text-white uppercase">
                     {currentLanguage.code === 'ar' ? 'تونسي' : currentLanguage.code}
                 </span>
@@ -62,7 +76,20 @@ export const LanguageSwitcher: React.FC = () => {
                                     }`}
                             >
                                 <div className="flex items-center gap-2">
-                                    <span className="text-sm xs:text-base">{lang.flag}</span>
+                                    <span className="text-sm xs:text-base flex items-center">
+                                        {lang.countryCode ? (
+                                            <img
+                                                src={`https://flagcdn.com/w40/${lang.countryCode}.png`}
+                                                srcSet={`https://flagcdn.com/w80/${lang.countryCode}.png 2x`}
+                                                width="18"
+                                                alt={lang.label}
+                                                className="rounded-[2px] shadow-sm"
+                                            />
+                                        ) : (
+                                            lang.flag
+                                        )}
+                                    </span>
+
                                     <span className={`font-rajdhani text-xs xs:text-sm font-bold tracking-wider ${i18n.language === lang.code ? 'text-neonBlue' : 'text-gray-400 group-hover:text-white'
                                         }`}>
                                         {lang.label}
