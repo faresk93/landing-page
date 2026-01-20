@@ -370,12 +370,25 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
           </div>
         </div>
 
-        {/* Footer */}
         <div className="flex flex-col items-center gap-3 md:gap-4 border-t border-white/5 pt-4 md:pt-8 mt-6 md:mt-12">
-          <div className="flex flex-wrap items-center justify-center gap-x-4 md:gap-x-6 gap-y-2 md:gap-y-3 text-[9px] md:text-xs font-rajdhani font-bold tracking-[0.15em] md:tracking-[0.2em] text-gray-500 uppercase">
+          <div className={`flex flex-wrap items-center justify-center gap-x-4 md:gap-x-6 gap-y-2 md:gap-y-3 text-[9px] md:text-xs font-rajdhani font-bold tracking-[0.15em] md:tracking-[0.2em] text-gray-500 uppercase ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
             <div className={`flex items-center gap-1.5 md:gap-2 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
-              {t('common.made_with')} <span className="text-red-500/80 animate-pulse text-xs md:text-sm">❤</span> {t('common.by')} <span className="text-white">Fares KH<span className="cursor-i">I</span>ARY</span>
+              {i18n.language === 'ar' ? (
+                <>
+                  <span className="text-white">
+                    <span className="font-cairo">فـ<span className="cursor-i">ا</span>رس الخياري</span>
+                  </span>
+                  <span>{t('common.by')}</span>
+                  <span className="text-red-500/80 animate-pulse text-xs md:text-sm">❤</span>
+                  <span>{t('common.made_with')}</span>
+                </>
+              ) : (
+                <>
+                  {t('common.made_with')} <span className="text-red-500/80 animate-pulse text-xs md:text-sm">❤</span> {t('common.by')} <span className="text-white">Fares KH<span className="cursor-i">I</span>ARY</span>
+                </>
+              )}
             </div>
+
             <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white/10" />
             <button onClick={() => setIsPrivacyOpen(true)} className="text-neonBlue/60 hover:text-neonBlue transition-colors tracking-[0.2em] md:tracking-[0.3em]">{t('common.privacy_policy')}</button>
             <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white/10" />
@@ -384,6 +397,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
             </div>
           </div>
         </div>
+
       </div>
 
       {/* Privacy Policy Modal */}
