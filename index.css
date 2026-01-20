@@ -281,3 +281,9 @@ button {
 .light-theme .text-gray-300 {
     color: #374151;
 }
+
+.three-html-label {
+    direction: ltr !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}

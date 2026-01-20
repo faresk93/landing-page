@@ -76,11 +76,13 @@ const Planet: React.FC<{ name: string; color: string; distance: number; speed: n
                         />
                     </Sphere>
                     {hasRings && <PlanetRings color={color} size={size} />}
-                    <Html distanceFactor={8} position={[0, size + 0.3, 0]} center>
-                        <div className="px-3 py-1.5 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full whitespace-nowrap shadow-2xl pointer-events-none select-none">
+                    <Html distanceFactor={8} position={[0, size + 0.3, 0]} center style={{ direction: 'ltr' }}>
+                        <div className="three-html-label px-3 py-1.5 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full whitespace-nowrap shadow-2xl pointer-events-none select-none" dir="ltr">
                             <span className="font-rajdhani font-black text-[9px] tracking-[0.3em] text-white uppercase">{name}</span>
                         </div>
                     </Html>
+
+
                 </Float>
             </group>
         </group>
@@ -116,11 +118,13 @@ const SolarSystem: React.FC<{ showSolarSystem: boolean }> = ({ showSolarSystem }
                     blending={THREE.AdditiveBlending}
                 />
             </Sphere>
-            <Html center>
-                <div className="flex flex-col items-center select-none pointer-events-auto [direction:ltr]" dir="ltr">
+            <Html center style={{ direction: 'ltr' }}>
+                <div className="three-html-label flex flex-col items-center select-none pointer-events-auto" dir="ltr">
                     <span className="font-orbitron font-black text-2xl tracking-[0.3em] text-white drop-shadow-[0_0_10px_rgba(255,158,0,0.8)] opacity-90 uppercase">Web</span>
                 </div>
             </Html>
+
+
 
 
 
@@ -234,7 +238,8 @@ const CameraController: React.FC<{ showSolarSystem: boolean }> = ({ showSolarSys
 
 export const Background3D: React.FC<{ showSolarSystem?: boolean }> = ({ showSolarSystem = false }) => {
     return (
-        <div className="absolute inset-0 z-0 bg-[#020205]">
+        <div className="absolute inset-0 z-0 bg-[#020205]" dir="ltr">
+
             <Canvas
                 camera={{ position: [0, 15, 35], fov: 40 }}
                 gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
