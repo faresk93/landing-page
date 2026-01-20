@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, X, ShieldCheck, Sparkles, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../services/supabase';
 import { sanitizeInput, checkRateLimit } from '../utils/security';
 import { NOTES_WEBHOOK_URL } from '../constants';
@@ -14,6 +15,7 @@ interface NotePopupProps {
 }
 
 export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, userEmail, userName }) => {
+    const { t, i18n } = useTranslation();
     const [note, setNote] = useState('');
     const [name, setName] = useState('');
     const [isAnonymous, setIsAnonymous] = useState(false);
@@ -79,7 +81,7 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
 
         if (!webhookSuccess) {
             setIsSending(false);
-            setErrorMsg("Neural link disrupted. Your note couldn't be transmitted to Fares's digital mind right now.");
+            setErrorMsg(t('notes.error_disrupted'));
             setTimeout(() => setErrorMsg(''), 5000);
             return;
         }
@@ -114,7 +116,7 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
             }, displayDuration);
         } else {
             setIsSending(false);
-            setErrorMsg("Archive connection failed. Your note couldn't be stored in Fares's database.");
+            setErrorMsg(t('notes.error_archive'));
             console.error('Error sending note:', error.message);
             setTimeout(() => setErrorMsg(''), 5000);
         }
@@ -139,14 +141,14 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                         className="relative w-full max-w-lg bg-[#0d0d15] border border-white/10 rounded-3xl overflow-hidden shadow-2xl"
                     >
                         {/* Header */}
-                        <div className="p-6 border-b border-white/5 flex items-center justify-between bg-gradient-to-r from-neonPurple/10 to-transparent">
-                            <div className="flex items-center gap-3">
+                        <div className={`p-6 border-b border-white/5 flex items-center justify-between bg-gradient-to-r from-neonPurple/10 to-transparent ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+                            <div className={`flex items-center gap-3 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                 <div className="p-2 rounded-xl bg-neonPurple/20 border border-neonPurple/30">
                                     <ShieldCheck className="w-5 h-5 text-neonPurple" />
                                 </div>
-                                <div>
-                                    <h3 className="font-orbitron text-sm font-bold tracking-widest text-white uppercase">Direct Link to Fares</h3>
-                                    <p className="font-rajdhani text-[10px] text-gray-400 uppercase tracking-wider">Secure Neural Transmission</p>
+                                <div className={i18n.language === 'ar' ? 'text-right' : ''}>
+                                    <h3 className="font-orbitron text-sm font-bold tracking-widest text-white uppercase">{t('notes.title')}</h3>
+                                    <p className="font-rajdhani text-[10px] text-gray-400 uppercase tracking-wider">{t('notes.subtitle')}</p>
                                 </div>
                             </div>
                             <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors">
@@ -168,7 +170,7 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                     </div>
                                     <div className="flex flex-col items-center gap-2">
                                         <p className="font-orbitron text-[10px] font-bold text-white tracking-[0.3em] uppercase animate-pulse">
-                                            Initializing Neural Transfer
+                                            {t('notes.initializing')}
                                         </p>
                                         <div className="h-[1px] w-24 bg-gradient-to-r from-transparent via-neonPurple/50 to-transparent" />
                                     </div>
@@ -190,10 +192,10 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
 
                                     <div className="text-center space-y-2">
                                         <p className="font-orbitron text-sm font-black text-green-400 tracking-[0.2em] uppercase">
-                                            Note Transmitted to Fares
+                                            {t('notes.transmitted')}
                                         </p>
                                         <p className="font-rajdhani text-[10px] text-gray-500 uppercase tracking-widest">
-                                            Handshake Confirmed • Data Encrypted
+                                            {t('notes.confirmed')}
                                         </p>
                                     </div>
 
@@ -218,12 +220,12 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                 <form onSubmit={handleSubmit} className="space-y-4">
                                     {!userId && (
                                         <div className="space-y-4">
-                                            <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl hover:border-neonPurple/30 transition-all cursor-pointer group/anon" onClick={() => setIsAnonymous(!isAnonymous)}>
+                                            <div className={`flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl hover:border-neonPurple/30 transition-all cursor-pointer group/anon ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`} onClick={() => setIsAnonymous(!isAnonymous)}>
                                                 <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${isAnonymous ? 'bg-neonPurple border-neonPurple' : 'border-white/20'}`}>
                                                     {isAnonymous && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
                                                 </div>
                                                 <span className="font-orbitron text-[10px] text-gray-400 uppercase tracking-widest group-hover/anon:text-neonPurple transition-colors">
-                                                    Send Anonymously
+                                                    {t('notes.send_anonymously')}
                                                 </span>
                                             </div>
 
@@ -235,8 +237,8 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                                         exit={{ opacity: 0, height: 0 }}
                                                         className="space-y-2 overflow-hidden"
                                                     >
-                                                        <label className="font-orbitron text-[10px] text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-1">
-                                                            Name (Necessary)
+                                                        <label className={`font-orbitron text-[10px] text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-1 ${i18n.language === 'ar' ? 'flex-row-reverse text-right' : ''}`}>
+                                                            {t('notes.name_label')}
                                                         </label>
                                                         <input
                                                             type="text"
@@ -244,8 +246,8 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                                             autoComplete="name"
                                                             value={name}
                                                             onChange={(e) => setName(e.target.value)}
-                                                            placeholder="Enter your name"
-                                                            className="w-full bg-white/5 border border-white/10 rounded-xl p-3 font-rajdhani text-white placeholder:text-gray-600 focus:outline-none focus:border-neonPurple/50 transition-all text-sm"
+                                                            placeholder={t('notes.name_placeholder')}
+                                                            className={`w-full bg-white/5 border border-white/10 rounded-xl p-3 font-rajdhani text-white placeholder:text-gray-600 focus:outline-none focus:border-neonPurple/50 transition-all text-sm ${i18n.language === 'ar' ? 'text-right' : ''}`}
                                                             disabled={isSending}
                                                         />
                                                     </motion.div>
@@ -254,20 +256,20 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                         </div>
                                     )}
                                     <div className="relative group">
-                                        <label className="font-orbitron text-[10px] text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-1 mb-2">
-                                            Your Message <span className="text-red-500/50 text-[8px]">* Min 3 chars</span>
+                                        <label className={`font-orbitron text-[10px] text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-1 mb-2 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+                                            {t('notes.message_label')} <span className="text-red-500/50 text-[8px]">* {t('notes.min_chars')}</span>
                                         </label>
                                         <textarea
                                             name="note_content"
                                             autoComplete="off"
                                             value={note}
                                             onChange={(e) => setNote(e.target.value)}
-                                            placeholder="Type your message for Fares here..."
-                                            className="w-full h-40 bg-white/5 border border-white/10 rounded-2xl p-4 font-rajdhani text-white placeholder:text-gray-600 focus:outline-none focus:border-neonPurple/50 transition-all resize-none"
+                                            placeholder={t('notes.message_placeholder')}
+                                            className={`w-full h-40 bg-white/5 border border-white/10 rounded-2xl p-4 font-rajdhani text-white placeholder:text-gray-600 focus:outline-none focus:border-neonPurple/50 transition-all resize-none ${i18n.language === 'ar' ? 'text-right' : ''}`}
                                             disabled={isSending}
                                         />
-                                        <div className="absolute bottom-4 right-4 text-[10px] font-orbitron text-gray-600 uppercase tracking-widest">
-                                            {note.length} chars
+                                        <div className={`absolute bottom-4 ${i18n.language === 'ar' ? 'left-4' : 'right-4'} text-[10px] font-orbitron text-gray-600 uppercase tracking-widest`}>
+                                            {note.length} {t('notes.chars')}
                                         </div>
                                     </div>
 
@@ -275,11 +277,11 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                         <motion.div
                                             initial={{ opacity: 0, y: -10 }}
                                             animate={{ opacity: 1, y: 0 }}
-                                            className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl"
+                                            className={`flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl ${i18n.language === 'ar' ? 'flex-row-reverse text-right' : ''}`}
                                         >
                                             <AlertCircle className="w-4 h-4 text-red-400" />
                                             <p className="font-rajdhani text-[10px] text-red-400 uppercase tracking-widest">
-                                                Slow down! Too many neural transmissions for Fares. Please wait a moment.
+                                                {t('notes.rate_limited')}
                                             </p>
                                         </motion.div>
                                     )}
@@ -288,7 +290,7 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                         <motion.div
                                             initial={{ opacity: 0, scale: 0.95 }}
                                             animate={{ opacity: 1, scale: 1 }}
-                                            className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl"
+                                            className={`flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl ${i18n.language === 'ar' ? 'flex-row-reverse text-right' : ''}`}
                                         >
                                             <div className="p-1.5 rounded-lg bg-red-500/20">
                                                 <AlertCircle className="w-4 h-4 text-red-500" />
@@ -307,15 +309,15 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                         {isSending ? (
                                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                         ) : (
-                                            <>
-                                                Transmit to Fares
-                                                <Send className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                                            </>
+                                            <div className={`flex items-center gap-3 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+                                                {t('notes.transmit_button')}
+                                                <Send className={`w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform ${i18n.language === 'ar' ? 'rotate-180 group-hover:-translate-x-1 group-hover:translate-y-1' : ''}`} />
+                                            </div>
                                         )}
                                     </button>
 
                                     <p className="text-center font-rajdhani text-[10px] text-gray-500 uppercase tracking-widest">
-                                        Only Fares can decrypt and read this message.
+                                        {t('notes.privacy_note')}
                                     </p>
                                 </form>
                             )}

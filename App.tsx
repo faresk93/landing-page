@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Background3D } from './components/Background3D';
 import { ProfileCard } from './components/ProfileCard';
 import { CookieConsent } from './components/CookieConsent';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
   const [view, setView] = useState<'profile' | 'solar-system'>('profile');
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Prevent double-logging in React Strict Mode
@@ -52,7 +55,7 @@ const App: React.FC = () => {
             className="fixed bottom-8 left-1/2 -translate-x-1/2 px-5 py-2.5 xs:px-8 xs:py-3 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full font-orbitron text-[9px] xs:text-xs tracking-[0.3em] text-white hover:border-neonBlue/50 hover:bg-black/60 transition-all z-20 pointer-events-auto flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
           >
             <div className="w-1.5 h-1.5 rounded-full bg-neonBlue animate-pulse" />
-            BACK TO PROFILE
+            {t('common.back_to_profile')}
           </motion.button>
         )}
       </main>

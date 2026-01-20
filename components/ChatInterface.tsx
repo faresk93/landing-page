@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Loader2, Brain, Bot, AlertTriangle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { sendMessageToWebhook } from '../services/webhookService';
 import { sanitizeInput, checkRateLimit } from '../utils/security';
-import { INITIAL_GREETING } from '../constants';
 
 interface Message {
   id: string;
@@ -17,8 +17,6 @@ interface ChatInterfaceProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
-const SUGGESTIONS: string[] = [];
 
 const TypingMessage: React.FC<{ text: string; onUpdate?: () => void; onComplete?: () => void }> = ({ text, onUpdate, onComplete }) => {
   const [displayedText, setDisplayedText] = useState('');
@@ -53,6 +51,7 @@ const TypingMessage: React.FC<{ text: string; onUpdate?: () => void; onComplete?
 };
 
 const DisconnectedMind: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center py-6 gap-6">
       <div className="relative">
@@ -128,7 +127,7 @@ const DisconnectedMind: React.FC = () => {
       <div className="flex flex-col items-center gap-1">
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
-          <span className="font-orbitron text-[9px] font-bold tracking-[0.3em] text-red-500 uppercase">Connection to Fares's Digital Mind Failed</span>
+          <span className="font-orbitron text-[9px] font-bold tracking-[0.3em] text-red-500 uppercase">{t('chat.connection_failed')}</span>
         </div>
         <div className="h-[1px] w-24 bg-gradient-to-r from-transparent via-red-500/30 to-transparent" />
       </div>
@@ -186,6 +185,7 @@ const GlitchText: React.FC<{ text: string }> = ({ text }) => {
 };
 
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose }) => {
+  const { t, i18n } = useTranslation();
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -199,10 +199,10 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
   const inputRef = useRef<HTMLInputElement>(null);
 
   const PLACEHOLDERS = [
-    "Ask anything about Fares...",
-    "Posez une question sur Fares...",
-    "إسأل أي سؤال عن فارس...",
-    "Fragen Sie etwas über Fares..."
+    t('chat.placeholder_en'),
+    t('chat.placeholder_fr'),
+    t('chat.placeholder_ar'),
+    t('chat.placeholder_de')
   ];
 
   useEffect(() => {
@@ -224,18 +224,18 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
     }, isDeleting ? 30 : 50);
 
     return () => clearTimeout(timeout);
-  }, [currentText, isDeleting, placeholderIndex]);
+  }, [currentText, isDeleting, placeholderIndex, t]);
 
   useEffect(() => {
     if (messages.length === 0) {
       setMessages([{
         id: 'init',
         role: 'ai',
-        text: INITIAL_GREETING,
+        text: t('chat.initial_greeting'),
         timestamp: Date.now()
       }]);
     }
-  }, []);
+  }, [t]);
 
   // Auto-focus removed to prevent keyboard auto-open on mobile
   useEffect(() => {
@@ -243,7 +243,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
       setMessages([{
         id: 'init',
         role: 'ai',
-        text: INITIAL_GREETING,
+        text: t('chat.initial_greeting'),
         timestamp: Date.now()
       }]);
       setActiveSuggestions([]);
@@ -251,7 +251,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
       setInput('');
       setLoading(false);
     }
-  }, [isOpen]);
+  }, [isOpen, t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -324,13 +324,13 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
           <header className="relative z-10 px-6 py-6 border-b border-white/5 flex items-center justify-between max-w-5xl mx-auto w-full">
-            <div className="flex items-center gap-4">
+            <div className={`flex items-center gap-4 ${i18n.language === 'ar' ? 'flex-row-reverse text-right' : ''}`}>
               <DigitalBrain size={32} />
               <div>
-                <h2 className="font-orbitron font-black text-[10px] md:text-sm tracking-[0.2em] text-white">FARES_AI_MIND_CLONE</h2>
-                <div className="flex items-center gap-2">
+                <h2 className="font-orbitron font-black text-[10px] md:text-sm tracking-[0.2em] text-white">{t('chat.ai_mind_clone')}</h2>
+                <div className={`flex items-center gap-2 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
                   <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)] animate-pulse" />
-                  <span className="text-[10px] font-rajdhani font-bold tracking-[0.3em] text-gray-400 uppercase">Neural Link Active</span>
+                  <span className="text-[10px] font-rajdhani font-bold tracking-[0.3em] text-gray-400 uppercase">{t('chat.neural_link_active')}</span>
                 </div>
               </div>
             </div>
@@ -356,7 +356,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                 <div className={`max-w-[85%] rounded-3xl px-6 py-4 ${msg.role === 'user'
                   ? 'bg-neonPurple/20 border border-neonPurple/30 text-white ml-12'
                   : 'bg-white/5 border border-white/10 text-gray-300 mr-12'
-                  }`}>
+                  } ${i18n.language === 'ar' ? 'text-right' : ''}`}>
                   {msg.isError ? (
                     <DisconnectedMind />
                   ) : msg.role === 'ai' && msg.id !== 'init' ? (
@@ -384,7 +384,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="flex flex-wrap gap-2 pt-4 pb-2"
+                  className={`flex flex-wrap gap-2 pt-4 pb-2 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}
                 >
                   {activeSuggestions.map((suggestion, i) => (
                     <button
@@ -410,7 +410,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                   <DigitalBrain size={80} />
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <GlitchText text="Fares is thinking..." />
+                  <GlitchText text={t('chat.thinking')} />
                   <div className="flex gap-1.5">
                     {[0, 1, 2].map((i) => (
                       <motion.div
@@ -439,7 +439,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder={currentText}
-                  className="w-full bg-transparent text-white px-6 py-5 outline-none font-rajdhani text-base md:text-lg placeholder-gray-500"
+                  className={`w-full bg-transparent text-white px-6 py-5 outline-none font-rajdhani text-base md:text-lg placeholder-gray-500 ${i18n.language === 'ar' ? 'text-right' : ''}`}
                   disabled={loading}
                 />
                 <button
@@ -450,7 +450,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                   {loading ? (
                     <Loader2 className="w-6 h-6 animate-spin" />
                   ) : (
-                    <Send className="w-6 h-6 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                    <Send className={`w-6 h-6 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform ${i18n.language === 'ar' ? 'rotate-180 group-hover/btn:-translate-x-1 group-hover/btn:translate-y-1' : ''}`} />
                   )}
                 </button>
               </div>
@@ -462,7 +462,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                 >
                   <div className="flex items-center gap-2 px-4 py-2 bg-red-500/20 border border-red-500/30 rounded-full backdrop-blur-md">
                     <AlertTriangle className="w-4 h-4 text-red-400" />
-                    <span className="font-rajdhani text-[10px] text-red-400 uppercase tracking-[0.2em] font-bold"> Neural link congested. Please wait.</span>
+                    <span className="font-rajdhani text-[10px] text-red-400 uppercase tracking-[0.2em] font-bold"> {t('chat.rate_limited')}</span>
                   </div>
                 </motion.div>
               )}

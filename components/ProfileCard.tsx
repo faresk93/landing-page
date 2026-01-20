@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   Code2, Cake, Mail, Linkedin, Instagram, Github, ArrowRight, Settings,
   MessageSquare, Bot, LogIn, LogOut, User as UserIcon, X
@@ -10,20 +11,23 @@ import { supabase } from '../services/supabase';
 import { User } from '@supabase/supabase-js';
 import { NotePopup } from './NotePopup';
 import { AdminDashboard } from './AdminDashboard';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { LayoutDashboard, ShieldCheck } from 'lucide-react';
 
 interface ProfileCardProps {
   onEnterUniverse: () => void;
 }
 
-const PLACEHOLDERS = [
-  "Ask Fares a question...",
-  "Posez une question à Fares...",
-  "إسأل فارس أيّ سؤال...",
-  "Stellen Sie Fares eine Frage..."
-];
-
 export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => {
+  const { t, i18n } = useTranslation();
+
+  const PLACEHOLDERS = [
+    t('chat.placeholder_en'),
+    t('chat.placeholder_fr'),
+    t('chat.placeholder_ar'),
+    t('chat.placeholder_de')
+  ];
+
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
@@ -91,7 +95,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
     }, isDeleting ? 30 : 50);
 
     return () => clearTimeout(timeout);
-  }, [currentText, isDeleting, placeholderIndex]);
+  }, [currentText, isDeleting, placeholderIndex, t]); // Added t to dependencies
 
   return (
     <motion.div
@@ -107,17 +111,17 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
         <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-neonPurple/5 blur-[120px] pointer-events-none hidden md:block" />
 
         {/* Top Header Strip */}
-        <div className="flex items-center justify-between gap-1 mb-4 md:mb-8 border-b border-white/5 pb-2 md:pb-4">
+        <div className={`flex items-center justify-between gap-1 mb-4 md:mb-8 border-b border-white/5 pb-2 md:pb-4 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
           <div className="flex items-center gap-1.5 text-yellow-500/80 shrink-0">
             <Settings className="w-3 h-3 animate-spin-slow hidden xs:block" />
             <div className="flex items-center gap-1">
-              <span className="font-orbitron font-bold text-[8px] xs:text-[9px] tracking-tighter xs:tracking-widest uppercase text-yellow-500/80 whitespace-nowrap">Fares Link</span>
+              <span className="font-orbitron font-bold text-[8px] xs:text-[9px] tracking-tighter xs:tracking-widest uppercase text-yellow-500/80 whitespace-nowrap">{t('common.fares_link')}</span>
               <motion.span
                 animate={{ opacity: [0.2, 1, 0.2] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 className="font-orbitron font-black text-[6px] tracking-tighter text-yellow-500/40 uppercase hidden sm:block"
               >
-                [WIP]
+                {t('common.wip')}
               </motion.span>
               <motion.span
                 animate={{ scale: [1, 1.2, 1] }}
@@ -129,9 +133,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 overflow-hidden">
+          <div className={`flex items-center gap-1.5 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+            <LanguageSwitcher />
             {user ? (
-              <div className="flex items-center gap-1.5">
+              <div className={`flex items-center gap-1.5 ${i18n.language === 'ar' ? 'flex-row-reverse text-right' : ''}`}>
                 <div className="flex flex-col items-end">
                   <span className="font-rajdhani text-[8px] text-white/60 font-bold uppercase tracking-wider whitespace-nowrap truncate max-w-[60px] xs:max-w-none">
                     {user.user_metadata.full_name || user.email}
@@ -140,7 +145,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
                     onClick={handleLogout}
                     className="flex items-center gap-1 font-orbitron text-[6px] text-red-400/60 hover:text-red-400 transition-colors uppercase tracking-widest"
                   >
-                    Logout <LogOut className="w-2 h-2" />
+                    {t('common.logout')} <LogOut className="w-2 h-2" />
                   </button>
                 </div>
                 {user.user_metadata.avatar_url && !imgError ? (
@@ -157,10 +162,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
                 className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all group whitespace-nowrap scale-90 xs:scale-100"
               >
                 <LogIn className="w-2.5 h-2.5 text-neonBlue group-hover:scale-110 transition-transform" />
-                <span className="font-orbitron text-[7px] xs:text-[8px] font-bold tracking-widest text-white/70 group-hover:text-white uppercase truncate max-w-[80px] xs:max-w-none">Login</span>
+                <span className="font-orbitron text-[7px] xs:text-[8px] font-bold tracking-widest text-white/70 group-hover:text-white uppercase truncate max-w-[80px] xs:max-w-none">{t('common.login')}</span>
               </button>
             )}
-            <span className="font-orbitron text-[8px] text-white/20 tracking-tighter sm:tracking-[0.2em] shrink-0">v4.8</span>
+            <span className="font-orbitron text-[8px] text-white/20 tracking-tighter sm:tracking-[0.2em] shrink-0">{t('common.v_protocol')}</span>
           </div>
         </div>
 
@@ -179,9 +184,9 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
                   <div className="p-1.5 rounded-lg bg-blue-500/20 border border-blue-500/30">
                     <LayoutDashboard className="w-4 h-4 text-blue-400" />
                   </div>
-                  <span className="font-orbitron font-bold text-[9px] tracking-[0.15em] text-blue-400 uppercase whitespace-nowrap">My Private Notes</span>
+                  <span className="font-orbitron font-bold text-[9px] tracking-[0.15em] text-blue-400 uppercase whitespace-nowrap">{t('common.my_private_notes')}</span>
                 </div>
-                <ArrowRight className="w-4 h-4 text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+                <ArrowRight className={`w-4 h-4 text-blue-400 group-hover:translate-x-0.5 transition-transform ${i18n.language === 'ar' ? 'rotate-180 group-hover:-translate-x-0.5' : ''}`} />
               </motion.div>
             )}
 
@@ -197,14 +202,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
             <div className="flex flex-col gap-4 items-center md:items-start mb-8 w-full">
               <div className="inline-flex items-center gap-2 px-4 xs:px-6 py-2 rounded-full border border-neonPurple/30 bg-neonPurple/5 text-neonBlue font-rajdhani font-bold tracking-widest shadow-[0_0_30px_-5px_rgba(188,19,254,0.3)] text-xs xs:text-sm md:text-base transition-all hover:scale-105">
                 <Code2 className="w-4 h-4 md:w-5 md:h-5" />
-                <span>Full-Stack Web Developer</span>
+                <span>{t('common.full_stack_developer')}</span>
               </div>
 
               <div className="flex flex-wrap justify-center md:justify-start gap-2 text-[9px] md:text-[11px] font-rajdhani font-bold tracking-[0.15em] text-gray-400 uppercase">
                 {[
-                  { icon: "🇹🇳", label: "Tunisia" },
-                  { icon: "🇫🇷", label: "France" },
-                  { icon: "🇴🇲", label: "Oman" },
+                  { icon: "🇹🇳", label: t('common.tunisia') },
+                  { icon: "🇫🇷", label: t('common.france') },
+                  { icon: "🇴🇲", label: t('common.oman') },
                   { icon: <Cake className="w-3 h-3 text-pink-400" />, label: "32" }
                 ].map((item, idx) => (
                   <span key={idx} className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 shadow-inner hover:bg-white/10 transition-colors">
@@ -240,15 +245,15 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
           <div className="flex flex-col gap-6 md:gap-10">
             {/* AI Chat Integrated Input */}
             <div className="mb-5 md:mb-0 group">
-              <div className="flex flex-col gap-2 md:gap-3 mb-3 md:mb-4 px-1">
-                <div className="flex items-center gap-2 md:gap-3 text-neonPurple">
+              <div className={`flex flex-col gap-2 md:gap-3 mb-3 md:mb-4 px-1 ${i18n.language === 'ar' ? 'md:items-end text-right' : ''}`}>
+                <div className={`flex items-center gap-2 md:gap-3 text-neonPurple ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
                   <div className="p-0 md:p-1.5 md:rounded-lg md:bg-neonPurple/10 md:border md:border-neonPurple/20">
                     <Bot className="w-3 h-3 md:w-4 md:h-4 animate-pulse" />
                   </div>
-                  <span className="font-orbitron text-[9px] md:text-sm font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase">Fares AI Assistant</span>
+                  <span className="font-orbitron text-[9px] md:text-sm font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase">{t('chat.assistant_title')}</span>
                 </div>
                 <p className="font-rajdhani text-[11px] md:text-sm text-gray-400 leading-relaxed font-medium md:max-w-md">
-                  Tap the input below to start a conversation. You can ask me anything about my experience, skills, or personal journey.
+                  {t('chat.assistant_description')}
                 </p>
               </div>
 
@@ -256,8 +261,8 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
                 onClick={() => setIsChatOpen(true)}
                 className="relative cursor-text overflow-hidden rounded-2xl md:rounded-[1.5rem] bg-white/5 md:bg-white/[0.03] border border-white/10 p-4 md:p-6 transition-all duration-300 md:duration-500 hover:border-neonPurple/50 hover:bg-white/10 md:hover:bg-white/[0.07] group-hover:shadow-[0_0_20px_rgba(188,19,254,0.1)] md:group-hover:shadow-[0_0_40px_rgba(188,19,254,0.15)] group-active:scale-[0.99]"
               >
-                <div className="flex items-center justify-between text-gray-400 md:text-gray-300">
-                  <span className="font-rajdhani text-sm md:text-lg tracking-wide whitespace-nowrap overflow-hidden pr-4">
+                <div className={`flex items-center justify-between text-gray-400 md:text-gray-300 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+                  <span className={`font-rajdhani text-sm md:text-lg tracking-wide whitespace-nowrap overflow-hidden pr-4 ${i18n.language === 'ar' ? 'pr-0 pl-4' : ''}`}>
                     {currentText}
                     <span className="inline-block w-[2px] h-4 md:h-5 bg-neonPurple ml-1 animate-pulse" />
                   </span>
@@ -296,7 +301,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
               </div>
 
               {/* Primary Action Buttons */}
-              <div className="flex items-center flex-row gap-2 px-1 md:px-0">
+              <div className={`flex items-center flex-row gap-2 px-1 md:px-0 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
                 <motion.button
                   onClick={onEnterUniverse}
                   whileHover={{ scale: 1.02 }}
@@ -304,10 +309,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
                   className="flex-1 relative group rounded-xl md:rounded-2xl bg-gradient-to-r md:bg-gradient-to-br from-yellow-600/20 md:from-yellow-600/10 via-orange-600/20 md:via-orange-600/15 to-yellow-600/20 md:to-yellow-600/10 border border-white/10 md:border-yellow-500/20 hover:border-yellow-500/30 md:hover:border-yellow-500/40 transition-all duration-500 md:duration-700 overflow-hidden shadow-lg md:shadow-xl h-11 md:h-14"
                 >
                   <div className="absolute inset-x-0 bottom-0 h-[2px] bg-yellow-500/50 md:bg-yellow-500/30 shadow-[0_0_10px_rgba(234,179,8,0.5)] md:shadow-[0_0_15px_rgba(234,179,8,0.4)]" />
-                  <div className="relative flex items-center justify-center gap-1.5 md:gap-3 px-2 md:px-6">
+                  <div className={`relative flex items-center justify-center gap-1.5 md:gap-3 px-2 md:px-6 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
                     <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-yellow-400 animate-pulse shadow-[0_0_8px_rgba(234,179,8,0.8)] md:shadow-[0_0_12px_rgba(234,179,8,1)]" />
-                    <span className="font-orbitron font-bold md:font-black text-[8px] xs:text-[9px] md:text-[11px] tracking-widest md:tracking-[0.2em] text-white whitespace-nowrap">MY UNIVERSE</span>
-                    <ArrowRight className="w-3 h-3 md:w-5 md:h-5 text-yellow-500 group-hover:translate-x-1 md:group-hover:translate-x-2 transition-transform duration-500" />
+                    <span className="font-orbitron font-bold md:font-black text-[8px] xs:text-[9px] md:text-[11px] tracking-widest md:tracking-[0.2em] text-white whitespace-nowrap">{t('actions.my_universe')}</span>
+                    <ArrowRight className={`w-3 h-3 md:w-5 md:h-5 text-yellow-500 group-hover:translate-x-1 md:group-hover:translate-x-2 transition-transform duration-500 ${i18n.language === 'ar' ? 'rotate-180 group-hover:-translate-x-1 md:group-hover:-translate-x-2' : ''}`} />
                   </div>
                 </motion.button>
 
@@ -318,9 +323,9 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
                   className="flex-1 relative group rounded-xl md:rounded-2xl bg-gradient-to-r md:bg-gradient-to-br from-neonPurple/20 md:from-neonPurple/10 to-blue-600/20 md:via-blue-600/15 md:to-neonPurple/10 border border-white/10 hover:border-white/20 md:hover:border-neonPurple/30 transition-all duration-500 md:duration-700 overflow-hidden shadow-lg md:shadow-xl h-11 md:h-14 animate-flash-border"
                 >
                   <div className="absolute inset-x-0 bottom-0 h-[2px] bg-neonPurple/50 md:bg-neonPurple/30" />
-                  <div className="relative flex items-center justify-center gap-1.5 md:gap-3 px-2 md:px-6">
+                  <div className={`relative flex items-center justify-center gap-1.5 md:gap-3 px-2 md:px-6 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
                     <ShieldCheck className="w-3 h-3 md:w-5 md:h-5 text-neonPurple group-hover:rotate-12 transition-transform duration-500 shrink-0" />
-                    <span className="font-orbitron font-bold md:font-black text-[8px] xs:text-[9px] md:text-[11px] tracking-widest md:tracking-[0.2em] text-white uppercase whitespace-nowrap">SEND NOTE</span>
+                    <span className="font-orbitron font-bold md:font-black text-[8px] xs:text-[9px] md:text-[11px] tracking-widest md:tracking-[0.2em] text-white uppercase whitespace-nowrap">{t('actions.send_note')}</span>
                   </div>
                 </motion.button>
               </div>
@@ -331,14 +336,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
         {/* Footer */}
         <div className="flex flex-col items-center gap-3 md:gap-4 border-t border-white/5 pt-4 md:pt-8 mt-6 md:mt-12">
           <div className="flex flex-wrap items-center justify-center gap-x-4 md:gap-x-6 gap-y-2 md:gap-y-3 text-[9px] md:text-xs font-rajdhani font-bold tracking-[0.15em] md:tracking-[0.2em] text-gray-500 uppercase">
-            <div className="flex items-center gap-1.5 md:gap-2">
-              Made with <span className="text-red-500/80 animate-pulse text-xs md:text-sm">❤</span> by <span className="text-white">Fares KH<span className="cursor-i">I</span>ARY</span>
+            <div className={`flex items-center gap-1.5 md:gap-2 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+              {t('common.made_with')} <span className="text-red-500/80 animate-pulse text-xs md:text-sm">❤</span> {t('common.by')} <span className="text-white">Fares KH<span className="cursor-i">I</span>ARY</span>
             </div>
             <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white/10" />
-            <button onClick={() => setIsPrivacyOpen(true)} className="text-neonBlue/60 hover:text-neonBlue transition-colors tracking-[0.2em] md:tracking-[0.3em]">Privacy Policy</button>
+            <button onClick={() => setIsPrivacyOpen(true)} className="text-neonBlue/60 hover:text-neonBlue transition-colors tracking-[0.2em] md:tracking-[0.3em]">{t('common.privacy_policy')}</button>
             <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white/10" />
-            <div className="flex items-center gap-1 md:gap-2 text-yellow-500/50">
-              ✨ Enhanced with AI
+            <div className={`flex items-center gap-1 md:gap-2 text-yellow-500/50 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+              ✨ {t('common.enhanced_with_ai')}
             </div>
           </div>
         </div>
@@ -361,32 +366,32 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               className="relative w-full max-w-lg bg-[#0d0d15] border border-white/10 rounded-3xl p-8 shadow-2xl overflow-hidden max-h-[80vh] flex flex-col"
             >
-              <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
-                <div className="flex items-center gap-2">
+              <div className={`flex items-center justify-between mb-6 border-b border-white/5 pb-4 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+                <div className={`flex items-center gap-2 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
                   <ShieldCheck className="w-5 h-5 text-neonBlue" />
-                  <h3 className="font-orbitron text-sm font-black text-white uppercase tracking-widest">Privacy Protocol</h3>
+                  <h3 className="font-orbitron text-sm font-black text-white uppercase tracking-widest">{t('privacy.title')}</h3>
                 </div>
                 <button onClick={() => setIsPrivacyOpen(false)} className="p-2 hover:bg-white/5 rounded-full transition-colors">
                   <X className="w-5 h-5 text-gray-500" />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto font-rajdhani text-sm text-gray-400 space-y-6 pr-4">
+              <div className={`flex-1 overflow-y-auto font-rajdhani text-sm text-gray-400 space-y-6 pr-4 ${i18n.language === 'ar' ? 'text-right' : ''}`}>
                 <section>
-                  <h4 className="font-orbitron text-[10px] text-neonBlue uppercase mb-2">1. Data Collection</h4>
-                  <p>We only collect the name and message you voluntarily provide in the contact section. If you sign in with Google, we access only your basic profile information (name and email) to offer a personalized interface.</p>
+                  <h4 className="font-orbitron text-[10px] text-neonBlue uppercase mb-2">{t('privacy.section1_title')}</h4>
+                  <p>{t('privacy.section1_content')}</p>
                 </section>
                 <section>
-                  <h4 className="font-orbitron text-[10px] text-neonBlue uppercase mb-2">2. Data Security</h4>
-                  <p>Your messages are encrypted and stored securely using Supabase. We do not share your personal information with third parties or use it for advertising.</p>
+                  <h4 className="font-orbitron text-[10px] text-neonBlue uppercase mb-2">{t('privacy.section2_title')}</h4>
+                  <p>{t('privacy.section2_content')}</p>
                 </section>
                 <section>
-                  <h4 className="font-orbitron text-[10px] text-neonBlue uppercase mb-2">3. Transparency</h4>
-                  <p>This site is a professional portfolio. All data flows are initiated by the user. Signing in with Google is optional and not required to view the content.</p>
+                  <h4 className="font-orbitron text-[10px] text-neonBlue uppercase mb-2">{t('privacy.section3_title')}</h4>
+                  <p>{t('privacy.section3_content')}</p>
                 </section>
                 <section>
-                  <h4 className="font-orbitron text-[10px] text-neonBlue uppercase mb-2">4. User Rights</h4>
-                  <p>You can request the deletion of any messages you have sent by contacting Fares directly via LinkedIn or email.</p>
+                  <h4 className="font-orbitron text-[10px] text-neonBlue uppercase mb-2">{t('privacy.section4_title')}</h4>
+                  <p>{t('privacy.section4_content')}</p>
                 </section>
               </div>
 
@@ -394,7 +399,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
                 onClick={() => setIsPrivacyOpen(false)}
                 className="w-full mt-8 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-orbitron text-[10px] tracking-widest uppercase hover:bg-white/10 transition-all"
               >
-                Close Protocol
+                {t('common.close_protocol')}
               </button>
             </motion.div>
           </div>
