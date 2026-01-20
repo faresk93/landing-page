@@ -141,7 +141,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
                   </button>
                 </div>
                 {user.user_metadata.avatar_url && !imgError ? (
-                  <img src={user.user_metadata.avatar_url} alt="Avatar" referrerPolicy="no-referrer" className="w-6 h-6 rounded-full border border-white/20" onError={() => setImgError(true)} />
+                  <img src={user.user_metadata.avatar_url} alt="User Profile Avatar" width="24" height="24" referrerPolicy="no-referrer" className="w-6 h-6 rounded-full border border-white/20" onError={() => setImgError(true)} />
                 ) : (
                   <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
                     <UserIcon className="w-3 h-3 text-white/40" />
