@@ -215,7 +215,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
             )}
 
             {/* Name Title with Glow Effect */}
-            <div className={`mb-8 relative group cursor-default w-full text-center ${i18n.language === 'ar' ? 'md:text-right' : 'md:text-left'}`}>
+            <div className={`mb-5 relative group cursor-default w-full text-center ${i18n.language === 'ar' ? 'md:text-right' : 'md:text-left'}`}>
               <div className="absolute -inset-4 bg-gradient-to-r from-neonBlue/10 to-neonPurple/10 blur-2xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
               <h1 className="my-name relative font-orbitron font-black text-2xl xs:text-3xl md:text-4xl lg:text-5xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white drop-shadow-[0_0_15px_rgba(0,255,255,0.2)] leading-none whitespace-nowrap inline-block">
                 {i18n.language === 'ar' ? (
@@ -233,7 +233,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
                 <span>{t('common.full_stack_developer')}</span>
               </div>
 
-              <div className="flex flex-wrap justify-center md:justify-start gap-2 text-[9px] md:text-[11px] font-rajdhani font-bold tracking-[0.15em] text-gray-400 uppercase">
+              <div className="flex justify-center md:justify-start gap-2 text-[9px] md:text-[11px] font-rajdhani font-bold tracking-[0.15em] text-gray-400 uppercase">
                 {[
                   { country: "tn", label: t('common.tunisia') },
                   { country: "fr", label: t('common.france') },
