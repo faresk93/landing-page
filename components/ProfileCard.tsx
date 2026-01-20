@@ -189,7 +189,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
             <div className="text-center md:text-left mb-8 relative group cursor-default w-full">
               <div className="absolute -inset-4 bg-gradient-to-r from-neonBlue/10 to-neonPurple/10 blur-2xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
               <h1 className="relative font-orbitron font-black text-2xl xs:text-3xl md:text-4xl lg:text-5xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white drop-shadow-[0_0_15px_rgba(0,255,255,0.2)] leading-none whitespace-nowrap">
-                Fares KHIARY
+                Fares KH<span className="cursor-i">I</span>ARY
               </h1>
             </div>
 
@@ -332,7 +332,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
         <div className="flex flex-col items-center gap-3 md:gap-4 border-t border-white/5 pt-4 md:pt-8 mt-6 md:mt-12">
           <div className="flex flex-wrap items-center justify-center gap-x-4 md:gap-x-6 gap-y-2 md:gap-y-3 text-[9px] md:text-xs font-rajdhani font-bold tracking-[0.15em] md:tracking-[0.2em] text-gray-500 uppercase">
             <div className="flex items-center gap-1.5 md:gap-2">
-              Made with <span className="text-red-500/80 animate-pulse text-xs md:text-sm">❤</span> by <span className="text-white">Fares KHIARY</span>
+              Made with <span className="text-red-500/80 animate-pulse text-xs md:text-sm">❤</span> by <span className="text-white">Fares KH<span className="cursor-i">I</span>ARY</span>
             </div>
             <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white/10" />
             <button onClick={() => setIsPrivacyOpen(true)} className="text-neonBlue/60 hover:text-neonBlue transition-colors tracking-[0.2em] md:tracking-[0.3em]">Privacy Policy</button>
