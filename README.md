@@ -15,6 +15,23 @@ A modern, interactive portfolio landing page featuring 3D graphics, AI-powered c
 - **Modern Stack** - Built with React 19, TypeScript, and Vite
 - **Comprehensive Testing** - Unit, component, and integration tests with Vitest
 
+### SEO & Social Media Optimization
+- **Open Graph Protocol** - Full OG meta tags for rich social media previews (Facebook, LinkedIn)
+- **Twitter Cards** - Summary large image cards with optimized 1200x630px images
+- **Image Cache-Busting** - Dynamic versioning on OG/Twitter images for instant updates
+- **Structured Data (JSON-LD)** - Schema.org Person type with social links
+- **Meta Tags** - Title, description, keywords, author, canonical links
+- **Facebook Integration** - Facebook App ID for social features
+- **Fresh Timestamps** - Dynamic `og:updated_time` and `article:modified_time` metadata
+
+### GDPR Compliance & Privacy
+- **Cookie Consent Banner** - Glassmorphic modal with accept/decline/policy options
+- **Persistent Consent Storage** - localStorage-based consent management (`fares_cookie_consent`)
+- **Privacy Policy Modal** - Comprehensive policy covering data collection, security, transparency, and user rights
+- **GDPR-First Design** - User control over data collection with clear opt-in mechanism
+- **Minimal Data Collection** - Only voluntary name/message and Google OAuth basic profile data
+- **No Third-Party Sharing** - All data encrypted and stored securely in Supabase
+
 ### AI Chat Assistant
 - **N8N Webhook Integration** - Real-time AI conversations powered by GPT-4.1-mini via N8N
 - **Multi-language Support** - Auto-detects and responds in the same language as the question
@@ -23,11 +40,15 @@ A modern, interactive portfolio landing page featuring 3D graphics, AI-powered c
 - **Conversation Analytics** - All interactions logged to Google Sheets with metadata
 - **Graceful Fallback** - Mock responses when webhook is unavailable
 
-### Private Notes System
+### Private Notes System with AI Feedback
 - **Anonymous Notes** - Visitors can send private notes without signing in
 - **Identified Notes** - Authenticated users can send notes with their identity
-- **Admin Dashboard** - Secure admin panel to view, manage, and delete notes
-- **Real-time Storage** - Notes stored securely in Supabase database
+- **AI-Powered Feedback** - Second N8N webhook generates instant AI responses to submitted notes
+- **Two-Webhook Architecture** - Separate webhooks for chat assistant and note feedback
+- **Admin Dashboard** - Secure admin panel to view notes with AI comments, manage, and delete
+- **Real-time Storage** - Notes and AI feedback stored securely in Supabase database
+- **Input Sanitization** - XSS protection via HTML escaping on all user inputs
+- **Rate Limiting** - Client-side rate limit (5 notes per 10 minutes) to prevent spam
 
 ### Authentication (OAuth via Supabase)
 - **Google OAuth** - Seamless one-click sign-in with Google
@@ -44,14 +65,17 @@ Nano Banana Pro 🍌 generated digram of the application workflow/arechitecture 
 ```
 landing-page/
 ├── components/
-│   ├── AdminDashboard.tsx    # Admin panel for managing private notes
+│   ├── AdminDashboard.tsx    # Admin panel for managing private notes with AI feedback
 │   ├── Background3D.tsx      # Three.js 3D space background & solar system
 │   ├── ChatInterface.tsx     # AI chat assistant component
-│   ├── NotePopup.tsx         # Private note submission modal
+│   ├── CookieConsent.tsx     # GDPR-compliant cookie consent banner
+│   ├── NotePopup.tsx         # Private note submission modal with AI feedback
 │   └── ProfileCard.tsx       # Main profile card with info & navigation
 ├── services/
 │   ├── supabase.ts           # Supabase client initialization
-│   └── webhookService.ts     # N8N webhook integration for AI responses
+│   └── webhookService.ts     # N8N webhook integration for AI chat & notes
+├── utils/
+│   └── security.ts           # Input sanitization and rate limiting
 ├── tests/
 │   ├── setup.ts              # Test setup and global mocks
 │   ├── components/           # Component tests
@@ -115,7 +139,8 @@ npm install
 Create a `.env` file in the project root:
 
 ```env
-VITE_N8N_WEBHOOK_URL=your_n8n_webhook_url
+VITE_N8N_WEBHOOK_URL=your_n8n_webhook_url_for_chat
+VITE_NOTES_WEBHOOK_URL=your_n8n_webhook_url_for_notes_feedback
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
@@ -423,11 +448,19 @@ The AI is configured to:
 
 ### Configuration
 
-Set `VITE_N8N_WEBHOOK_URL` in your environment pointing to your N8N instance.
+**Chat Assistant Webhook:**
+```env
+VITE_N8N_WEBHOOK_URL=your_n8n_chat_webhook_url
+```
+
+**Notes Feedback Webhook:**
+```env
+VITE_NOTES_WEBHOOK_URL=your_n8n_notes_webhook_url
+```
 
 ### Endpoint
 ```
-GET {WEBHOOK_URL}?question={user_message}
+GET {VITE_N8N_WEBHOOK_URL}?question={user_message}
 ```
 
 ### Features
@@ -436,6 +469,180 @@ GET {WEBHOOK_URL}?question={user_message}
 - Conversation memory for context awareness
 - Real-time analytics logging to Google Sheets
 - Graceful fallback to mock responses when webhook is unavailable
+
+---
+
+## GDPR Compliance & Privacy Protection
+
+The portfolio implements comprehensive GDPR compliance with transparent data handling and user consent management.
+
+### Cookie Consent System
+
+**Component:** `CookieConsent.tsx`
+
+**Features:**
+- **Glassmorphic Banner**: Modern design with backdrop blur effect
+- **Delayed Display**: Appears 2 seconds after page load (if consent not given)
+- **Consent Actions**:
+  - ✅ **Confirm Handshake** - Accept cookies and dismiss banner
+  - ❌ **Decline** - Reject cookies
+  - 📋 **Policy** - View full privacy policy
+- **Persistent Storage**: Consent saved to `localStorage` key: `fares_cookie_consent`
+- **Animated Entrance**: Spring physics animation via Framer Motion
+
+### Privacy Policy
+
+**Location:** ProfileCard.tsx footer link + Cookie consent policy button
+
+**Sections:**
+1. **Data Collection**
+   - Voluntary name/message submission
+   - Google OAuth basic profile data (name, email, avatar)
+   - No tracking without consent
+
+2. **Data Security**
+   - End-to-end encryption via Supabase
+   - No third-party sharing
+   - Secure OAuth token management
+
+3. **Transparency**
+   - Portfolio purpose clearly stated
+   - All data flows are user-initiated
+   - Open-source codebase (visible on GitHub)
+
+4. **User Rights**
+   - Data deletion requests via LinkedIn or email
+   - Right to withdraw consent
+   - Access to collected data
+
+### Data Storage
+
+| Data Type | Storage | Encryption | Retention |
+|-----------|---------|------------|-----------|
+| User session | Supabase Auth | ✅ Yes | Session-based |
+| Private notes | Supabase PostgreSQL | ✅ Yes | Indefinite (deletable) |
+| Cookie consent | localStorage | ❌ Not sensitive | Indefinite |
+| Chat conversations | Google Sheets (N8N) | ⚠️ External | Per N8N policy |
+
+### Security Measures
+
+**Console Warning:**
+```javascript
+// App.tsx - Fares Neural Defense Protocol v4.7
+// Warns developers against unauthorized code injection
+```
+
+**Input Sanitization:**
+- All user inputs sanitized before database/webhook submission
+- HTML entity escaping prevents XSS attacks
+
+**Rate Limiting:**
+- Client-side protection against spam/abuse
+- 5 notes per 10 minutes per client
+
+---
+
+## SEO & Social Media Optimization
+
+The portfolio is fully optimized for search engines and social media sharing with comprehensive meta tags and structured data.
+
+### Open Graph Protocol
+
+**Location:** `index.html` (`<head>` section)
+
+**Implemented Tags:**
+```html
+<html prefix="og: http://ogp.me/ns#">
+<!-- OG Prefix for namespace declaration -->
+
+<!-- Primary OG Tags -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://fares-khiary.com/" />
+<meta property="og:title" content="Fares Khiary | AI Engineer Portfolio" />
+<meta property="og:description" content="Interactive portfolio..." />
+<meta property="og:locale" content="en_US" />
+
+<!-- OG Image Metadata -->
+<meta property="og:image" content="https://fares-khiary.com/og-image.png?v=4" />
+<meta property="og:image:secure_url" content="https://fares-khiary.com/og-image.png?v=4" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Fares Khiary AI Engineer Portfolio Preview" />
+
+<!-- Timestamps -->
+<meta property="og:updated_time" content="2026-01-20T20:13:00Z" />
+<meta property="article:published_time" content="2025-01-15T00:00:00Z" />
+<meta property="article:modified_time" content="2026-01-20T20:13:00Z" />
+```
+
+### Twitter Cards
+
+```html
+<!-- Twitter Card Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://fares-khiary.com/" />
+<meta name="twitter:title" content="Fares Khiary | AI Engineer Portfolio" />
+<meta name="twitter:description" content="Interactive portfolio..." />
+<meta name="twitter:image" content="https://fares-khiary.com/twitter-image.png?v=4" />
+<meta name="twitter:image:alt" content="Fares Khiary Portfolio Preview" />
+```
+
+### Structured Data (JSON-LD)
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Fares Khiary",
+  "jobTitle": "AI Engineer",
+  "url": "https://fares-khiary.com",
+  "sameAs": [
+    "https://www.linkedin.com/in/fares-khiary",
+    "https://github.com/faresk93",
+    "https://www.instagram.com/faresk93"
+  ]
+}
+```
+
+### Facebook Integration
+
+```html
+<meta property="fb:app_id" content="1136552551741448" />
+```
+
+### Image Optimization
+
+**Cache-Busting:**
+- Dynamic versioning on OG/Twitter images: `?v=4`
+- Ensures instant image updates on social platforms
+- Prevents stale cache issues
+
+**Image Specifications:**
+- **OG Image**: 1200x630px (Facebook/LinkedIn optimal)
+- **Twitter Image**: 1200x630px (summary_large_image format)
+- **Format**: PNG for transparency support
+- **Alt Text**: SEO-optimized descriptive text
+
+### Primary Meta Tags
+
+```html
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fares Khiary | AI Engineer Portfolio</title>
+<meta name="description" content="Interactive 3D portfolio..." />
+<meta name="keywords" content="AI Engineer, Portfolio, React, Three.js..." />
+<meta name="author" content="Fares Khiary" />
+<link rel="canonical" href="https://fares-khiary.com/" />
+```
+
+### Benefits
+
+✅ **Rich Previews**: LinkedIn, Facebook, Twitter show full preview cards
+✅ **SEO Ranking**: Structured data helps search engines understand content
+✅ **Social Engagement**: Eye-catching previews increase click-through rates
+✅ **Fresh Content**: Version parameters ensure latest images display
+✅ **Professional Branding**: Consistent metadata across all platforms
 
 ---
 
@@ -481,15 +688,19 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 
 ---
 
-## Private Notes System
+## Private Notes System with AI Feedback
 
-Visitors can send private notes to the portfolio owner, with optional anonymous submission.
+Visitors can send private notes to the portfolio owner, with optional anonymous submission and instant AI-generated feedback.
 
 ### Features
 
 - **Anonymous Notes**: Send notes without signing in
 - **Identified Notes**: Authenticated users can attach their identity
-- **Admin Dashboard**: Secure panel to view and manage all notes
+- **AI-Powered Feedback**: Instant AI response generated via N8N webhook before saving
+- **Two-Webhook Architecture**: Separate webhooks for chat assistant and note feedback
+- **Input Sanitization**: XSS protection via HTML escaping on all user inputs
+- **Rate Limiting**: Client-side protection (5 notes per 10 minutes)
+- **Admin Dashboard**: Secure panel to view notes with AI comments and manage all notes
 - **Delete Confirmation**: Protected delete operations with confirmation dialog
 
 ### Database Schema (Supabase)
@@ -501,31 +712,75 @@ CREATE TABLE notes (
   content TEXT NOT NULL,
   sender_name TEXT,
   user_email TEXT,
+  ai_comment TEXT,  -- AI-generated feedback from webhook
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 ```
 
-### Note Submission Flow
+### Note Submission Flow with AI Feedback
 
 ```
-┌─────────────┐     ┌─────────────┐     ┌──────────────┐
-│  Visitor    │────>│ Note Popup  │────>│   Supabase   │
-│ Clicks Send │     │  Modal      │     │   Database   │
-└─────────────┘     └─────────────┘     └──────────────┘
-                          │
-                          ▼
-               Options:
-               - Anonymous (no auth required)
-               - Identified (uses Google session)
+┌─────────────┐     ┌─────────────┐     ┌──────────────┐     ┌──────────────┐
+│  Visitor    │────>│ Note Popup  │────>│ N8N Webhook  │────>│   Supabase   │
+│ Clicks Send │     │  Modal      │     │  (AI Model)  │     │   Database   │
+└─────────────┘     └─────────────┘     └──────────────┘     └──────────────┘
+                          │                     │                    │
+                          ▼                     ▼                    ▼
+               User inputs:              AI generates:        Stores:
+               - Name (optional)         - Feedback comment   - Note content
+               - Email (optional)        - Response message   - Sender info
+               - Note content                                 - AI comment
+                                                              - Timestamp
+
+Options:
+- Anonymous (no auth required)
+- Identified (uses Google session)
 ```
+
+### Webhook Configuration
+
+**Notes Feedback Webhook:**
+```
+URL: VITE_NOTES_WEBHOOK_URL
+Parameters:
+  - note: string (sanitized note content)
+  - sender: string (sender name or "Anonymous")
+  - email: string (sender email or empty)
+  - isAnonymous: boolean
+
+Response:
+{
+  "ai_comment": "AI-generated feedback text"
+}
+```
+
+### Security Features
+
+**Input Sanitization (`utils/security.ts`):**
+```typescript
+sanitizeInput(input: string): string
+// Escapes HTML entities: & < > " '
+// Prevents XSS attacks
+```
+
+**Rate Limiting:**
+- **Limit**: 5 notes per 10 minutes per client
+- **Storage**: localStorage timestamp tracking
+- **Character Limit**: 2000 characters per note
+- **Bypass**: Development environment unlimited
 
 ### Admin Access
 
-The admin dashboard is restricted to the portfolio owner's email. Features include:
-- View all notes with sender info and timestamps
-- Sort notes by date (ascending/descending)
-- Delete notes with confirmation
-- Responsive design (table on desktop, cards on mobile)
+The admin dashboard is restricted to the portfolio owner's email (`khiary.fares@gmail.com`). Features include:
+- **View All Notes**: Complete note archive with sender info and timestamps
+- **AI Feedback Display**: "Transmission Response" column shows AI-generated comments
+- **Sort Options**: Sort by date (newest/oldest first)
+- **Delete Notes**: Confirmation modal before deletion
+- **Responsive Design**:
+  - Desktop: Full table with Identity, Payload, AI Response, Timestamp columns
+  - Mobile: Card-based layout with all data preserved
+- **Real-time Refresh**: Manual refresh button to fetch latest notes
+- **Metrics Footer**: Total note count display
 
 ## Customization
 
