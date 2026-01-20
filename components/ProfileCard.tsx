@@ -102,8 +102,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="relative z-10 w-full max-w-md md:max-w-4xl mx-auto md:mx-0 pointer-events-auto px-1 xs:px-2"
+      className="relative z-10 w-full max-w-md md:max-w-5xl mx-auto md:mx-0 pointer-events-auto px-1 xs:px-2"
+      dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
     >
+
       {/* Main Glass Card */}
       <div className="bg-[#0a0a12]/80 backdrop-blur-xl border border-white/10 rounded-2xl xs:rounded-3xl p-5 xs:p-8 md:p-10 shadow-2xl relative overflow-hidden">
         {/* Background glow for the whole card on desktop */}
@@ -191,10 +193,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
             )}
 
             {/* Name Title with Glow Effect */}
-            <div className="text-center md:text-left mb-8 relative group cursor-default w-full">
+            <div className={`mb-8 relative group cursor-default w-full text-center ${i18n.language === 'ar' ? 'md:text-right' : 'md:text-left'}`}>
               <div className="absolute -inset-4 bg-gradient-to-r from-neonBlue/10 to-neonPurple/10 blur-2xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
-              <h1 className="relative font-orbitron font-black text-2xl xs:text-3xl md:text-4xl lg:text-5xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white drop-shadow-[0_0_15px_rgba(0,255,255,0.2)] leading-none whitespace-nowrap">
-                Fares KH<span className="cursor-i">I</span>ARY
+              <h1 className="my-name relative font-orbitron font-black text-2xl xs:text-3xl md:text-4xl lg:text-5xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white drop-shadow-[0_0_15px_rgba(0,255,255,0.2)] leading-none whitespace-nowrap inline-block">
+                {i18n.language === 'ar' ? (
+                  <span className="font-cairo">فـ<span className="cursor-i">ا</span>رس الخياري</span>
+                ) : (
+                  <>Fares KH<span className="cursor-i">I</span>ARY</>
+                )}
               </h1>
             </div>
 
@@ -242,7 +248,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
           </div>
 
           {/* Right Column: AI & Actions */}
-          <div className="flex flex-col gap-6 md:gap-10">
+          <div className="flex flex-col gap-2 md:gap-10">
             {/* AI Chat Integrated Input */}
             <div className="mb-5 md:mb-0 group">
               <div className={`flex flex-col gap-2 md:gap-3 mb-3 md:mb-4 px-1 ${i18n.language === 'ar' ? 'md:items-end text-right' : ''}`}>
@@ -252,9 +258,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse }) => 
                   </div>
                   <span className="font-orbitron text-[9px] md:text-sm font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase">{t('chat.assistant_title')}</span>
                 </div>
-                <p className="font-rajdhani text-[11px] md:text-sm text-gray-400 leading-relaxed font-medium md:max-w-md">
+                <p className="ai-description font-rajdhani text-[11px] md:text-sm text-gray-400 leading-relaxed font-medium md:max-w-[450px] whitespace-pre-wrap break-words">
                   {t('chat.assistant_description')}
                 </p>
+
               </div>
 
               <div

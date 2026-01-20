@@ -38,13 +38,12 @@ export const LanguageSwitcher: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-1.5 px-2 py-1 xs:px-3 xs:py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all group pointer-events-auto"
+                className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-white/[0.03] border border-white/5 hover:bg-white/10 transition-all group pointer-events-auto cursor-pointer"
             >
-                <span className="text-sm xs:text-base">{currentLanguage.flag}</span>
-                <span className="font-orbitron text-[7px] xs:text-[9px] font-bold tracking-widest text-white/70 group-hover:text-white uppercase">
+                <span className="text-xs xs:text-sm">{currentLanguage.flag}</span>
+                <span className="font-orbitron text-[7px] xs:text-[9px] font-bold tracking-widest text-white/50 group-hover:text-white uppercase">
                     {currentLanguage.code === 'ar' ? 'تونسي' : currentLanguage.code}
                 </span>
-                <ChevronDown className={`w-2.5 h-2.5 xs:w-3 xs:h-3 text-white/40 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
             </motion.button>
 
             <AnimatePresence>

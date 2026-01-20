@@ -4,10 +4,10 @@
         "login": "دخول",
         "logout": "خروج",
         "wip": "[تحت التطوير]",
-        "fares_link": "Fares Link",
-        "v_protocol": "v4.8",
+        "fares_link": "الرابط بفارس",
+        "v_protocol": "v4.9",
         "my_private_notes": "نوتاتي الخاصة",
-        "full_stack_developer": "Full-Stack Web Developer",
+        "full_stack_developer": "مطوّر برمجيّات واب",
         "tunisia": "تونس",
         "france": "فرنسا",
         "oman": "عمان",
@@ -18,7 +18,7 @@
         "close_protocol": "إغلاق البروتوكول"
     },
     "chat": {
-        "assistant_title": "Fares AI Assistant",
+        "assistant_title": "المساعد الرقمي الذكيّ لفارس",
         "assistant_description": "انزل لوطا باش تبدا تحكي معايا. تنجم تسألني على أي حاجة تخص خدمتي، مهاراتي، ولا حياتي.",
         "placeholder_en": "Ask Fares a question...",
         "placeholder_fr": "Posez une question à Fares...",
@@ -48,7 +48,7 @@
     },
     "notes": {
         "title": "رابط مباشر لفارس",
-        "subtitle": "إرسال عصبي مؤمن",
+        "subtitle": "إرسال رقمي",
         "initializing": "قاعدين نحضروا في الإرسال العصبي",
         "transmitted": "المساج تبعث لـفارس",
         "confirmed": "تم التأكيد • البيانات مشفرة",
@@ -61,12 +61,12 @@
         "chars": "حروف",
         "rate_limited": "بالشوية! برشا مساجات تبعثت لفارس. استنى شوية.",
         "transmit_button": "أبعث لفارس",
-        "privacy_note": "كان فارس نجم يقرا ويفهم المساج هذا.",
-        "error_disrupted": "الإرسال العصبي تقص. المساج متاعك ما نجمناش نبعثوه لفارس توا.",
+        "privacy_note": "كان فارس ينجم يقرا ويفهم المساج هذا.",
+        "error_disrupted": "الإرسال الرقمي تقص. المساج متاعك ما نجمناش نبعثوه لفارس توا.",
         "error_archive": "الارتباط بالأرشيف فشل. المساج متاعك ما تسجلش في قاعدة البيانات."
     },
     "cookies": {
-        "title": "كوكيز عصبية",
+        "title": "كوكيز رقمية",
         "protocol": "بروتوكول: متوافق مع GDPR",
         "description": "فارس يستعمل أقل قدر ممكن من الكوكيز باش يأمن الجلسة متاعك ويخصص الواجهة متاعك. ما فماش تتبع مخفي.",
         "accept": "تأكيد المصافحة",
@@ -74,7 +74,7 @@
         "policy": "السياسة"
     },
     "admin": {
-        "title": "نوتات فارس العصبية",
+        "title": "نوتات فارس الرقمية",
         "secure_archive": "أرشيف مؤمن",
         "oldest_first": "الأقدم",
         "newest_first": "الأحدث",
