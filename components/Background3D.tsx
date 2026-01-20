@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial, Float, Html, Sphere, MeshDistortMaterial, OrbitControls } from '@react-three/drei';
 import { EffectComposer, Bloom, Noise, Vignette } from '@react-three/postprocessing';
@@ -117,10 +117,13 @@ const SolarSystem: React.FC<{ showSolarSystem: boolean }> = ({ showSolarSystem }
                 />
             </Sphere>
             <Html center>
-                <div className="flex flex-col items-center select-none pointer-events-none">
-                    <span className="font-orbitron font-black text-4xl tracking-[0.5em] text-white drop-shadow-[0_0_25px_rgba(255,158,0,1)] opacity-90">Web</span>
+                <div className="flex flex-col items-center select-none pointer-events-auto [direction:ltr]" dir="ltr">
+                    <span className="font-orbitron font-black text-2xl tracking-[0.3em] text-white drop-shadow-[0_0_10px_rgba(255,158,0,0.8)] opacity-90 uppercase">Web</span>
                 </div>
             </Html>
+
+
+
             <pointLight intensity={30} distance={40} color="#ffaa00" decay={1.5} />
             <pointLight intensity={10} distance={10} color="#ffffff" decay={1} />
             {TECH_STACK.map((tech, idx) => (
@@ -189,17 +192,43 @@ const StarField: React.FC = () => {
 };
 
 const CameraController: React.FC<{ showSolarSystem: boolean }> = ({ showSolarSystem }) => {
+    const lastShowSolarSystem = useRef(showSolarSystem);
+    const isTransitioning = useRef(false);
+
+    useEffect(() => {
+        if (lastShowSolarSystem.current !== showSolarSystem) {
+            isTransitioning.current = true;
+            lastShowSolarSystem.current = showSolarSystem;
+            // Transition will last roughly 2 seconds
+            const timer = setTimeout(() => {
+                isTransitioning.current = false;
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [showSolarSystem]);
+
     useFrame((state) => {
-        const targetZ = showSolarSystem ? 22 : 35;
-        const targetY = showSolarSystem ? 5 : 12;
-
-        state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, targetZ, 0.05);
-        state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, targetY, 0.05);
-        state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, 0, 0.05);
-
-        // Ensure camera keeps looking towards the scene center
-        state.camera.lookAt(0, 0, 0);
+        if (showSolarSystem) {
+            const targetZ = 22;
+            const targetY = 5;
+            if (isTransitioning.current) {
+                state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, targetZ, 0.05);
+                state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, targetY, 0.05);
+                state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, 0, 0.05);
+                state.camera.lookAt(0, 0, 0);
+            }
+        } else {
+            const targetZ = 35;
+            const targetY = 12;
+            if (isTransitioning.current) {
+                state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, targetZ, 0.05);
+                state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, targetY, 0.05);
+                state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, 0, 0.05);
+                state.camera.lookAt(0, 0, 0);
+            }
+        }
     });
+
     return null;
 };
 

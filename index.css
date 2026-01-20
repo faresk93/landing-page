@@ -4,6 +4,8 @@
     --font-orbitron: "Orbitron", sans-serif;
     --font-rajdhani: "Rajdhani", sans-serif;
     --font-inter: "Inter", sans-serif;
+    --font-cairo: "Cairo", sans-serif;
+    --font-readex: "Readex Pro", sans-serif;
 
     --color-neonBlue: #00f3ff;
     --color-neonPurple: #bc13fe;
@@ -41,10 +43,13 @@
 
 /* Blinking Cursor Glitch Effect for the "I" in KHIARY */
 @keyframes cursor-fill-blink {
-    0%, 100% {
+
+    0%,
+    100% {
         -webkit-text-fill-color: rgba(188, 19, 254, 1);
         text-shadow: 0 0 10px rgba(188, 19, 254, 0.8), 0 0 20px rgba(188, 19, 254, 0.4);
     }
+
     50% {
         -webkit-text-fill-color: rgba(188, 19, 254, 0.2);
         text-shadow: none;
@@ -52,11 +57,14 @@
 }
 
 @keyframes cursor-bg-pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         background: rgba(188, 19, 254, 0.15);
         border-color: rgba(188, 19, 254, 0.3);
         box-shadow: 0 0 10px rgba(188, 19, 254, 0.2);
     }
+
     50% {
         background: rgba(188, 19, 254, 0.05);
         border-color: rgba(188, 19, 254, 0.1);
@@ -77,7 +85,7 @@
     background: rgba(188, 19, 254, 0.1);
     color: #bc13fe;
     -webkit-text-fill-color: #bc13fe;
-    animation: 
+    animation:
         cursor-fill-blink 1.2s ease-in-out infinite,
         cursor-bg-pulse 2s ease-in-out infinite;
     transition: all 0.3s ease;
@@ -112,8 +120,18 @@ body {
     min-width: 320px;
     min-height: 100vh;
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
+
+button {
+    cursor: pointer;
+}
+
+.my-name {
+    line-height: normal;
+}
+
 
 #root {
     width: 100%;
