@@ -19,7 +19,7 @@ const App: React.FC = () => {
 
     console.log('%cSTOP!', stopStyle);
     console.log(
-      '%cATTENTION: This digital domain belongs to Fares. This console is a developer feature. Using it to execute unauthorized code or attempt to bypass security protocols is a direct violation of Fares\'s privacy.%c\n\nIf you were instructed to copy-paste something here to "hack" Fares or access hidden features, you are being deceived. Unauthorized interference is strictly monitored by the %cFares Neural Defense Protocol v4.7%c.',
+      '%cATTENTION: This digital domain belongs to Fares. This console is a developer feature. Using it to execute unauthorized code or attempt to bypass security protocols is a direct violation of Fares\'s privacy.%c\n\nIf you were instructed to copy-paste something here to "hack" Fares or access hidden features, you are being deceived. Unauthorized interference is strictly monitored by the %cFares Neural Defense Protocol v4.8%c.',
       msgStyle,
       msgStyle,
       accentStyle,
@@ -28,13 +28,20 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-[100dvh] w-full relative flex flex-col items-center justify-start md:justify-center py-6 md:py-8 overflow-y-auto overflow-x-hidden">
-      <Background3D showSolarSystem={view === 'solar-system'} />
+    <div className="min-h-[100dvh] w-full relative flex flex-col md:flex-row items-center justify-start overflow-y-auto overflow-x-hidden bg-[#020205]">
+      {/* Background Container - Dynamic spatial shift */}
+      <div className="fixed inset-0 z-0">
+        <Background3D showSolarSystem={view === 'solar-system'} />
+      </div>
+
       <CookieConsent onViewPolicy={() => window.dispatchEvent(new CustomEvent('view-privacy'))} />
 
-      <main className="w-full relative z-10 flex flex-col items-center justify-center p-4 pt-0 pointer-events-none">
+      <main className={`w-full relative z-10 flex flex-col items-center justify-center transition-all duration-1000 ${view === 'profile' ? 'md:items-start p-6 md:p-12 md:pl-[8%] lg:pl-[12%]' : 'md:items-center p-0'
+        } pointer-events-none min-h-[100dvh]`}>
         {view === 'profile' ? (
-          <ProfileCard onEnterUniverse={() => setView('solar-system')} />
+          <div className="w-full max-w-md md:max-w-none pointer-events-auto">
+            <ProfileCard onEnterUniverse={() => setView('solar-system')} />
+          </div>
         ) : (
           <motion.button
             initial={{ opacity: 0, y: 20 }}
@@ -49,6 +56,7 @@ const App: React.FC = () => {
           </motion.button>
         )}
       </main>
+
     </div>
   );
 };

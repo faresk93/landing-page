@@ -87,9 +87,17 @@ const Planet: React.FC<{ name: string; color: string; distance: number; speed: n
     );
 };
 
-const SolarSystem: React.FC = () => {
+const SolarSystem: React.FC<{ showSolarSystem: boolean }> = ({ showSolarSystem }) => {
+    const groupRef = useRef<THREE.Group>(null);
+    useFrame(() => {
+        if (groupRef.current) {
+            // Shift the system to the right when not in solar-system view
+            const targetX = showSolarSystem ? 0 : 14;
+            groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, targetX, 0.05);
+        }
+    });
     return (
-        <group rotation={[Math.PI * 0.05, 0, 0]}>
+        <group ref={groupRef} rotation={[Math.PI * 0.05, 0, 0]}>
             <Sphere args={[0.8, 64, 64]}>
                 <MeshDistortMaterial
                     color="#ff4d00"
@@ -181,35 +189,23 @@ const StarField: React.FC = () => {
 };
 
 const CameraController: React.FC<{ showSolarSystem: boolean }> = ({ showSolarSystem }) => {
-    const targetReached = useRef(false);
-
     useFrame((state) => {
-        if (showSolarSystem && !targetReached.current) {
-            const targetZ = 20;
-            const targetY = 8;
-            state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, targetZ, 0.03);
-            state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, targetY, 0.03);
+        const targetZ = showSolarSystem ? 22 : 35;
+        const targetY = showSolarSystem ? 5 : 12;
 
-            if (Math.abs(state.camera.position.z - targetZ) < 0.1) {
-                targetReached.current = true;
-            }
-        }
-        if (!showSolarSystem && targetReached.current) {
-            const targetZ = 35;
-            const targetY = 15;
-            state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, targetZ, 0.03);
-            state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, targetY, 0.03);
-            if (Math.abs(state.camera.position.z - targetZ) < 0.1) {
-                targetReached.current = false;
-            }
-        }
+        state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, targetZ, 0.05);
+        state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, targetY, 0.05);
+        state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, 0, 0.05);
+
+        // Ensure camera keeps looking towards the scene center
+        state.camera.lookAt(0, 0, 0);
     });
     return null;
 };
 
 export const Background3D: React.FC<{ showSolarSystem?: boolean }> = ({ showSolarSystem = false }) => {
     return (
-        <div className="fixed inset-0 z-0 bg-[#020205]">
+        <div className="absolute inset-0 z-0 bg-[#020205]">
             <Canvas
                 camera={{ position: [0, 15, 35], fov: 40 }}
                 gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
@@ -217,7 +213,7 @@ export const Background3D: React.FC<{ showSolarSystem?: boolean }> = ({ showSola
             >
                 <CameraController showSolarSystem={showSolarSystem} />
                 <StarField />
-                <SolarSystem />
+                <SolarSystem showSolarSystem={showSolarSystem} />
 
                 <OrbitControls
                     enablePan={false}
