@@ -10,6 +10,8 @@ A modern, interactive portfolio landing page featuring 3D graphics, AI-powered c
 ### Core Features
 - **Interactive 3D Background** - Immersive space-themed visuals using Three.js with React Three Fiber
 - **Solar System View** - Interactive 3D solar system exploration mode
+- **Multi-language Support (i18n)** - Full support for English, French, Arabic (Tunisian), and German
+- **Dynamic Themes** - Seamless Light/Dark mode switching with persistent user preference
 - **Responsive Design** - Fully responsive layout with Tailwind CSS
 - **Smooth Animations** - Fluid transitions and effects with Framer Motion
 - **Modern Stack** - Built with React 19, TypeScript, and Vite
@@ -49,6 +51,22 @@ A modern, interactive portfolio landing page featuring 3D graphics, AI-powered c
 - **Real-time Storage** - Notes and AI feedback stored securely in Supabase database
 - **Input Sanitization** - XSS protection via HTML escaping on all user inputs
 - **Rate Limiting** - Client-side rate limit (5 notes per 10 minutes) to prevent spam
+
+### Multi-language Support (i18n)
+- **Framework** - Powered by `react-i18next` and `i18next-browser-languagedetector`
+- **Supported Languages**:
+  - 🇺🇸 **English** (en)
+  - 🇫🇷 **Français** (fr)
+  - 🇹🇳 **العربية (تونسي)** (ar) - Features futuristic Arabic typography and RTL support
+  - 🇩🇪 **Deutsch** (de)
+- **Smart Detection** - Automatically detects browser language and persists user choice
+- **Iconography** - High-quality SVG flags (via FlagCDN) for reliable cross-platform rendering (Windows/Mac/Mobile)
+
+### Dynamic Theming
+- **Mode Toggle** - Instant switching between futuristic Dark Mode and crisp Light Mode
+- **Glassmorphism** - Adapts glass effects and neon accents for optimal visibility in both themes
+- **Persistence** - Theme preference is saved locally (`localStorage`) and maintained across page reloads and 3D view changes
+- **Full Coverage** - Consistent theming across all modals, chat interfaces, and private note popups
 
 ### Authentication (OAuth via Supabase)
 - **Google OAuth** - Seamless one-click sign-in with Google
@@ -113,8 +131,9 @@ landing-page/
 | Testing | Vitest, Testing Library, jsdom |
 | 3D Graphics | Three.js, React Three Fiber, React Three Drei |
 | Animations | Framer Motion |
-| Styling | Tailwind CSS |
-| Icons | Lucide React |
+| Styling | Tailwind CSS 4 |
+| Internationalization | react-i18next, i18next |
+| Icons | Lucide React, FlagCDN (SVG) |
 | Backend/Auth | Supabase (PostgreSQL, OAuth) |
 | AI Workflow | N8N (Self-hosted) |
 | Container | Docker with Nginx |
@@ -822,6 +841,29 @@ The project uses three custom fonts from Google Fonts:
 - **Orbitron** - Headers and accent text
 - **Rajdhani** - Secondary headings
 - **Inter** - Body text
+- **Cairo** - Bold, modern Arabic typography
+- **Readex Pro** - Futuristic look for Arabic names and UI elements
+
+### Theming System
+
+The application uses a hybrid CSS variable system for themes:
+
+```css
+:root {
+  /* Dark Theme (Default) */
+  --card-bg: rgba(13, 13, 21, 0.7);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --card-text: #ffffff;
+}
+
+.light-theme {
+  /* Light Theme Overrides */
+  --card-bg: rgba(255, 255, 255, 0.8);
+  --card-border: rgba(0, 0, 0, 0.1);
+  --card-text: #1f2937;
+  background-color: #f8fafc;
+}
+```
 
 ## Browser Support
 
