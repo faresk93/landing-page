@@ -547,7 +547,7 @@ The portfolio implements comprehensive GDPR compliance with transparent data han
 
 **Console Warning:**
 ```javascript
-// App.tsx - Fares Neural Defense Protocol v5.0
+// App.tsx - Fares Neural Defense Protocol v5.1
 // Warns developers against unauthorized code injection
 ```
 
