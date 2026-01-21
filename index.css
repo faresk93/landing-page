@@ -282,6 +282,39 @@ button {
     color: #374151;
 }
 
+@keyframes glitch-simple {
+
+    0%,
+    90%,
+    100% {
+        transform: translate(0);
+        text-shadow: none;
+        opacity: 1;
+    }
+
+    92% {
+        transform: translate(-1px, 0);
+        text-shadow: 1px 0 rgba(188, 19, 254, 0.5), -1px 0 rgba(0, 243, 255, 0.5);
+        opacity: 0.9;
+    }
+
+    94% {
+        transform: translate(1px, 0);
+        text-shadow: -1px 0 rgba(188, 19, 254, 0.5), 1px 0 rgba(0, 243, 255, 0.5);
+        opacity: 1;
+    }
+
+    96% {
+        transform: translate(-1px, 0);
+        text-shadow: 0.5px 0 rgba(188, 19, 254, 0.3), -0.5px 0 rgba(0, 243, 255, 0.3);
+    }
+}
+
+.glitch-text {
+    animation: glitch-simple 3s infinite;
+    display: inline-block;
+}
+
 .three-html-label {
     direction: ltr !important;
     text-align: center !important;

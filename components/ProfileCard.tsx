@@ -15,6 +15,7 @@ import { NotePopup } from './NotePopup';
 import { AdminDashboard } from './AdminDashboard';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { LayoutDashboard, ShieldCheck } from 'lucide-react';
+import { fetchInstagramFollowers } from '../utils/instagram';
 
 interface ProfileCardProps {
   onEnterUniverse: () => void;
@@ -43,6 +44,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
   const [isNoteOpen, setIsNoteOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+  const [instagramFollowers, setInstagramFollowers] = useState<number | null>(null);
 
 
   const isAdmin = user?.email === 'khiary.fares@gmail.com';
@@ -66,6 +68,29 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
   useEffect(() => {
     const handleViewPrivacy = () => setIsPrivacyOpen(true);
     window.addEventListener('view-privacy', handleViewPrivacy);
+
+    // Fetch Instagram followers via Supabase
+    const fetchFollowers = async () => {
+      // Use cached value if available and fresh (e.g. 1 hour)
+      const cached = localStorage.getItem('instagram_followers');
+      const cachedTime = localStorage.getItem('instagram_followers_time');
+      const now = Date.now();
+
+      if (cached && cachedTime && now - parseInt(cachedTime) < 3600000) {
+        setInstagramFollowers(parseInt(cached));
+      } else {
+        fetchInstagramFollowers().then(count => {
+          if (count !== null) {
+            setInstagramFollowers(count);
+            localStorage.setItem('instagram_followers', count.toString());
+            localStorage.setItem('instagram_followers_time', now.toString());
+          }
+        });
+      }
+    };
+
+    fetchFollowers();
+
     return () => window.removeEventListener('view-privacy', handleViewPrivacy);
   }, []);
 
@@ -258,20 +283,29 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
             {/* Desktop Social Links */}
             <div className="hidden md:flex items-center gap-4 w-full">
               {[
-                { Icon: Mail, href: `mailto:${SOCIAL_LINKS.EMAIL}`, color: 'text-neonOrange', borderColor: 'hover:border-neonOrange', label: 'Email' },
+                { Icon: Mail, href: `mailto:${SOCIAL_LINKS.EMAIL}`, color: 'text-neonOrange', borderColor: 'hover:border-neonOrange', label: t('common.email') },
                 { Icon: Linkedin, href: SOCIAL_LINKS.LINKEDIN, color: 'text-blue-400', borderColor: 'hover:border-blue-400', label: 'LinkedIn' },
-                { Icon: Instagram, href: SOCIAL_LINKS.INSTAGRAM, color: 'text-pink-500', borderColor: 'hover:border-pink-500', label: 'Instagram' },
+                { Icon: Instagram, href: SOCIAL_LINKS.INSTAGRAM, color: 'text-pink-500', borderColor: 'hover:border-pink-500', label: 'Instagram', isInstagram: true },
                 { Icon: Github, href: SOCIAL_LINKS.GITHUB, color: 'text-white', borderColor: 'hover:border-white', label: 'Github' },
-              ].map(({ Icon, href, color, borderColor, label }, idx) => (
+              ].map(({ Icon, href, color, borderColor, label, isInstagram }, idx) => (
                 <a
                   key={idx}
                   href={href}
                   target={href.startsWith('mailto') ? '_self' : '_blank'}
                   rel="noopener noreferrer"
                   title={label}
-                  className={`p-3 md:p-4 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 hover:bg-white/10 ${color} ${borderColor} shadow-lg hover:-translate-y-1 group`}
+                  className={`relative flex items-center justify-center p-3 md:p-4 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 hover:bg-white/10 ${color} ${borderColor} shadow-lg hover:-translate-y-1 group min-w-[44px] md:min-w-[56px] h-[44px] md:h-[56px]`}
                 >
                   <Icon className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:scale-110" />
+                  {isInstagram && instagramFollowers !== null && (
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="absolute bottom-1 left-0 right-0 font-orbitron font-black text-[7px] md:text-[8px] text-pink-500/70 glitch-text tracking-tighter text-center leading-none"
+                    >
+                      {instagramFollowers.toLocaleString()}
+                    </motion.span>
+                  )}
                 </a>
               ))}
             </div>
@@ -316,23 +350,32 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
             </div>
 
             {/* Actions Section */}
-            <div className="flex flex-col gap-4 md:gap-6">
+            <div className="flex flex-col gap-6 md:gap-6">
               {/* Mobile Social Links - hidden on desktop */}
               <div className="md:hidden flex justify-center items-center gap-3">
                 {[
                   { Icon: Mail, href: `mailto:${SOCIAL_LINKS.EMAIL}`, color: 'text-neonOrange', borderColor: 'hover:border-neonOrange' },
                   { Icon: Linkedin, href: SOCIAL_LINKS.LINKEDIN, color: 'text-blue-400', borderColor: 'hover:border-blue-400' },
-                  { Icon: Instagram, href: SOCIAL_LINKS.INSTAGRAM, color: 'text-pink-500', borderColor: 'hover:border-pink-500' },
+                  { Icon: Instagram, href: SOCIAL_LINKS.INSTAGRAM, color: 'text-pink-500', borderColor: 'hover:border-pink-500', isInstagram: true },
                   { Icon: Github, href: SOCIAL_LINKS.GITHUB, color: 'text-white', borderColor: 'hover:border-white' },
-                ].map(({ Icon, href, color, borderColor }, idx) => (
+                ].map(({ Icon, href, color, borderColor, isInstagram }, idx) => (
                   <a
                     key={idx}
                     href={href}
                     target={href.startsWith('mailto') ? '_self' : '_blank'}
                     rel="noopener noreferrer"
-                    className={`p-3 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 hover:bg-white/10 ${color} ${borderColor} shadow-lg group`}
+                    className={`relative flex items-center justify-center p-3 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 hover:bg-white/10 ${color} ${borderColor} shadow-lg group min-w-[44px] h-[44px]`}
                   >
                     <Icon className="w-4 h-4 transition-transform group-hover:scale-110" />
+                    {isInstagram && instagramFollowers !== null && (
+                      <motion.span
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="absolute bottom-1 left-0 right-0 font-orbitron font-black text-[7px] text-pink-500/70 glitch-text tracking-tighter text-center leading-none"
+                      >
+                        {instagramFollowers.toLocaleString()}
+                      </motion.span>
+                    )}
                   </a>
                 ))}
               </div>
