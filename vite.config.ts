@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       host: '0.0.0.0',
-      allowedHosts: ['unexpounded-hilton-creamlaid.ngrok-free.dev']
+      allowedHosts: ['unexpounded-hilton-creamlaid.ngrok-free.dev', 'zoologically-stedfast-aliyah.ngrok-free.dev']
     },
     plugins: [
       react(),

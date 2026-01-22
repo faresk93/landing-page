@@ -30,6 +30,7 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
     const [audioPreviewUrl, setAudioPreviewUrl] = useState<string | null>(null);
     const [recordingTime, setRecordingTime] = useState(0);
+    const [actualDuration, setActualDuration] = useState(0);
     const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const previewAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -43,8 +44,10 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
         try {
             // Check for supported mime types in order of preference
             const mimeTypes = [
+                'audio/mp4;codecs=mp4a.40.2',
                 'audio/mp4',
                 'audio/aac',
+                'audio/mpeg',
                 'audio/webm;codecs=opus',
                 'audio/webm',
                 'audio/ogg;codecs=opus'
@@ -69,14 +72,20 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
             });
             mediaRecorderRef.current = mediaRecorder;
             const chunks: Blob[] = [];
+            const startTime = Date.now();
 
             mediaRecorder.ondataavailable = (e) => {
                 if (e.data.size > 0) chunks.push(e.data);
             };
 
             mediaRecorder.onstop = () => {
-                const blob = new Blob(chunks, { type: mimeType });
-                if (import.meta.env.DEV) console.log('Recording stopped. Blob size:', blob.size, 'type:', blob.type);
+                const duration = (Date.now() - startTime) / 1000;
+                setActualDuration(duration);
+
+                const finalMimeType = mediaRecorder.mimeType || mimeType;
+                const blob = new Blob(chunks, { type: finalMimeType });
+
+                if (import.meta.env.DEV) console.log('Recording stopped. Blob size:', blob.size, 'type:', finalMimeType, 'duration:', duration);
 
                 if (blob.size === 0) {
                     console.error('Recording resulted in an empty blob.');
@@ -145,8 +154,19 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
             previewAudioRef.current.pause();
             setIsPreviewPlaying(false);
         } else {
-            previewAudioRef.current.play();
-            setIsPreviewPlaying(true);
+            // Ensure audio is not muted and volume is up
+            previewAudioRef.current.muted = false;
+            previewAudioRef.current.volume = 1.0;
+
+            const playPromise = previewAudioRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    setIsPreviewPlaying(true);
+                }).catch(error => {
+                    console.error("Playback failed:", error);
+                    setIsPreviewPlaying(false);
+                });
+            }
         }
     };
 
@@ -161,6 +181,17 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
         if (previewAudioRef.current && audioPreviewUrl) {
             previewAudioRef.current.src = audioPreviewUrl;
             previewAudioRef.current.load();
+
+            // Hack to force duration calculation for WebM blobs
+            previewAudioRef.current.addEventListener('loadedmetadata', () => {
+                if (previewAudioRef.current && previewAudioRef.current.duration === Infinity) {
+                    previewAudioRef.current.currentTime = 1e101;
+                    previewAudioRef.current.ontimeupdate = function () {
+                        this.ontimeupdate = null;
+                        this.currentTime = 0;
+                    };
+                }
+            }, { once: true });
         }
     }, [audioPreviewUrl]);
 
@@ -560,11 +591,17 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                                                     </motion.button>
                                                                     <audio
                                                                         ref={previewAudioRef}
-                                                                        onEnded={() => setIsPreviewPlaying(false)}
+                                                                        playsInline
+                                                                        onEnded={() => {
+                                                                            setIsPreviewPlaying(false);
+                                                                            if (previewAudioRef.current) previewAudioRef.current.currentTime = 0;
+                                                                        }}
                                                                         onTimeUpdate={(e) => {
                                                                             const audio = e.currentTarget;
-                                                                            // Use recordingTime as fallback if duration is NaN (common in WebM blobs)
-                                                                            const durationFallback = (audio.duration && !isNaN(audio.duration)) ? audio.duration : (recordingTime > 0 ? recordingTime : 0);
+                                                                            // Use actualDuration as fallback if duration is Infinity/NaN
+                                                                            const durationFallback = (audio.duration && isFinite(audio.duration))
+                                                                                ? audio.duration
+                                                                                : (actualDuration > 0 ? actualDuration : recordingTime);
 
                                                                             // If currentTime exceeds expected length, force stop
                                                                             if (durationFallback > 0 && audio.currentTime >= durationFallback && isPreviewPlaying) {
@@ -573,8 +610,15 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                                                                 audio.currentTime = 0;
                                                                             }
                                                                         }}
-                                                                        onPlay={() => console.log('Audio started playing')}
-                                                                        onError={(e) => console.error('Audio preview playback error:', e)}
+                                                                        onPlay={() => {
+                                                                            if (import.meta.env.DEV) console.log('Audio started playing');
+                                                                            setIsPreviewPlaying(true);
+                                                                        }}
+                                                                        onPause={() => setIsPreviewPlaying(false)}
+                                                                        onError={(e) => {
+                                                                            console.error('Audio preview playback error:', e);
+                                                                            setIsPreviewPlaying(false);
+                                                                        }}
                                                                         className="hidden"
                                                                     />
                                                                 </div>
@@ -583,7 +627,7 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                                                         {isPreviewPlaying ? t('notes.playing') || 'Playing Preview' : t('notes.play_preview')}
                                                                     </p>
                                                                     <p className="font-rajdhani text-[12px] text-neonPurple font-bold mt-1">
-                                                                        {formatTime(recordingTime)}
+                                                                        {formatTime(Math.round(actualDuration || recordingTime))}
                                                                     </p>
                                                                 </div>
                                                             </div>
