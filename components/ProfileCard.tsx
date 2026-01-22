@@ -265,7 +265,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
                   { country: "om", label: t('common.oman') },
                   { icon: <Cake className="w-3 h-3 text-pink-400" />, label: "32" }
                 ].map((item, idx) => (
-                  <span key={idx} className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 shadow-inner hover:bg-white/10 transition-colors">
+                  <span key={`badge-${idx}`} className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 shadow-inner hover:bg-white/10 transition-colors">
                     {item.country ? (
                       <img
                         src={`https://flagcdn.com/w40/${item.country}.png`}
@@ -289,7 +289,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
                 { Icon: Github, href: SOCIAL_LINKS.GITHUB, color: 'text-white', borderColor: 'hover:border-white', label: 'Github' },
               ].map(({ Icon, href, color, borderColor, label, isInstagram }, idx) => (
                 <a
-                  key={idx}
+                  key={`social-desktop-${idx}`}
                   href={href}
                   target={href.startsWith('mailto') ? '_self' : '_blank'}
                   rel="noopener noreferrer"
@@ -360,7 +360,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
                   { Icon: Github, href: SOCIAL_LINKS.GITHUB, color: 'text-white', borderColor: 'hover:border-white' },
                 ].map(({ Icon, href, color, borderColor, isInstagram }, idx) => (
                   <a
-                    key={idx}
+                    key={`social-mobile-${idx}`}
                     href={href}
                     target={href.startsWith('mailto') ? '_self' : '_blank'}
                     rel="noopener noreferrer"
