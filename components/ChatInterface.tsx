@@ -104,7 +104,7 @@ const DisconnectedMind: React.FC = () => {
         {/* Floating particles */}
         {[...Array(5)].map((_, i) => (
           <motion.div
-            key={i}
+            key={`particle-${i}`}
             className="absolute w-1 h-1 bg-red-500 rounded-full"
             animate={{
               y: [-20, -60],
@@ -388,7 +388,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                 >
                   {activeSuggestions.map((suggestion, i) => (
                     <button
-                      key={i}
+                      key={`suggestion-${i}`}
                       onClick={() => handleSuggestionClick(suggestion)}
                       className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400 hover:text-white hover:bg-white/10 hover:border-neonPurple/50 transition-all duration-300 backdrop-blur-sm"
                     >
@@ -414,7 +414,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose })
                   <div className="flex gap-1.5">
                     {[0, 1, 2].map((i) => (
                       <motion.div
-                        key={i}
+                        key={`loader-dot-${i}`}
                         animate={{ height: [4, 12, 4], opacity: [0.3, 1, 0.3] }}
                         transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.1 }}
                         className="w-1 bg-neonBlue rounded-full"

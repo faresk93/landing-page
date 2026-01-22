@@ -131,7 +131,7 @@ const SolarSystem: React.FC<{ showSolarSystem: boolean }> = ({ showSolarSystem }
             <pointLight intensity={30} distance={40} color="#ffaa00" decay={1.5} />
             <pointLight intensity={10} distance={10} color="#ffffff" decay={1} />
             {TECH_STACK.map((tech, idx) => (
-                <Planet key={idx} {...tech} />
+                <Planet key={`planet-${idx}`} {...tech} />
             ))}
             <ambientLight intensity={0.4} />
         </group>
