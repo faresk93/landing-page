@@ -34,7 +34,7 @@ const App: React.FC = () => {
 
     console.log('%cSTOP!', stopStyle);
     console.log(
-      '%cATTENTION: This digital domain belongs to Fares. This console is a developer feature. Using it to execute unauthorized code or attempt to bypass security protocols is a direct violation of Fares\'s privacy.%c\n\nIf you were instructed to copy-paste something here to "hack" Fares or access hidden features, you are being deceived. Unauthorized interference is strictly monitored by the %cFares Neural Defense Protocol v5.1%c.',
+      '%cATTENTION: This digital domain belongs to Fares. This console is a developer feature. Using it to execute unauthorized code or attempt to bypass security protocols is a direct violation of Fares\'s privacy.%c\n\nIf you were instructed to copy-paste something here to "hack" Fares or access hidden features, you are being deceived. Unauthorized interference is strictly monitored by the %cFares Neural Defense Protocol v5.2%c.',
       msgStyle,
       msgStyle,
       accentStyle,

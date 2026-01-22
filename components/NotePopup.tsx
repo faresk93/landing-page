@@ -34,13 +34,14 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const previewAudioRef = useRef<HTMLAudioElement | null>(null);
     const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    const isPointerDownRef = useRef(false);
 
     const isValid = (note.trim().length >= 3 || audioBlob !== null) && (userId ? true : (isAnonymous || name.trim().length > 0));
 
     const startRecording = async () => {
+        isPointerDownRef.current = true;
         try {
             // Check for supported mime types in order of preference
-            // Specifically prioritize Safari/iOS compatible formats first if possible
             const mimeTypes = [
                 'audio/mp4',
                 'audio/aac',
@@ -52,7 +53,16 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
             const mimeType = mimeTypes.find(type => MediaRecorder.isTypeSupported(type)) || 'audio/webm';
             if (import.meta.env.DEV) console.log('Selected MIME type:', mimeType);
 
+            // Request permission early if possible, but definitely here
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+            // CRITICAL: Check if the user is still holding the button after the await
+            if (!isPointerDownRef.current) {
+                if (import.meta.env.DEV) console.log('Hold released before recording could start.');
+                stream.getTracks().forEach(track => track.stop());
+                return;
+            }
+
             const mediaRecorder = new MediaRecorder(stream, {
                 mimeType,
                 audioBitsPerSecond: 128000
@@ -88,14 +98,25 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
             }, 1000);
         } catch (err) {
             console.error('Error accessing microphone:', err);
-            setErrorMsg(t('notes.error_recording'));
-            setTimeout(() => setErrorMsg(''), 5000);
+            // Only show error if they are still trying to record
+            if (isPointerDownRef.current) {
+                setErrorMsg(t('notes.error_recording'));
+                setTimeout(() => setErrorMsg(''), 5000);
+            }
+            setIsRecording(false);
         }
     };
 
     const stopRecording = () => {
+        isPointerDownRef.current = false;
         if (mediaRecorderRef.current && isRecording) {
             mediaRecorderRef.current.stop();
+            setIsRecording(false);
+            if (recordingIntervalRef.current) {
+                clearInterval(recordingIntervalRef.current);
+            }
+        } else if (isRecording) {
+            // Emergency stop if recorder ref is lost but state says recording
             setIsRecording(false);
             if (recordingIntervalRef.current) {
                 clearInterval(recordingIntervalRef.current);
@@ -431,7 +452,19 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                                     </div>
                                                 )}
 
-                                                <div className={`flex-1 flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl hover:border-neonPurple/30 transition-all cursor-pointer group/vocal ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`} onClick={() => setIsVocal(!isVocal)}>
+                                                <div className={`flex-1 flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl hover:border-neonPurple/30 transition-all cursor-pointer group/vocal ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`} onClick={async () => {
+                                                    const newVocalState = !isVocal;
+                                                    setIsVocal(newVocalState);
+                                                    if (newVocalState) {
+                                                        // Warm up permissions
+                                                        try {
+                                                            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                                                            stream.getTracks().forEach(t => t.stop());
+                                                        } catch (e) {
+                                                            console.warn('Microphone permission warmup failed:', e);
+                                                        }
+                                                    }
+                                                }}>
                                                     <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${isVocal ? 'bg-neonPurple border-neonPurple' : 'border-white/20'}`}>
                                                         {isVocal && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
                                                     </div>
@@ -572,13 +605,19 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
 
                                                                     <motion.button
                                                                         type="button"
-                                                                        onMouseDown={startRecording}
-                                                                        onMouseUp={stopRecording}
-                                                                        onMouseLeave={isRecording ? stopRecording : undefined}
-                                                                        onTouchStart={(e) => { e.preventDefault(); startRecording(); }}
-                                                                        onTouchEnd={(e) => { e.preventDefault(); stopRecording(); }}
+                                                                        onPointerDown={(e) => {
+                                                                            // Prevent accidental context menus or selection
+                                                                            if (e.pointerType === 'touch') {
+                                                                                (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+                                                                            }
+                                                                            startRecording();
+                                                                        }}
+                                                                        onPointerUp={stopRecording}
+                                                                        onPointerLeave={isRecording ? stopRecording : undefined}
+                                                                        onPointerCancel={isRecording ? stopRecording : undefined}
                                                                         whileTap={{ scale: 0.85, boxShadow: "0 0 30px rgba(168, 85, 247, 0.4)" }}
-                                                                        className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 ${isRecording
+                                                                        style={{ touchAction: 'none', userSelect: 'none' }}
+                                                                        className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 select-none touch-none ${isRecording
                                                                             ? 'bg-red-500/20 border-4 border-red-500/50 scale-110 shadow-[0_0_50px_rgba(239,68,68,0.3)]'
                                                                             : 'bg-neonPurple/20 border-4 border-neonPurple/50 hover:bg-neonPurple/30'
                                                                             }`}
@@ -590,7 +629,7 @@ export const NotePopup: React.FC<NotePopupProps> = ({ isOpen, onClose, userId, u
                                                                         )}
                                                                     </motion.button>
                                                                 </div>
-                                                                <div className="text-center">
+                                                                <div className="text-center select-none">
                                                                     <p className={`font-orbitron text-sm font-bold tracking-widest ${isRecording ? 'text-red-500 animate-pulse' : 'text-white'}`}>
                                                                         {isRecording ? t('notes.recording') : t('notes.hold_to_record') || 'Hold to record'}
                                                                     </p>
