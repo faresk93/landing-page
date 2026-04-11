@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import gsap from 'gsap';
 
 /* ═══════════ TYPES ═══════════ */
 
@@ -291,6 +292,129 @@ function TravelGrid({ active }: TravelGridProps) {
   );
 }
 
+/* ─── CINEMATIC LIFE BAR ─── */
+const CinematicLifeBar = ({ onComplete }: { onComplete: () => void }) => {
+  const years = 33;
+  const max = 100;
+  const [activeWord, setActiveWord] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [sparks, setSparks] = useState<{ id: number; left: number; top: number; opacity: number }[]>([]);
+  const fillRef = useRef<HTMLDivElement>(null);
+
+  const milestones = [
+    { year: 5, word: "Oman 🇴🇲" },
+    { year: 12, word: "Tunisia 🇹🇳" },
+    { year: 18, word: "Learning 📚" },
+    { year: 25, word: "Paris 🗼" },
+    { year: 31, word: "Travel 🌍" }
+  ];
+
+  useEffect(() => {
+    const tl = gsap.timeline({
+      delay: 0.8,
+      onComplete: () => {
+        gsap.to(".arrival-glow", { opacity: 1, scale: 3, duration: 1, ease: "power2.out" });
+        onComplete();
+      }
+    });
+
+    tl.to({ val: 0 }, {
+      val: years,
+      duration: 5,
+      ease: "power2.inOut",
+      onUpdate: function() {
+        const current = this.targets()[0].val;
+        setProgress(current);
+        const y = Math.floor(current);
+        
+        // Spawn sparks
+        if (Math.random() > 0.7) {
+          const newSpark = {
+            id: Math.random(),
+            left: (current / max) * 100,
+            top: Math.random() * 100,
+            opacity: 1
+          };
+          setSparks(prev => [...prev.slice(-15), newSpark]);
+          setTimeout(() => {
+            setSparks(prev => prev.filter(s => s.id !== newSpark.id));
+          }, 800);
+        }
+
+        const m = milestones.find(ms => ms.year === y);
+        if (m && activeWord !== m.word) {
+          setActiveWord(m.word);
+          setTimeout(() => setActiveWord(null), 1200);
+        }
+      }
+    });
+  }, []);
+
+  const accent = "#d4a574";
+  const pct = (progress / years) * 50; 
+  const targetPct = 50;
+
+  return (
+    <div style={{ width: "95%", maxWidth: "360px", margin: "0 auto", position: "relative" }}>
+      <div style={{ position: "absolute", top: "-2.8rem", left: `${pct}%`, transform: "translateX(-50%)", pointerEvents: "none", zIndex: 20 }}>
+        {activeWord && (
+          <div style={{ 
+            fontFamily: "'Cormorant Garamond',serif", fontStyle: "italic", fontSize: "1.1rem", color: accent,
+            letterSpacing: "4px", textTransform: "uppercase", whiteSpace: "nowrap",
+            animation: "fadeSlideUp 1.2s forwards"
+          }}>
+            {activeWord}
+          </div>
+        )}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+        <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.55rem", color: "#ffffff33", letterSpacing: "3px" }}>LIFE PROGRESS</span>
+        <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.55rem", color: accent, letterSpacing: "1px" }}>{Math.floor(progress)} / X</span>
+      </div>
+
+      <div style={{ width: "100%", height: "8px", borderRadius: "99px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "visible" }}>
+        <div style={{ position: "absolute", inset: 0, left: `${targetPct}%`, background: "rgba(255,255,255,0.015)", animation: "futureFlicker 3s infinite alternate ease-in-out" }} />
+        
+        {/* Sparks */}
+        {sparks.map(s => (
+          <div key={s.id} style={{
+            position: "absolute", left: `${s.left}%`, top: `${s.top}%`, width: "2px", height: "2px",
+            background: "#fff", borderRadius: "50%", pointerEvents: "none", zIndex: 10,
+            boxShadow: `0 0 4px #fff`,
+            transition: "all 0.8s ease-out",
+            transform: "translateY(-10px) scale(0)",
+            opacity: 0
+          }} />
+        ))}
+
+        <div ref={fillRef} style={{
+          height: "100%", borderRadius: "99px",
+          background: `linear-gradient(90deg, ${accent}33, ${accent})`,
+          width: `${pct}%`,
+          boxShadow: `0 0 15px ${accent}44`,
+          position: "relative", zIndex: 5
+        }}>
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
+            width: "50%", animation: "shimmerSlide 2s linear infinite"
+          }} />
+          <div style={{ position: "absolute", right: "-2px", top: "50%", transform: "translateY(-50%)", width: "4px", height: "140%", background: "#fff", borderRadius: "2px", boxShadow: `0 0 12px #fff` }} />
+        </div>
+
+        <div className="arrival-glow" style={{ position: "absolute", left: `${targetPct}%`, top: "50%", transform: "translate(-50%, -50%) scale(0)", width: "30px", height: "30px", background: `radial-gradient(circle, ${accent} 0%, transparent 70%)`, opacity: 0, zIndex: 10, filter: "blur(8px)" }} />
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "8px", opacity: 0.1 }}>
+        {Array.from({ length: 11 }).map((_, i) => (
+          <div key={i} style={{ width: "1px", height: "3px", background: i * 10 <= progress ? accent : "#fff" }} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 /* ─── SLIDE ─── */
 interface SlideProps {
   ch: Chapter;
@@ -359,47 +483,77 @@ interface IntroProps {
 }
 
 function Intro({ onEnter }: IntroProps) {
-  const [h, setH] = useState(false);
+  const [complete, setComplete] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  useEffect(() => { setTimeout(() => setLoaded(true), 300); }, []);
+  useEffect(() => { setTimeout(() => setLoaded(true), 200); }, []);
+
   return (
     <div style={{
       position: "fixed", inset: 0, zIndex: 100,
-      background: "linear-gradient(160deg,#030308 0%,#080614 20%,#0e0a1e 45%,#080614 70%,#030308 100%)",
+      background: "#030308",
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", overflow: "hidden",
     }}>
-      <Particles color="#d4a574" count={65} />
-      {[440, 320, 210, 530].map((s, i) => (
-        <div key={i} style={{ position: "absolute", width: `min(${s * 0.2}vw,${s}px)`, height: `min(${s * 0.2}vw,${s}px)`, borderRadius: "50%", border: `1px solid #d4a574${i < 2 ? "10" : "08"}`, top: "50%", left: "50%", transform: "translate(-50%,-50%)", animation: `orbitSpin ${20 + i * 11}s linear infinite ${i % 2 ? "reverse" : ""}` }} />
-      ))}
-      {["📖", "🕯️", "🌙", "🖋️", "📜", "🌟", "🕰️", "🗝️"].map((ic, i) => (
-        <div key={i} style={{ position: "absolute", fontSize: `${26 + Math.random() * 28}px`, opacity: 0.028, filter: "blur(3px)", left: `${5 + (i * 12) % 88}%`, top: `${8 + (i * 15) % 78}%`, animation: `floatGentle ${5 + i * 1.3}s ease-in-out ${-i}s infinite alternate` }}>{ic}</div>
-      ))}
-
-      <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "0 1.5rem", maxWidth: "420px" }}>
-        <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(0.8rem,2vw,0.95rem)", color: "#d4a57438", direction: "rtl", marginBottom: "0.5rem", animation: "fadeSlideUp 1s 0.2s both" }}>بسم الله الرحمن الرحيم</div>
-        <div style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.55rem", color: "#d4a574aa", letterSpacing: "4px", marginBottom: "1.2rem", animation: "fadeSlideUp 1s 0.3s both" }}>CHAPTER 33: THE MILESTONE · الليلة أتممتُ ثلاثاً وثلاثين</div>
-        <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(2.8rem,8.5vw,4.8rem)", fontWeight: 700, color: "#d4a574", direction: "rtl", lineHeight: 1.15, textShadow: "0 0 45px #d4a57430, 0 3px 18px #00000050", marginBottom: "0.1rem", animation: "fadeSlideUp 1s 0.4s both" }}>فارس الخياري</div>
-        <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(2.4rem,8.5vw,4.8rem)", fontWeight: 300, fontStyle: "italic", color: "#f0ece6", margin: "0 0 0.7rem", lineHeight: 1, letterSpacing: "-1.5px", textShadow: "0 0 55px #d4a57412", animation: "fadeSlideUp 1s 0.6s both" }}>Fares Khiary</h1>
-        <p style={{ fontFamily: "'IBM Plex Sans Arabic',sans-serif", fontSize: "clamp(0.7rem,1.8vw,0.82rem)", fontWeight: 300, lineHeight: 1.8, color: "#d4a57466", direction: "rtl", marginBottom: "0.4rem", animation: "fadeSlideUp 1s 0.8s both" }}>
-          الليلة، في الثالثة والثلاثين، تجتمع الذكريات. من رمال عُمان، إلى ياسمين تونس، وصولاً إلى أنوار فرنسا. من المختبرات إلى عالم الكود — قصة إيمان ونمو، ما زالت فصولها تروى.
-        </p>
-        <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.82rem,2.1vw,0.95rem)", lineHeight: 1.8, color: "#ffffff44", fontStyle: "italic", marginBottom: "1.6rem", animation: "fadeSlideUp 1s 0.95s both" }}>
-          Tonight, at 33, memories converge. From the sands of Oman, to the jasmine of Tunisia, and finally the lights of France. From science labs to digital craft—a journey of faith and growth, still unfolding.
-        </p>
-        <div style={{ marginBottom: "1.8rem", animation: "fadeSlideUp 1s 1.1s both" }}>
-          <LifeGauge years={33} max="X" animate={loaded} accent="#d4a574" delay={1.5} />
+      {/* Cinematic Background Layer */}
+      <div style={{ 
+        position: "absolute", inset: 0, 
+        background: "linear-gradient(145deg, #030308 0%, #0d122b 30%, #1a0b2e 70%, #030308 100%)",
+        backgroundSize: "200% 200%", animation: "gradientFlow 20s ease infinite" 
+      }} />
+      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at center, transparent 0%, #030308 90%)" }} />
+      
+      <Particles color="#d4a574" count={80} />
+      
+      <div style={{ position: "relative", zIndex: 10, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "2.5rem", width: "100%", maxWidth: "450px", padding: "0 1.5rem" }}>
+        <div style={{ position: "relative", animation: "fadeSlideUp 1s both" }}>
+          {/* Artistic Background Number */}
+          <div style={{
+            position: "absolute", top: "0", right: "0", transform: "translateX(120%)",
+            fontSize: "clamp(6rem, 20vw, 12rem)", fontFamily: "'Cormorant Garamond',serif", fontWeight: 700, fontStyle: "italic",
+            color: "rgba(212, 165, 116, 0.03)", WebkitTextStroke: "1px rgba(212, 165, 116, 0.06)",
+            zIndex: -1, pointerEvents: "none",
+            opacity: complete ? 1 : 0, transition: "all 3s cubic-bezier(0.16,1,0.3,1)",
+            filter: complete ? "blur(1px)" : "blur(40px)",
+            lineHeight: 0.8
+          }}>33</div>
+          <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(0.8rem,2vw,0.95rem)", color: "#d4a57466", direction: "rtl", marginBottom: "1rem" }}>بسم الله الرحمن الرحيم</div>
+          <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(2.4rem, 8vw, 3.8rem)", color: "#d4a574", direction: "rtl", textShadow: "0 0 25px rgba(212,165,116,0.25)", marginBottom: "-0.5rem" }}>فارس الخياري</div>
+          <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(2rem, 6vw, 3rem)", fontWeight: 300, fontStyle: "italic", color: "#f0ece6", letterSpacing: "1px", textShadow: "0 0 15px rgba(255, 255, 255, 0.15)" }}>Fares Khiary</h1>
         </div>
-        <button onClick={onEnter} onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)} style={{
-          fontFamily: "'Cormorant Garamond',serif", fontSize: "0.9rem", fontStyle: "italic",
-          padding: "11px 36px", borderRadius: "999px", border: "1px solid #d4a57440",
-          background: h ? "#d4a574" : "transparent", color: h ? "#0a0a0a" : "#d4a574",
-          cursor: "pointer", letterSpacing: "2px",
-          transition: "all 0.5s cubic-bezier(0.16,1,0.3,1)",
-          boxShadow: h ? "0 0 38px #d4a57440" : "0 0 15px #d4a57412",
-          transform: h ? "scale(1.05)" : "scale(1)",
-          animation: "fadeSlideUp 1s 1.3s both",
-        }}>Enter My Story · ادخل قصتي</button>
+
+        <CinematicLifeBar onComplete={() => setComplete(true)} />
+
+        <div style={{ marginTop: "1rem", animation: "fadeSlideUp 1s 2s both" }}>
+          <p style={{ fontFamily: "'IBM Plex Sans Arabic',sans-serif", fontSize: "clamp(0.7rem,1.8vw,0.82rem)", fontWeight: 300, lineHeight: 1.8, color: "#d4a57466", direction: "rtl", marginBottom: "0.4rem" }}>
+            الليلة، في الثالثة والثلاثين، تجتمع الذكريات. من رمال عُمان، إلى ياسمين تونس، وصولاً إلى أنوار فرنسا. من المختبرات إلى عالم الكود — قصة إيمان ونمو، ما زالت فصولها تروى.
+          </p>
+          <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.82rem,2.1vw,0.95rem)", lineHeight: 1.8, color: "#ffffff44", fontStyle: "italic", marginBottom: "0.5rem" }}>
+            Tonight, at 33, memories converge. From the sands of Oman, to the jasmine of Tunisia, and finally the lights of France. From science labs to digital craft—a journey of faith and growth, still unfolding.
+          </p>
+        </div>
+
+        <div style={{ 
+          opacity: complete ? 1 : 0, 
+          transform: complete ? "translateY(0)" : "translateY(20px)",
+          transition: "all 1s cubic-bezier(0.16,1,0.3,1)",
+          marginTop: "1.5rem"
+        }}>
+          <button 
+            onClick={onEnter} 
+            style={{
+              fontFamily: "'Cormorant Garamond',serif", fontSize: "1.1rem", fontStyle: "italic",
+              padding: "14px 45px", borderRadius: "999px", border: "1px solid #d4a57440",
+              background: "rgba(212, 165, 116, 0.05)", color: "#d4a574",
+              cursor: "pointer", letterSpacing: "3px",
+              transition: "all 0.5s cubic-bezier(0.16,1,0.3,1)",
+              boxShadow: "0 0 25px rgba(212, 165, 116, 0.15)",
+              position: "relative", overflow: "hidden"
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = "#d4a574"; e.currentTarget.style.color = "#0a0a0a"; e.currentTarget.style.boxShadow = "0 0 40px rgba(212, 165, 116, 0.5)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "rgba(212, 165, 116, 0.05)"; e.currentTarget.style.color = "#d4a574"; e.currentTarget.style.boxShadow = "0 0 25px rgba(212, 165, 116, 0.15)"; }}
+          >
+            Enter My Story · ادخل قصتي
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -535,6 +689,8 @@ const StorybookPage: React.FC = () => {
         @keyframes introExit{to{opacity:0;transform:scale(1.1);filter:blur(25px)}}
         @keyframes grain{0%,100%{opacity:0.022}50%{opacity:0.045}}
         @keyframes shimmerSlide{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+        @keyframes futureFlicker{0%{opacity:0.2;filter:blur(1px)}100%{opacity:0.6;filter:blur(2px)}}
+        @keyframes gradientFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
       `}</style>
 
       <div className="storybook-container">
