@@ -30,130 +30,130 @@ interface Chapter {
 /* ═══════════ DATA ═══════════ */
 
 const COUNTRIES = [
-  "🇴🇲","🇹🇳","🇩🇪","🇫🇷","🇦🇹","🇧🇪","🇸🇦","🇮🇹","🇻🇦","🇨🇭","🇨🇿",
-  "🇱🇺","🇪🇸","🇭🇷","🇲🇨","🇬🇧","🇫🇮","🇪🇪","🇳🇴","🇦🇱","🇬🇷","🇳🇱"
+  "🇴🇲", "🇹🇳", "🇩🇪", "🇫🇷", "🇦🇹", "🇧🇪", "🇸🇦", "🇮🇹", "🇻🇦", "🇨🇭", "🇨🇿",
+  "🇱🇺", "🇪🇸", "🇭🇷", "🇲🇨", "🇬🇧", "🇫🇮", "🇪🇪", "🇳🇴", "🇦🇱", "🇬🇷", "🇳🇱"
 ];
 
 const chapters: Chapter[] = [
   {
-    id:"birth", year:"1993",
-    title:"Born Under Arabian Skies", titleAr:"وُلِدَ تحت سماء عُمان",
-    sub:"Muscat, Oman 🇴🇲 · مسقط، عُمان",
-    en:"In a land where the desert whispers to the sea, a child opened his eyes for the first time. Muscat wrapped him in warmth, frankincense, and the echo of the adhan — a soul beginning its journey under the infinite grace of the Creator.",
-    ar:"في أرضٍ حيث تُعانق الصحراء البحر، فتح طفلٌ عينيه لأول مرة. مسقط لفّته بالدفء واللبان وصدى الأذان — روحٌ تبدأ رحلتها تحت رحمة الخالق الواسعة.",
-    emoji:"👶", flag:"🇴🇲",
-    bgEmojis:["🕌","🌙","⭐","🐪","🌊","🏜️"],
-    pal:{ bg:"#0d1b2a", bg2:"#1b2838", bg3:"#2d1b4e", accent:"#d4a574", glow:"#d4a57444" },
+    id: "birth", year: "1993",
+    title: "Born Under Arabian Skies", titleAr: "وُلِدَ تحت سماء عُمان",
+    sub: "Muscat, Oman 🇴🇲 · مسقط، عُمان",
+    en: "In a land where the desert whispers to the sea, a child opened his eyes for the first time. Muscat wrapped him in warmth, frankincense, and the echo of the adhan — a soul beginning its journey under the infinite grace of the Creator.",
+    ar: "في أرضٍ حيث تُعانق الصحراء البحر، فتح طفلٌ عينيه لأول مرة. مسقط لفّته بالدفء واللبان وصدى الأذان — روحٌ تبدأ رحلتها تحت رحمة الخالق الواسعة.",
+    emoji: "👶", flag: "🇴🇲",
+    bgEmojis: ["🕌", "🌙", "⭐", "🐪", "🌊", "🏜️"],
+    pal: { bg: "#0d1b2a", bg2: "#1b2838", bg3: "#2d1b4e", accent: "#d4a574", glow: "#d4a57444" },
   },
   {
-    id:"oman", year:"1993–97",
-    title:"Golden Desert Years", titleAr:"سنوات الصحراء الذهبية",
-    sub:"Ages 0–4 · Oman 🇴🇲 · الطفولة في عُمان",
-    en:"Four years of barefoot mornings on warm sand. Chasing sunsets between date palms, falling asleep to mother's lullabies. The world was simple, infinite, and kind — a childhood steeped in the golden light of the East.",
-    ar:"أربع سنوات من صباحات حافية على رمال دافئة. ملاحقة الغروب بين النخيل والنوم على تهاليل الأم. كان العالم بسيطاً ولا نهائياً — طفولة غارقة في نور الشرق الذهبي.",
-    emoji:"🌅", flag:"🇴🇲",
-    bgEmojis:["🌴","☀️","🐚","🦎","🌺","🏖️"],
-    pal:{ bg:"#3d1f04", bg2:"#5a3510", bg3:"#7a5530", accent:"#f0c27f", glow:"#f0c27f44" },
+    id: "oman", year: "1993–97",
+    title: "Golden Desert Years", titleAr: "سنوات الصحراء الذهبية",
+    sub: "Ages 0–4 · Oman 🇴🇲 · الطفولة في عُمان",
+    en: "Four years of barefoot mornings on warm sand. Chasing sunsets between date palms, falling asleep to mother's lullabies. The world was simple, infinite, and kind — a childhood steeped in the golden light of the East.",
+    ar: "أربع سنوات من صباحات حافية على رمال دافئة. ملاحقة الغروب بين النخيل والنوم على تهاليل الأم. كان العالم بسيطاً ولا نهائياً — طفولة غارقة في نور الشرق الذهبي.",
+    emoji: "🌅", flag: "🇴🇲",
+    bgEmojis: ["🌴", "☀️", "🐚", "🦎", "🌺", "🏖️"],
+    pal: { bg: "#3d1f04", bg2: "#5a3510", bg3: "#7a5530", accent: "#f0c27f", glow: "#f0c27f44" },
   },
   {
-    id:"move", year:"1997",
-    title:"Crossing Continents", titleAr:"عبور القارات",
-    sub:"Oman → Tunisia 🇹🇳 · من عُمان إلى تونس",
-    en:"At four years old, the family crossed the map — from the Gulf to the Mediterranean. Béni Khalled, Nabeul. A small town of jasmine and olive groves. New colors, new scents, same heart, as the horizon of life began to expand.",
-    ar:"في الرابعة من عمره، عبرت العائلة الخريطة — من الخليج إلى المتوسط. بني خلاد، نابل. بلدة صغيرة من الياسمين والزيتون. ألوان جديدة، روائح جديدة، والقلب هو القلب، بينما بدأ أفق الحياة في الاتساع.",
-    emoji:"✈️", flag:"🇹🇳",
-    bgEmojis:["🗺️","✈️","🧳","🌍","🧭","🕊️"],
-    pal:{ bg:"#0a2818", bg2:"#0d4028", bg3:"#1a5a3a", accent:"#4ade80", glow:"#4ade8044" },
+    id: "move", year: "1997",
+    title: "Crossing Continents", titleAr: "عبور القارات",
+    sub: "Oman → Tunisia 🇹🇳 · من عُمان إلى تونس",
+    en: "At four years old, the family crossed the map — from the Gulf to the Mediterranean. Béni Khalled, Nabeul. A small town of jasmine and olive groves. New colors, new scents, same heart, as the horizon of life began to expand.",
+    ar: "في الرابعة من عمره، عبرت العائلة الخريطة — من الخليج إلى المتوسط. بني خلاد، نابل. بلدة صغيرة من الياسمين والزيتون. ألوان جديدة، روائح جديدة، والقلب هو القلب، بينما بدأ أفق الحياة في الاتساع.",
+    emoji: "✈️", flag: "🇹🇳",
+    bgEmojis: ["🗺️", "✈️", "🧳", "🌍", "🧭", "🕊️"],
+    pal: { bg: "#0a2818", bg2: "#0d4028", bg3: "#1a5a3a", accent: "#4ade80", glow: "#4ade8044" },
   },
   {
-    id:"preschool", year:"1998–99",
-    title:"First Colors", titleAr:"الألوان الأولى",
-    sub:"Ages 5–6 · Pre-school 🇹🇳 · الروضة",
-    en:"Crayons on paper, sticky fingers, bare feet in schoolyards. Learning the alphabet in Arabic and French, making friends who spoke with laughter. A young Fares drew houses with too many windows, looking out at a world full of wonder.",
-    ar:"ألوان شمع على ورق، أصابع لزجة، أقدام حافية في ساحة المدرسة. تعلّم الحروف بالعربية والفرنسية وصداقات تتكلم بالضحك. فارس الصغير كان يرسم بيوتاً بنوافذ كثيرة، يطلّ منها على عالم مليء بالعجائب.",
-    emoji:"🎨", flag:"🇹🇳",
-    bgEmojis:["✏️","🖍️","🎈","🧸","🎪","📐"],
-    pal:{ bg:"#2a1050", bg2:"#401870", bg3:"#5a2090", accent:"#e879f9", glow:"#e879f944" },
+    id: "preschool", year: "1998–99",
+    title: "First Colors", titleAr: "الألوان الأولى",
+    sub: "Ages 5–6 · Pre-school 🇹🇳 · الروضة",
+    en: "Crayons on paper, sticky fingers, bare feet in schoolyards. Learning the alphabet in Arabic and French, making friends who spoke with laughter. A young Fares drew houses with too many windows, looking out at a world full of wonder.",
+    ar: "ألوان شمع على ورق، أصابع لزجة، أقدام حافية في ساحة المدرسة. تعلّم الحروف بالعربية والفرنسية وصداقات تتكلم بالضحك. فارس الصغير كان يرسم بيوتاً بنوافذ كثيرة، يطلّ منها على عالم مليء بالعجائب.",
+    emoji: "🎨", flag: "🇹🇳",
+    bgEmojis: ["✏️", "🖍️", "🎈", "🧸", "🎪", "📐"],
+    pal: { bg: "#2a1050", bg2: "#401870", bg3: "#5a2090", accent: "#e879f9", glow: "#e879f944" },
   },
   {
-    id:"primary", year:"1999–2005",
-    title:"Arbi Zarrouk Days", titleAr:"أيام العربي زروق",
-    sub:"Ages 6–12 · Primary School 🇹🇳 · المدرسة الابتدائية",
-    en:"Six years of chalk dust and bell rings. Walking to school through narrow streets, the smell of fresh bread, and friendships forged over shared sandwiches. In the quiet of the classroom, math became his secret language of logic and order.",
-    ar:"ست سنوات من غبار الطباشير ورنين الجرس. المشي إلى المدرسة عبر الأزقة، رائحة الخبز الطازج، وصداقات صُنعت فوق ساندويتشات مُقتسمة. في هدوء الفصل، صارت الرياضيات لغته السرية للمنطق والنظام.",
-    emoji:"📚", flag:"🇹🇳",
-    bgEmojis:["📖","✍️","🏫","📝","🎒","📏"],
-    pal:{ bg:"#0c1c38", bg2:"#1a3058", bg3:"#284878", accent:"#60a5fa", glow:"#60a5fa44" },
+    id: "primary", year: "1999–2005",
+    title: "Arbi Zarrouk", titleAr: "مدرسة العربي زروق",
+    sub: "Ages 6–12 · Primary School 🇹🇳 · المدرسة الابتدائية",
+    en: "Six years of chalk dust and bell rings. Walking to school through narrow streets, the smell of fresh bread, and friendships forged over shared sandwiches. In the quiet of the classroom, math became his secret language of logic and order.",
+    ar: "ست سنوات من غبار الطباشير ورنين الجرس. المشي إلى المدرسة عبر الأزقة، رائحة الخبز الطازج، وصداقات صُنعت فوق ساندويتشات مُقتسمة. في هدوء الفصل، صارت الرياضيات لغته السرية للمنطق والنظام. جزا الله معلّمي خير الجزاْ ورحم من توفّي منهم. اللهم ارحم عمي ومعلّمي رضا بومعيزة برحمتك الواسعة",
+    emoji: "📚", flag: "🇹🇳",
+    bgEmojis: ["📖", "✍️", "🏫", "📝", "🎒", "📏"],
+    pal: { bg: "#0c1c38", bg2: "#1a3058", bg3: "#284878", accent: "#60a5fa", glow: "#60a5fa44" },
   },
   {
-    id:"college", year:"2005–08",
-    title:"The Ninth Trial", titleAr:"امتحان التاسعة",
-    sub:"Ages 12–15 · Collège 🇹🇳 · الإعدادي",
-    en:"The bridge years. Harder lessons, stricter voices, the weight of a national exam on young shoulders. The 9ème wasn't just a test — it was a rite of passage into a more disciplined self. He crossed it with focus and resolve.",
-    ar:"سنوات العبور. دروس أصعب، أصوات أكثر صرامة، وثقل امتحان وطني على أكتاف شابة. التاسعة لم تكن مجرد اختبار — كانت طقس عبور إلى ذات أكثر انضباطاً. اجتازها بتركيز وعزيمة.",
-    emoji:"🏫", flag:"🇹🇳",
-    bgEmojis:["📐","🔬","🧪","📊","🎯","⚡"],
-    pal:{ bg:"#0a2828", bg2:"#104848", bg3:"#186060", accent:"#2dd4bf", glow:"#2dd4bf44" },
+    id: "college", year: "2005–08",
+    title: "The Ninth Trial", titleAr: "امتحان التاسعة",
+    sub: "Ages 12–15 · Collège 🇹🇳 · الإعدادي",
+    en: "The bridge years. Harder lessons, stricter voices, the weight of a national exam on young shoulders. The 9ème wasn't just a test — it was a rite of passage into a more disciplined self. He crossed it with focus and resolve.",
+    ar: "سنوات العبور. دروس أصعب، أصوات أكثر صرامة، وثقل امتحان وطني على أكتاف شابة. التاسعة لم تكن مجرد اختبار — كانت طقس عبور إلى ذات أكثر انضباطاً. اجتازها بتركيز وعزيمة.",
+    emoji: "🏫", flag: "🇹🇳",
+    bgEmojis: ["📐", "🔬", "🧪", "📊", "🎯", "⚡"],
+    pal: { bg: "#0a2828", bg2: "#104848", bg3: "#186060", accent: "#2dd4bf", glow: "#2dd4bf44" },
   },
   {
-    id:"highschool", year:"2008–12",
-    title:"Numbers & Glory", titleAr:"الأرقام والمجد",
-    sub:"Ages 15–19 · Lycée · Mathematics 🇹🇳 · الباكالوريا رياضيات",
-    en:"Four years in the world of integrals and equations. Nahj El Manzeh — where a boy sharpened into a young man. The Baccalauréat came, and he conquered it with honors, opening the doors to a future built on excellence and effort.",
-    ar:"أربع سنوات في عالم التكاملات والمعادلات. نهج المنزه — حيث صُقل الفتى رجلاً. جاء الباكالوريا وانتصر عليه بامتياز، ليفتح أبواب المستقبل المبني على التفوق والجهد.",
-    emoji:"🎓", flag:"🇹🇳",
-    bgEmojis:["∑","∫","π","📐","🏆","🎓"],
-    pal:{ bg:"#280a0a", bg2:"#4a1818", bg3:"#702828", accent:"#f87171", glow:"#f8717144" },
+    id: "highschool", year: "2008–12",
+    title: "Numbers & Glory", titleAr: "الأرقام والمجد",
+    sub: "Ages 15–19 · Lycée · Mathematics 🇹🇳 · الباكالوريا رياضيات",
+    en: "Four years in the world of integrals and equations. Nahj El Manzeh — where a boy sharpened into a young man. The Baccalauréat came, and he conquered it with honors, opening the doors to a future built on excellence and effort.",
+    ar: "أربع سنوات في عالم التكاملات والمعادلات. نهج المنزه — حيث صُقل الفتى رجلاً. جاء الباكالوريا وانتصر عليه بامتياز، ليفتح أبواب المستقبل المبني على التفوق والجهد.",
+    emoji: "🎓", flag: "🇹🇳",
+    bgEmojis: ["∑", "∫", "π", "📐", "🏆", "🎓"],
+    pal: { bg: "#280a0a", bg2: "#4a1818", bg3: "#702828", accent: "#f87171", glow: "#f8717144" },
   },
   {
-    id:"insat", year:"2012–18",
-    title:"The Engineer", titleAr:"المُهندس",
-    sub:"Ages 19–25 · INSAT Tunis 🇹🇳 · الهندسة",
-    en:"Five years at INSAT, in the heart of Tunis. Late nights, rigorous exams, and lifelong bonds. Graduation day arrived — a diploma in hand, a testament to years of dedication and the pride in his parents' eyes.",
-    ar:"خمس سنوات في المعهد الوطني، في قلب العاصمة. ليالٍ طويلة، امتحانات صارمة، وروابط تدوم. جاء يوم التخرج — الشهادة في اليد، شاهدة على سنوات من التفاني والفخر في عيون الوالدين.",
-    emoji:"⚗️", flag:"🇹🇳",
-    bgEmojis:["⚗️","🔬","🧪","⚙️","🎓","🏛️"],
-    pal:{ bg:"#0a0a28", bg2:"#181848", bg3:"#282870", accent:"#818cf8", glow:"#818cf844" },
+    id: "insat", year: "2012–18",
+    title: "The Engineer", titleAr: "المُهندس",
+    sub: "Ages 19–25 · INSAT Tunis 🇹🇳 · الهندسة",
+    en: "Five years at INSAT, in the heart of Tunis. Late nights, rigorous exams, and lifelong bonds. Graduation day arrived — a diploma in hand, a testament to years of dedication and the pride in his parents' eyes.",
+    ar: "خمس سنوات في المعهد الوطني، في قلب العاصمة. ليالٍ طويلة، امتحانات صارمة، وروابط تدوم. جاء يوم التخرج — الشهادة في اليد، شاهدة على سنوات من التفاني والفخر في عيون الوالدين.",
+    emoji: "⚗️", flag: "🇹🇳",
+    bgEmojis: ["⚗️", "🔬", "🧪", "⚙️", "🎓", "🏛️"],
+    pal: { bg: "#0a0a28", bg2: "#181848", bg3: "#282870", accent: "#818cf8", glow: "#818cf844" },
   },
   {
-    id:"pivot", year:"2018",
-    title:"The Great Pivot", titleAr:"المنعطف الكبير",
-    sub:"A Leap of Faith · قفزة إيمان",
-    en:"A safe job offer. A comfortable path. And a voice inside that said: 'This is not where you belong.' He turned it down, choosing the uncertain over the conventional. He trusted in the path less traveled. Bismillah.",
-    ar:"عرض عمل مريح. طريق آمن. وصوت في الداخل قال: 'هذا ليس مكانك.' رفضه، مختاراً المجهول على المألوف. توكّل على الطريق الأقل سلوكاً. بسم الله.",
-    emoji:"⚡", flag:"",
-    bgEmojis:["🔀","💡","⚡","🔥","🛤️","🎯"],
-    pal:{ bg:"#000000", bg2:"#1a0808", bg3:"#300808", accent:"#ff6b6b", glow:"#ff6b6b44" },
+    id: "pivot", year: "2018",
+    title: "The Great Pivot", titleAr: "المنعطف الكبير",
+    sub: "A Leap of Faith · قفزة إيمان",
+    en: "A safe job offer. A comfortable path. And a voice inside that said: 'This is not where you belong.' He turned it down, choosing the uncertain over the conventional. He trusted in the path less traveled. Bismillah.",
+    ar: "عرض عمل مريح. طريق آمن. وصوت في الداخل قال: 'هذا ليس مكانك.' رفضه، مختاراً المجهول على المألوف. توكّل على الطريق الأقل سلوكاً. بسم الله.",
+    emoji: "⚡", flag: "",
+    bgEmojis: ["🔀", "💡", "⚡", "🔥", "🛤️", "🎯"],
+    pal: { bg: "#000000", bg2: "#1a0808", bg3: "#300808", accent: "#ff6b6b", glow: "#ff6b6b44" },
   },
   {
-    id:"dev", year:"2018–21",
-    title:"The Reinvention", titleAr:"إعادة الاختراع",
-    sub:"Tunisia 🇹🇳 · البداية الجديدة",
-    en:"He rewired himself. From labs to keyboards, from molecules to code. Three years of relentless learning and becoming, transforming into a architect of digital possibilities, driven by a new passion for creation.",
-    ar:"أعاد تشكيل نفسه. من المختبرات إلى لوحات المفاتيح، من الجزيئات إلى البرمجة. ثلاث سنوات من التعلم المستمر، ليتحول إلى مهندس للاحتمالات الرقمية، مدفوعاً بشغف جديد للبناء.",
-    emoji:"💻", flag:"🇹🇳",
-    bgEmojis:["💻","⌨️","🖥️","📱","🔧","🚀"],
-    pal:{ bg:"#0a1428", bg2:"#0f2040", bg3:"#183058", accent:"#38bdf8", glow:"#38bdf844" },
+    id: "dev", year: "2018–21",
+    title: "The Reinvention", titleAr: "إعادة الاختراع",
+    sub: "Tunisia 🇹🇳 · البداية الجديدة",
+    en: "He rewired himself. From labs to keyboards, from molecules to code. Three years of relentless learning and becoming, transforming into a architect of digital possibilities, driven by a new passion for creation.",
+    ar: "أعاد تشكيل نفسه. من المختبرات إلى لوحات المفاتيح، من الجزيئات إلى البرمجة. ثلاث سنوات من التعلم المستمر، ليتحول إلى مهندس للاحتمالات الرقمية، مدفوعاً بشغف جديد للبناء.",
+    emoji: "💻", flag: "🇹🇳",
+    bgEmojis: ["💻", "⌨️", "🖥️", "📱", "🔧", "🚀"],
+    pal: { bg: "#0a1428", bg2: "#0f2040", bg3: "#183058", accent: "#38bdf8", glow: "#38bdf844" },
   },
   {
-    id:"paris", year:"2021",
-    title:"City of Light", titleAr:"مدينة النور",
-    sub:"Paris, France 🇫🇷 · باريس، فرنسا",
-    en:"A one-way ticket. The City of Light welcomed a new dreamer. Leaving behind the familiar home for the magnificent unknown, carrying with him the values of his past and the ambition for a global future.",
-    ar:"تذكرة ذهاب بلا عودة. مدينة النور استقبلت حالماً جديداً. ترك الوطن المألوف نحو المجهول العظيم، حاملاً معه قيم الماضي وطموح المستقبل العالمي.",
-    emoji:"🗼", flag:"🇫🇷",
-    bgEmojis:["🗼","🥐","🇫🇷","🌉","🏛️","🌹"],
-    pal:{ bg:"#0f0a28", bg2:"#1c1450", bg3:"#2a1c70", accent:"#fbbf24", glow:"#fbbf2444" },
+    id: "paris", year: "2021",
+    title: "City of Light", titleAr: "مدينة النور",
+    sub: "Paris, France 🇫🇷 · باريس، فرنسا",
+    en: "A one-way ticket. The City of Light welcomed a new dreamer. Leaving behind the familiar home for the magnificent unknown, carrying with him the values of his past and the ambition for a global future.",
+    ar: "تذكرة ذهاب بلا عودة. مدينة النور استقبلت حالماً جديداً. ترك الوطن المألوف نحو المجهول العظيم، حاملاً معه قيم الماضي وطموح المستقبل العالمي.",
+    emoji: "🗼", flag: "🇫🇷",
+    bgEmojis: ["🗼", "🥐", "🇫🇷", "🌉", "🏛️", "🌹"],
+    pal: { bg: "#0f0a28", bg2: "#1c1450", bg3: "#2a1c70", accent: "#fbbf24", glow: "#fbbf2444" },
   },
   {
-    id:"france", year:"2021–26",
-    title:"Building & Exploring", titleAr:"البناء والاستكشاف",
-    sub:"France 🇫🇷 · Growth · نمو",
-    en:"Five years of growth and wanderlust. 22 countries across 3 continents — from Nordic fjords to Mediterranean shores. Each destination adding a new layer to the map of his soul and a new perspective to his craft.",
-    ar:"خمس سنوات من النمو وحب الترحال. ٢٢ بلداً عبر ٣ قارات — من مضايق الشمال إلى شواطئ المتوسط. كل وجهة أضافت طبقة جديدة لخريطة روحه ومنظوراً جديداً لحرفته.",
-    emoji:"🌍", flag:"🇫🇷",
-    bgEmojis:["🌍","✈️","🧳","📸","⛰️","🌊"],
-    pal:{ bg:"#0a2018", bg2:"#0d3020", bg3:"#165030", accent:"#4ade80", glow:"#4ade8044" },
+    id: "france", year: "2021–26",
+    title: "Building & Exploring", titleAr: "البناء والاستكشاف",
+    sub: "France 🇫🇷 · Growth · نمو",
+    en: "Five years of growth and wanderlust. 22 countries across 3 continents — from Nordic fjords to Mediterranean shores. Each destination adding a new layer to the map of his soul and a new perspective to his craft.",
+    ar: "خمس سنوات من النمو وحب الترحال. 22 بلداً عبر 3 قارات — من مضايق الشمال إلى شواطئ المتوسط. كل وجهة أضافت طبقة جديدة لخريطة روحه ومنظوراً جديداً لحرفته.",
+    emoji: "🌍", flag: "🇫🇷",
+    bgEmojis: ["🌍", "✈️", "🧳", "📸", "⛰️", "🌊"],
+    pal: { bg: "#0a2018", bg2: "#0d3020", bg3: "#165030", accent: "#4ade80", glow: "#4ade8044" },
     showTravel: true,
   },
 ];
@@ -200,14 +200,14 @@ function Particles({ color, count = 45 }: ParticlesProps) {
 
 interface LifeGaugeProps {
   years?: number;
-  max?: number;
+  max?: number | string;
   animate?: boolean;
   accent?: string;
   delay?: number;
 }
 
 function LifeGauge({ years = 33, max = 100, animate = true, accent = "#d4a574", delay = 1 }: LifeGaugeProps) {
-  const pct = (years / max) * 100;
+  const pct = typeof max === 'number' ? (years / max) * 100 : 50;
   return (
     <div style={{ width: "85%", maxWidth: "300px", margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "5px" }}>
@@ -335,8 +335,8 @@ function Slide({ ch, active, idx, total }: SlideProps) {
           <h2 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(1.4rem,4.8vw,2.2rem)", fontWeight: 700, fontStyle: "italic", color: "#f0ece6", margin: "0 0 0.25rem", lineHeight: 1.1, textShadow: `0 0 35px ${p.glow}`, animation: active ? "fadeSlideUp 0.7s 0.3s both" : "none" }}>{ch.title}</h2>
           <div style={{ fontSize: "0.58rem", color: "#ffffff50", letterSpacing: "2px", fontFamily: "'IBM Plex Mono',monospace", marginBottom: "0.8rem", animation: active ? "fadeSlideUp 0.7s 0.35s both" : "none" }}>{ch.sub}</div>
           <div style={{ width: "36px", height: "1.5px", margin: "0 auto 0.8rem", background: `linear-gradient(90deg,transparent,${p.accent},transparent)`, animation: active ? "fadeSlideUp 0.7s 0.38s both" : "none" }} />
-          <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.85rem,2.1vw,0.98rem)", lineHeight: 1.75, color: "#f0ece6cc", margin: "0 0 0.5rem", animation: active ? "fadeSlideUp 0.7s 0.46s both" : "none" }}>{ch.en}</p>
-          <p style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(0.78rem,1.9vw,0.9rem)", lineHeight: 1.9, color: `${p.accent}88`, direction: "rtl", margin: 0, animation: active ? "fadeSlideUp 0.7s 0.56s both" : "none" }}>{ch.ar}</p>
+          <p style={{ fontFamily: "'IBM Plex Sans Arabic',sans-serif", fontSize: "clamp(0.75rem,1.8vw,0.85rem)", fontWeight: 300, lineHeight: 1.8, color: `${p.accent}aa`, direction: "rtl", margin: "0 0 0.5rem", animation: active ? "fadeSlideUp 0.7s 0.46s both" : "none" }}>{ch.ar}</p>
+          <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.85rem,2.1vw,0.98rem)", lineHeight: 1.75, color: "#f0ece6cc", margin: 0, animation: active ? "fadeSlideUp 0.7s 0.56s both" : "none" }}>{ch.en}</p>
           {ch.showTravel && <TravelGrid active={active} />}
         </div>
       </div>
@@ -377,19 +377,18 @@ function Intro({ onEnter }: IntroProps) {
       ))}
 
       <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "0 1.5rem", maxWidth: "420px" }}>
-        <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(0.8rem,2vw,0.95rem)", color: "#d4a57438", direction: "rtl", marginBottom: "1.8rem", animation: "fadeSlideUp 1s 0.2s both" }}>بسم الله الرحمن الرحيم</div>
+        <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(0.8rem,2vw,0.95rem)", color: "#d4a57438", direction: "rtl", marginBottom: "0.5rem", animation: "fadeSlideUp 1s 0.2s both" }}>بسم الله الرحمن الرحيم</div>
+        <div style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.55rem", color: "#d4a574aa", letterSpacing: "4px", marginBottom: "1.2rem", animation: "fadeSlideUp 1s 0.3s both" }}>CHAPTER 33: THE MILESTONE · الليلة أتممتُ ثلاثاً وثلاثين</div>
         <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(2.8rem,8.5vw,4.8rem)", fontWeight: 700, color: "#d4a574", direction: "rtl", lineHeight: 1.15, textShadow: "0 0 45px #d4a57430, 0 3px 18px #00000050", marginBottom: "0.1rem", animation: "fadeSlideUp 1s 0.4s both" }}>فارس الخياري</div>
         <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(2.4rem,8.5vw,4.8rem)", fontWeight: 300, fontStyle: "italic", color: "#f0ece6", margin: "0 0 0.7rem", lineHeight: 1, letterSpacing: "-1.5px", textShadow: "0 0 55px #d4a57412", animation: "fadeSlideUp 1s 0.6s both" }}>Fares Khiary</h1>
-        <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.82rem,2.1vw,0.95rem)", lineHeight: 1.8, color: "#ffffff44", fontStyle: "italic", marginBottom: "0.4rem", animation: "fadeSlideUp 1s 0.8s both" }}>
-          From the deserts of Oman to the lights of Paris.<br />A story of faith, courage, and reinvention.<br />33 years of a life written by the Most Merciful.
+        <p style={{ fontFamily: "'IBM Plex Sans Arabic',sans-serif", fontSize: "clamp(0.7rem,1.8vw,0.82rem)", fontWeight: 300, lineHeight: 1.8, color: "#d4a57466", direction: "rtl", marginBottom: "0.4rem", animation: "fadeSlideUp 1s 0.8s both" }}>
+          الليلة، في الثالثة والثلاثين، تجتمع الذكريات. من رمال عُمان، إلى ياسمين تونس، وصولاً إلى أنوار فرنسا. من المختبرات إلى عالم الكود — قصة إيمان ونمو، ما زالت فصولها تروى.
         </p>
-        <p style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(0.76rem,1.9vw,0.88rem)", lineHeight: 1.9, color: "#d4a57455", direction: "rtl", marginBottom: "1.6rem", animation: "fadeSlideUp 1s 0.95s both" }}>
-          من صحراء عُمان إلى أنوار باريس.
-          <br />قصة إيمان وشجاعة وتجديد.
-          <br />٣٣ عاماً كتبها الرحمن.
+        <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.82rem,2.1vw,0.95rem)", lineHeight: 1.8, color: "#ffffff44", fontStyle: "italic", marginBottom: "1.6rem", animation: "fadeSlideUp 1s 0.95s both" }}>
+          Tonight, at 33, memories converge. From the sands of Oman, to the jasmine of Tunisia, and finally the lights of France. From science labs to digital craft—a journey of faith and growth, still unfolding.
         </p>
         <div style={{ marginBottom: "1.8rem", animation: "fadeSlideUp 1s 1.1s both" }}>
-          <LifeGauge years={33} max={100} animate={loaded} accent="#d4a574" delay={1.5} />
+          <LifeGauge years={33} max="X" animate={loaded} accent="#d4a574" delay={1.5} />
         </div>
         <button onClick={onEnter} onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)} style={{
           fontFamily: "'Cormorant Garamond',serif", fontSize: "0.9rem", fontStyle: "italic",
@@ -450,18 +449,18 @@ function Finale({ active, idx, total }: FinaleProps) {
           <div style={{ fontSize: "0.58rem", color: "#ffffff44", letterSpacing: "2px", fontFamily: "'IBM Plex Mono',monospace", marginBottom: "0.8rem", animation: active ? "fadeSlideUp 0.7s 0.36s both" : "none" }}>The Story Continues · القصة مستمرة</div>
           <div style={{ width: "36px", height: "1.5px", margin: "0 auto 0.8rem", background: `linear-gradient(90deg,transparent,${accent},transparent)`, animation: active ? "fadeSlideUp 0.7s 0.4s both" : "none" }} />
 
-          <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.85rem,2.1vw,0.96rem)", lineHeight: 1.8, color: "#f0ece6cc", margin: "0 0 0.5rem", animation: active ? "fadeSlideUp 0.7s 0.48s both" : "none" }}>
-            Looking back — every stumble was a lesson, every detour was divine guidance, every closed door was protection. The road was never straight, but it was always held in the hands of the Most Merciful.
-          </p>
-          <p style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(0.78rem,1.9vw,0.9rem)", lineHeight: 1.9, color: `${accent}88`, direction: "rtl", margin: "0 0 0.5rem", animation: active ? "fadeSlideUp 0.7s 0.56s both" : "none" }}>
+          <p style={{ fontFamily: "'IBM Plex Sans Arabic',sans-serif", fontSize: "clamp(0.75rem,1.8vw,0.85rem)", fontWeight: 300, lineHeight: 1.8, color: `${accent}aa`, direction: "rtl", margin: "0 0 0.5rem", animation: active ? "fadeSlideUp 0.7s 0.48s both" : "none" }}>
             بالنظر إلى الوراء — كل عثرة كانت درساً، كل منعطف كان هداية، كل باب مُغلق كان حماية. لم يكن الطريق مستقيماً أبداً، لكنه كان دائماً في يد الرحمن الرحيم.
           </p>
-
-          <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.82rem,2vw,0.92rem)", lineHeight: 1.8, color: "#ffffff55", fontStyle: "italic", margin: "0 0 0.4rem", animation: active ? "fadeSlideUp 0.7s 0.64s both" : "none" }}>
-            The best chapters haven't been written yet. Mecca awaits. Medina calls. New horizons are emerging on the silhouette of tomorrow.
+          <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.85rem,2.1vw,0.96rem)", lineHeight: 1.8, color: "#f0ece6cc", margin: "0 0 0.5rem", animation: active ? "fadeSlideUp 0.7s 0.56s both" : "none" }}>
+            Looking back — every stumble was a lesson, every detour was divine guidance, every closed door was protection. The road was never straight, but it was always held in the hands of the Most Merciful.
           </p>
-          <p style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(0.78rem,1.9vw,0.9rem)", lineHeight: 1.9, color: `${accent}66`, direction: "rtl", margin: "0 0 1.2rem", animation: active ? "fadeSlideUp 0.7s 0.72s both" : "none" }}>
+
+          <p style={{ fontFamily: "'IBM Plex Sans Arabic',sans-serif", fontSize: "clamp(0.75rem,1.8vw,0.85rem)", fontWeight: 300, lineHeight: 1.8, color: `${accent}88`, direction: "rtl", margin: "0 0 0.4rem", animation: active ? "fadeSlideUp 0.7s 0.64s both" : "none" }}>
             أجمل الفصول لم تُكتب بعد. مكة تنتظر. المدينة تنادي. آفاق جديدة تلوح في أفق الغد.
+          </p>
+          <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.82rem,2vw,0.92rem)", lineHeight: 1.8, color: "#ffffff55", fontStyle: "italic", margin: "0 0 1.2rem", animation: active ? "fadeSlideUp 0.7s 0.72s both" : "none" }}>
+            The best chapters haven't been written yet. Mecca awaits. Medina calls. New horizons are emerging on the silhouette of tomorrow.
           </p>
 
           <div style={{ fontSize: "1.8rem", marginBottom: "0.4rem", animation: active ? "fadeSlideUp 0.7s 0.8s both" : "none" }}>🤲</div>
@@ -469,7 +468,7 @@ function Finale({ active, idx, total }: FinaleProps) {
           <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "0.75rem", color: "#ffffff33", fontStyle: "italic", marginBottom: "1.3rem", animation: active ? "fadeSlideUp 0.7s 0.92s both" : "none" }}>All praise is due to Allah for everything.</div>
 
           <div style={{ animation: active ? "fadeSlideUp 1s 1.05s both" : "none" }}>
-            <LifeGauge years={33} max={100} animate={active && loaded} accent={accent} delay={0.5} />
+            <LifeGauge years={33} max="X" animate={active && loaded} accent={accent} delay={0.5} />
           </div>
           <div style={{ marginTop: "0.8rem", fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.5rem", color: "#ffffff1a", letterSpacing: "3px", textTransform: "uppercase", animation: active ? "fadeSlideUp 1s 1.4s both" : "none" }}>
             بسم الله نمضي · Onward, with God
@@ -524,7 +523,7 @@ const StorybookPage: React.FC = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,700&family=IBM+Plex+Mono:wght@300;400&family=Aref+Ruqaa:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,700&family=IBM+Plex+Mono:wght@300;400&family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap');
         *{margin:0;padding:0;box-sizing:border-box}
         .storybook-container { overflow:hidden; background:#030308; -webkit-font-smoothing:antialiased; height: 100vh; width: 100vw; position: fixed; inset: 0; }
         ::selection{background:#d4a57444;color:#fff}
@@ -576,7 +575,7 @@ const StorybookPage: React.FC = () => {
             <div style={{ position: "fixed", top: "1rem", right: "1rem", zIndex: 50, fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.55rem", color: "#ffffff22", letterSpacing: "2px" }}>{String(cur + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</div>
 
             {[{ show: cur > 0, s: "left", ic: "‹", fn: () => go(cur - 1) }, { show: cur < total - 1, s: "right", ic: "›", fn: () => go(cur + 1) }].filter(a => a.show).map((a, i) => (
-              <button key={i} onClick={a.fn} 
+              <button key={i} onClick={a.fn}
                 style={{
                   position: "fixed", [a.s as any]: "0.5rem", top: "50%", transform: "translateY(-50%)",
                   zIndex: 50, background: "#ffffff05", border: "1px solid #ffffff0a",
