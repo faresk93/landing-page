@@ -10,5 +10,7 @@ RUN npm run build
 FROM nginx:alpine
 # Copy the built files from the build stage to the standard Nginx directory
 COPY --from=build /app/dist /usr/share/nginx/html
+# Custom config to support SPA client-side routing (try_files fallback to index.html)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
