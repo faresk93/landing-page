@@ -80,7 +80,7 @@ const chapters: Chapter[] = [
     title: "Arbi Zarrouk", titleAr: "مدرسة العربي زروق",
     sub: "Ages 6–12 · Primary School 🇹🇳 · المدرسة الابتدائية",
     en: "Six years of chalk dust and bell rings. Walking to school through narrow streets, the smell of fresh bread, and friendships forged over shared sandwiches. In the quiet of the classroom, math became his secret language of logic and order.",
-    ar: "ست سنوات من غبار الطباشير ورنين الجرس. المشي إلى المدرسة عبر الأزقة، رائحة الخبز الطازج، وصداقات صُنعت فوق ساندويتشات مُقتسمة. في هدوء الفصل، صارت الرياضيات لغته السرية للمنطق والنظام. جزا الله معلّمي خير الجزاْ ورحم من توفّي منهم. اللهم ارحم عمي ومعلّمي رضا بومعيزة برحمتك الواسعة",
+    ar: "ست سنوات من غبار الطباشير ورنين الجرس. المشي إلى المدرسة عبر الأزقة، رائحة الخبز الطازج، وصداقات صُنعت فوق ساندويتشات مُقتسمة. في هدوء الفصل، صارت الرياضيات لغته السرية للمنطق والنظام. جزا الله معلّمي خير الجزاء ورحم من توفّي منهم. اللهم ارحم عمي ومعلّمي رضا بومعيزة برحمتك الواسعة",
     emoji: "📚", flag: "🇹🇳",
     bgEmojis: ["📖", "✍️", "🏫", "📝", "🎒", "📏"],
     pal: { bg: "#0c1c38", bg2: "#1a3058", bg3: "#284878", accent: "#60a5fa", glow: "#60a5fa44" },
@@ -97,7 +97,7 @@ const chapters: Chapter[] = [
   },
   {
     id: "highschool", year: "2008–12",
-    title: "Numbers & Glory", titleAr: "الأرقام والمجد",
+    title: "High School", titleAr: "المرحلة الثانوية - معهد نهج المنزه",
     sub: "Ages 15–19 · Lycée · Mathematics 🇹🇳 · الباكالوريا رياضيات",
     en: "Four years in the world of integrals and equations. Nahj El Manzeh — where a boy sharpened into a young man. The Baccalauréat came, and he conquered it with honors, opening the doors to a future built on excellence and effort.",
     ar: "أربع سنوات في عالم التكاملات والمعادلات. نهج المنزه — حيث صُقل الفتى رجلاً. جاء الباكالوريا وانتصر عليه بامتياز، ليفتح أبواب المستقبل المبني على التفوق والجهد.",
@@ -107,7 +107,7 @@ const chapters: Chapter[] = [
   },
   {
     id: "insat", year: "2012–18",
-    title: "The Engineer", titleAr: "المُهندس",
+    title: "INSAT Tunis", titleAr: "التعليم العالي",
     sub: "Ages 19–25 · INSAT Tunis 🇹🇳 · الهندسة",
     en: "Five years at INSAT, in the heart of Tunis. Late nights, rigorous exams, and lifelong bonds. Graduation day arrived — a diploma in hand, a testament to years of dedication and the pride in his parents' eyes.",
     ar: "خمس سنوات في المعهد الوطني، في قلب العاصمة. ليالٍ طويلة، امتحانات صارمة، وروابط تدوم. جاء يوم التخرج — الشهادة في اليد، شاهدة على سنوات من التفاني والفخر في عيون الوالدين.",
@@ -127,7 +127,7 @@ const chapters: Chapter[] = [
   },
   {
     id: "dev", year: "2018–21",
-    title: "The Reinvention", titleAr: "إعادة الاختراع",
+    title: "The Rerouting", titleAr: "إعادة التموضع",
     sub: "Tunisia 🇹🇳 · البداية الجديدة",
     en: "He rewired himself. From labs to keyboards, from molecules to code. Three years of relentless learning and becoming, transforming into a architect of digital possibilities, driven by a new passion for creation.",
     ar: "أعاد تشكيل نفسه. من المختبرات إلى لوحات المفاتيح، من الجزيئات إلى البرمجة. ثلاث سنوات من التعلم المستمر، ليتحول إلى مهندس للاحتمالات الرقمية، مدفوعاً بشغف جديد للبناء.",
@@ -137,7 +137,7 @@ const chapters: Chapter[] = [
   },
   {
     id: "paris", year: "2021",
-    title: "City of Light", titleAr: "مدينة النور",
+    title: "City of Lights", titleAr: "مدينة الأنوار",
     sub: "Paris, France 🇫🇷 · باريس، فرنسا",
     en: "A one-way ticket. The City of Light welcomed a new dreamer. Leaving behind the familiar home for the magnificent unknown, carrying with him the values of his past and the ambition for a global future.",
     ar: "تذكرة ذهاب بلا عودة. مدينة النور استقبلت حالماً جديداً. ترك الوطن المألوف نحو المجهول العظيم، حاملاً معه قيم الماضي وطموح المستقبل العالمي.",
@@ -317,7 +317,7 @@ function Slide({ ch, active, idx, total }: SlideProps) {
       <div style={{
         position: "relative", zIndex: 10, display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        height: "100%", padding: "2.2rem 1.5rem 4rem",
+        height: "100%", padding: "0 1.5rem 4rem",
         overflowY: "auto", WebkitOverflowScrolling: "touch",
       }}>
         <div style={{
@@ -341,7 +341,7 @@ function Slide({ ch, active, idx, total }: SlideProps) {
         </div>
       </div>
 
-      <div style={{ position: "absolute", bottom: "3rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", gap: "3px" }}>
+      <div style={{ position: "absolute", bottom: "4rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", gap: "3px" }}>
         {Array.from({ length: total }).map((_, i) => (
           <div key={i} style={{ width: i === idx ? "16px" : "3.5px", height: "3.5px", borderRadius: "99px", background: i === idx ? p.accent : "#ffffff15", transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)", boxShadow: i === idx ? `0 0 5px ${p.accent}55` : "none" }} />
         ))}
@@ -431,7 +431,7 @@ function Finale({ active, idx, total }: FinaleProps) {
       <div style={{
         position: "relative", zIndex: 10, display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        height: "100%", padding: "2.2rem 1.5rem 4rem",
+        height: "100%", padding: "0 1.5rem 4rem",
         overflowY: "auto", WebkitOverflowScrolling: "touch",
       }}>
         <div style={{
@@ -476,7 +476,7 @@ function Finale({ active, idx, total }: FinaleProps) {
         </div>
       </div>
 
-      <div style={{ position: "absolute", bottom: "3rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", gap: "3px" }}>
+      <div style={{ position: "absolute", bottom: "4rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", gap: "3px" }}>
         {Array.from({ length: total }).map((_, i) => (
           <div key={i} style={{ width: i === idx ? "16px" : "3.5px", height: "3.5px", borderRadius: "99px", background: i === idx ? accent : "#ffffff15", transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)", boxShadow: i === idx ? `0 0 5px ${accent}55` : "none" }} />
         ))}
