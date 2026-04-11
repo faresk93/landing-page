@@ -258,7 +258,7 @@ function Slide({ ch, active, idx, total }) {
       <div style={{
         position: "relative", zIndex: 10, display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        height: "100%", padding: "4.5rem 1.5rem 3.2rem",
+        height: "100%", padding: "2.2rem 1.5rem 4rem",
         overflowY: "auto", WebkitOverflowScrolling: "touch",
       }}>
         <div style={{
@@ -362,7 +362,7 @@ function Finale({ active, idx, total }) {
       <div style={{
         position: "relative", zIndex: 10, display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        height: "100%", padding: "4rem 1.5rem 3rem",
+        height: "100%", padding: "2.2rem 1.5rem 4rem",
         overflowY: "auto", WebkitOverflowScrolling: "touch",
       }}>
         <div style={{
