@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import {
   Code2, Cake, Mail, Linkedin, Instagram, Github, ArrowRight, Settings,
-  MessageSquare, Bot, LogIn, LogOut, User as UserIcon, X, Sun, Moon, Construction
+  MessageSquare, Bot, LogIn, LogOut, User as UserIcon, X, Sun, Moon, Construction, BookOpen
 } from 'lucide-react';
 
 
@@ -27,6 +28,7 @@ interface ProfileCardProps {
 export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLightMode, setIsLightMode }) => {
 
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
 
   const PLACEHOLDERS = [
     t('chat.placeholder_en'),
@@ -409,6 +411,30 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
                   </div>
                 </motion.button>
               </div>
+
+              {/* Storybook Button */}
+              <motion.button
+                onClick={() => navigate('/storybook')}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15, duration: 0.4 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full relative group rounded-xl md:rounded-2xl bg-gradient-to-r from-emerald-600/20 via-teal-600/20 to-emerald-600/20 border border-emerald-500/20 hover:border-emerald-500/50 transition-all duration-500 overflow-hidden shadow-lg md:shadow-xl h-11 md:h-14 px-1 md:px-0"
+              >
+                {/* animated shimmer sweep */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-400/10 to-transparent -translate-x-full"
+                  animate={{ translateX: ['−100%', '200%'] }}
+                  transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 1.5, ease: 'easeInOut' }}
+                />
+                <div className="absolute inset-x-0 bottom-0 h-[2px] bg-emerald-500/40 shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
+                <div className={`relative flex items-center justify-center gap-1.5 md:gap-3 h-full ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+                  <BookOpen className="w-3 h-3 md:w-5 md:h-5 text-emerald-400 group-hover:scale-110 transition-transform duration-300 shrink-0" />
+                  <span className="font-orbitron font-bold md:font-black text-[8px] xs:text-[9px] md:text-[11px] tracking-widest md:tracking-[0.2em] text-white uppercase whitespace-nowrap">Storybook</span>
+                  <ArrowRight className={`w-3 h-3 md:w-4 md:h-4 text-emerald-400 group-hover:translate-x-1 transition-transform duration-300 ${i18n.language === 'ar' ? 'rotate-180 group-hover:-translate-x-1' : ''}`} />
+                </div>
+              </motion.button>
             </div>
           </div>
         </div>
