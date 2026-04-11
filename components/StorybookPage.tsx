@@ -322,11 +322,11 @@ const CinematicLifeBar = ({ onComplete }: { onComplete: () => void }) => {
       val: years,
       duration: 5,
       ease: "power2.inOut",
-      onUpdate: function() {
+      onUpdate: function () {
         const current = this.targets()[0].val;
         setProgress(current);
         const y = Math.floor(current);
-        
+
         // Spawn sparks
         if (Math.random() > 0.7) {
           const newSpark = {
@@ -351,14 +351,14 @@ const CinematicLifeBar = ({ onComplete }: { onComplete: () => void }) => {
   }, []);
 
   const accent = "#d4a574";
-  const pct = (progress / years) * 50; 
+  const pct = (progress / years) * 50;
   const targetPct = 50;
 
   return (
     <div style={{ width: "95%", maxWidth: "360px", margin: "0 auto", position: "relative" }}>
       <div style={{ position: "absolute", top: "-2.8rem", left: `${pct}%`, transform: "translateX(-50%)", pointerEvents: "none", zIndex: 20 }}>
         {activeWord && (
-          <div style={{ 
+          <div style={{
             fontFamily: "'Cormorant Garamond',serif", fontStyle: "italic", fontSize: "1.1rem", color: accent,
             letterSpacing: "4px", textTransform: "uppercase", whiteSpace: "nowrap",
             animation: "fadeSlideUp 1.2s forwards"
@@ -375,7 +375,7 @@ const CinematicLifeBar = ({ onComplete }: { onComplete: () => void }) => {
 
       <div style={{ width: "100%", height: "8px", borderRadius: "99px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "visible" }}>
         <div style={{ position: "absolute", inset: 0, left: `${targetPct}%`, background: "rgba(255,255,255,0.015)", animation: "futureFlicker 3s infinite alternate ease-in-out" }} />
-        
+
         {/* Sparks */}
         {sparks.map(s => (
           <div key={s.id} style={{
@@ -494,15 +494,15 @@ function Intro({ onEnter }: IntroProps) {
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", overflow: "hidden",
     }}>
       {/* Cinematic Background Layer */}
-      <div style={{ 
-        position: "absolute", inset: 0, 
+      <div style={{
+        position: "absolute", inset: 0,
         background: "linear-gradient(145deg, #030308 0%, #0d122b 30%, #1a0b2e 70%, #030308 100%)",
-        backgroundSize: "200% 200%", animation: "gradientFlow 20s ease infinite" 
+        backgroundSize: "200% 200%", animation: "gradientFlow 20s ease infinite"
       }} />
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at center, transparent 0%, #030308 90%)" }} />
-      
+
       <Particles color="#d4a574" count={80} />
-      
+
       <div style={{ position: "relative", zIndex: 10, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "2.5rem", width: "100%", maxWidth: "450px", padding: "0 1.5rem" }}>
         <div style={{ position: "relative", animation: "fadeSlideUp 1s both" }}>
           {/* Artistic Background Number */}
@@ -531,14 +531,14 @@ function Intro({ onEnter }: IntroProps) {
           </p>
         </div>
 
-        <div style={{ 
-          opacity: complete ? 1 : 0, 
+        <div style={{
+          opacity: complete ? 1 : 0,
           transform: complete ? "translateY(0)" : "translateY(20px)",
           transition: "all 1s cubic-bezier(0.16,1,0.3,1)",
           marginTop: "1.5rem"
         }}>
-          <button 
-            onClick={onEnter} 
+          <button
+            onClick={onEnter}
             style={{
               fontFamily: "'Cormorant Garamond',serif", fontSize: "1.1rem", fontStyle: "italic",
               padding: "14px 45px", borderRadius: "999px", border: "1px solid #d4a57440",
@@ -611,10 +611,10 @@ function Finale({ active, idx, total }: FinaleProps) {
           </p>
 
           <p style={{ fontFamily: "'IBM Plex Sans Arabic',sans-serif", fontSize: "clamp(0.75rem,1.8vw,0.85rem)", fontWeight: 300, lineHeight: 1.8, color: `${accent}88`, direction: "rtl", margin: "0 0 0.4rem", animation: active ? "fadeSlideUp 0.7s 0.64s both" : "none" }}>
-            أجمل الفصول لم تُكتب بعد. مكة تنتظر. المدينة تنادي. آفاق جديدة تلوح في أفق الغد.
+            أجمل الفصول لم تُكتب بعد. آفاق جديدة تلوح في أفق الغد.
           </p>
           <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.82rem,2vw,0.92rem)", lineHeight: 1.8, color: "#ffffff55", fontStyle: "italic", margin: "0 0 1.2rem", animation: active ? "fadeSlideUp 0.7s 0.72s both" : "none" }}>
-            The best chapters haven't been written yet. Mecca awaits. Medina calls. New horizons are emerging on the silhouette of tomorrow.
+            The best chapters haven't been written yet. New horizons are emerging on the silhouette of tomorrow.
           </p>
 
           <div style={{ fontSize: "1.8rem", marginBottom: "0.4rem", animation: active ? "fadeSlideUp 0.7s 0.8s both" : "none" }}>🤲</div>
