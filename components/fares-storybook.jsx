@@ -1,40 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-
-/* ═══════════ TYPES ═══════════ */
-
-interface Palette {
-  bg: string;
-  bg2: string;
-  bg3: string;
-  accent: string;
-  glow: string;
-}
-
-interface Chapter {
-  id: string;
-  year: string;
-  title: string;
-  titleAr: string;
-  sub: string;
-  en: string;
-  ar: string;
-  emoji: string;
-  flag: string;
-  bgEmojis: string[];
-  pal: Palette;
-  showTravel?: boolean;
-}
-
-/* ═══════════ DATA ═══════════ */
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const COUNTRIES = [
   "🇴🇲","🇹🇳","🇩🇪","🇫🇷","🇦🇹","🇧🇪","🇸🇦","🇮🇹","🇻🇦","🇨🇭","🇨🇿",
   "🇱🇺","🇪🇸","🇭🇷","🇲🇨","🇬🇧","🇫🇮","🇪🇪","🇳🇴","🇦🇱","🇬🇷","🇳🇱"
 ];
 
-const chapters: Chapter[] = [
+const chapters = [
   {
     id:"birth", year:"1993",
     title:"Born Under Arabian Skies", titleAr:"وُلِدَ تحت سماء عُمان",
@@ -160,19 +131,13 @@ const chapters: Chapter[] = [
 
 /* ═══════════ COMPONENTS ═══════════ */
 
-interface ParticlesProps {
-  color: string;
-  count?: number;
-}
-
-function Particles({ color, count = 45 }: ParticlesProps) {
-  const ref = useRef<HTMLCanvasElement>(null);
-  const raf = useRef<number>(0);
+function Particles({ color, count = 45 }) {
+  const ref = useRef(null), raf = useRef(null);
   useEffect(() => {
     const c = ref.current; if (!c) return;
-    const ctx = c.getContext("2d"); if (!ctx) return;
-    const fit = () => { c.width = window.innerWidth; c.height = window.innerHeight; };
-    fit(); window.addEventListener("resize", fit);
+    const ctx = c.getContext("2d");
+    const fit = () => { c.width = innerWidth; c.height = innerHeight; };
+    fit(); addEventListener("resize", fit);
     const ps = Array.from({ length: count }, () => ({
       x: Math.random() * c.width, y: Math.random() * c.height,
       r: Math.random() * 2 + 0.5, dx: (Math.random() - 0.5) * 0.3,
@@ -193,20 +158,12 @@ function Particles({ color, count = 45 }: ParticlesProps) {
       raf.current = requestAnimationFrame(loop);
     };
     loop();
-    return () => { cancelAnimationFrame(raf.current); window.removeEventListener("resize", fit); };
+    return () => { cancelAnimationFrame(raf.current); removeEventListener("resize", fit); };
   }, [color, count]);
   return <canvas ref={ref} style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 2 }} />;
 }
 
-interface LifeGaugeProps {
-  years?: number;
-  max?: number;
-  animate?: boolean;
-  accent?: string;
-  delay?: number;
-}
-
-function LifeGauge({ years = 33, max = 100, animate = true, accent = "#d4a574", delay = 1 }: LifeGaugeProps) {
+function LifeGauge({ years = 33, max = 100, animate = true, accent = "#d4a574", delay = 1 }) {
   const pct = (years / max) * 100;
   return (
     <div style={{ width: "85%", maxWidth: "300px", margin: "0 auto" }}>
@@ -239,12 +196,7 @@ function LifeGauge({ years = 33, max = 100, animate = true, accent = "#d4a574", 
   );
 }
 
-interface AtmosphereProps {
-  icons: string[];
-  accent: string;
-}
-
-function Atmosphere({ icons, accent }: AtmosphereProps) {
+function Atmosphere({ icons, accent }) {
   const spots = [{ left: "6%", top: "10%" }, { right: "7%", top: "14%" }, { left: "14%", bottom: "20%" }, { right: "12%", bottom: "12%" }, { left: "48%", top: "6%" }, { right: "28%", bottom: "30%" }];
   return (
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 1 }}>
@@ -265,11 +217,7 @@ function Atmosphere({ icons, accent }: AtmosphereProps) {
   );
 }
 
-interface TravelGridProps {
-  active: boolean;
-}
-
-function TravelGrid({ active }: TravelGridProps) {
+function TravelGrid({ active }) {
   return (
     <div style={{
       marginTop: "1.1rem", opacity: active ? 1 : 0,
@@ -292,14 +240,7 @@ function TravelGrid({ active }: TravelGridProps) {
 }
 
 /* ─── SLIDE ─── */
-interface SlideProps {
-  ch: Chapter;
-  active: boolean;
-  idx: number;
-  total: number;
-}
-
-function Slide({ ch, active, idx, total }: SlideProps) {
+function Slide({ ch, active, idx, total }) {
   const p = ch.pal;
   return (
     <div style={{
@@ -354,11 +295,7 @@ function Slide({ ch, active, idx, total }: SlideProps) {
 }
 
 /* ─── INTRO ─── */
-interface IntroProps {
-  onEnter: () => void;
-}
-
-function Intro({ onEnter }: IntroProps) {
+function Intro({ onEnter }) {
   const [h, setH] = useState(false);
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { setTimeout(() => setLoaded(true), 300); }, []);
@@ -407,13 +344,7 @@ function Intro({ onEnter }: IntroProps) {
 }
 
 /* ─── FINALE ─── */
-interface FinaleProps {
-  active: boolean;
-  idx: number;
-  total: number;
-}
-
-function Finale({ active, idx, total }: FinaleProps) {
+function Finale({ active, idx, total }) {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { if (active) setTimeout(() => setLoaded(true), 400); }, [active]);
   const accent = "#fbbf24";
@@ -486,8 +417,8 @@ function Finale({ active, idx, total }: FinaleProps) {
   );
 }
 
-/* ═══════════ APP ═══════════ */
-const StorybookPage: React.FC = () => {
+/* ─── APP ─── */
+export default function App() {
   const [intro, setIntro] = useState(true);
   const [exit, setExit] = useState(false);
   const [cur, setCur] = useState(0);
@@ -495,7 +426,7 @@ const StorybookPage: React.FC = () => {
   const lock = useRef(false);
   const total = chapters.length + 1;
 
-  const go = useCallback((i: number) => {
+  const go = useCallback((i) => {
     if (i < 0 || i >= total || lock.current) return;
     lock.current = true; setCur(i);
     setTimeout(() => { lock.current = false; }, 780);
@@ -503,22 +434,22 @@ const StorybookPage: React.FC = () => {
 
   useEffect(() => {
     if (intro) return;
-    const h = (e: KeyboardEvent) => {
+    const h = e => {
       if (e.key === "ArrowRight" || e.key === "ArrowDown") go(cur + 1);
       if (e.key === "ArrowLeft" || e.key === "ArrowUp") go(cur - 1);
     };
-    window.addEventListener("keydown", h); return () => window.removeEventListener("keydown", h);
+    addEventListener("keydown", h); return () => removeEventListener("keydown", h);
   }, [cur, intro, go]);
 
   useEffect(() => {
     if (intro) return;
-    let wt: any = null;
-    const h = (e: WheelEvent) => {
+    let wt = null;
+    const h = e => {
       e.preventDefault(); if (wt) return;
       const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
       if (Math.abs(d) > 22) { go(d > 0 ? cur + 1 : cur - 1); wt = setTimeout(() => { wt = null; }, 880); }
     };
-    window.addEventListener("wheel", h, { passive: false }); return () => window.removeEventListener("wheel", h);
+    addEventListener("wheel", h, { passive: false }); return () => removeEventListener("wheel", h);
   }, [cur, intro, go]);
 
   return (
@@ -526,7 +457,7 @@ const StorybookPage: React.FC = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,700&family=IBM+Plex+Mono:wght@300;400&family=Aref+Ruqaa:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap');
         *{margin:0;padding:0;box-sizing:border-box}
-        .storybook-container { overflow:hidden; background:#030308; -webkit-font-smoothing:antialiased; height: 100vh; width: 100vw; position: fixed; inset: 0; }
+        html,body{overflow:hidden;background:#030308;-webkit-font-smoothing:antialiased}
         ::selection{background:#d4a57444;color:#fff}
         ::-webkit-scrollbar{width:0;height:0}
         @keyframes fadeSlideUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
@@ -538,62 +469,49 @@ const StorybookPage: React.FC = () => {
         @keyframes shimmerSlide{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
       `}</style>
 
-      <div className="storybook-container">
-        <div style={{ position: "fixed", inset: 0, zIndex: 9999, pointerEvents: "none", background: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`, opacity: 0.028, mixBlendMode: "overlay", animation: "grain 0.4s steps(1) infinite" }} />
+      <div style={{ position: "fixed", inset: 0, zIndex: 9999, pointerEvents: "none", background: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`, opacity: 0.028, mixBlendMode: "overlay", animation: "grain 0.4s steps(1) infinite" }} />
 
-        <Link
-          to="/"
-          className="fixed top-8 left-8 inline-flex items-center gap-2 text-white/40 hover:text-white transition-colors group z-[10000]"
+      {intro && (
+        <div style={{ animation: exit ? "introExit 0.9s cubic-bezier(0.16,1,0.3,1) forwards" : "none" }}>
+          <Intro onEnter={() => { setExit(true); setTimeout(() => setIntro(false), 900); }} />
+        </div>
+      )}
+
+      {!intro && (
+        <div
+          onTouchStart={e => { t.current = { sx: e.touches[0].clientX, drag: true }; }}
+          onTouchEnd={e => { if (!t.current.drag) return; t.current.drag = false; const dx = t.current.sx - e.changedTouches[0].clientX; if (Math.abs(dx) > 36) go(dx > 0 ? cur + 1 : cur - 1); }}
+          onMouseDown={e => { t.current = { sx: e.clientX, drag: true }; }}
+          onMouseUp={e => { if (!t.current.drag) return; t.current.drag = false; const dx = t.current.sx - e.clientX; if (Math.abs(dx) > 45) go(dx > 0 ? cur + 1 : cur - 1); }}
+          style={{ position: "fixed", inset: 0, overflow: "hidden", cursor: "grab", userSelect: "none" }}
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span className="font-orbitron text-[10px] tracking-widest uppercase font-bold">Back</span>
-        </Link>
-
-        {intro && (
-          <div style={{ animation: exit ? "introExit 0.9s cubic-bezier(0.16,1,0.3,1) forwards" : "none" }}>
-            <Intro onEnter={() => { setExit(true); setTimeout(() => setIntro(false), 900); }} />
+          <div style={{
+            display: "flex", width: `${total * 100}vw`, height: "100vh",
+            transform: `translateX(-${cur * 100}vw)`,
+            transition: "transform 0.78s cubic-bezier(0.16,1,0.3,1)",
+            willChange: "transform",
+          }}>
+            {chapters.map((ch, i) => <Slide key={ch.id} ch={ch} active={i === cur} idx={i} total={total} />)}
+            <Finale active={cur === chapters.length} idx={chapters.length} total={total} />
           </div>
-        )}
 
-        {!intro && (
-          <div
-            onTouchStart={e => { t.current = { sx: e.touches[0].clientX, drag: true }; }}
-            onTouchEnd={e => { if (!t.current.drag) return; t.current.drag = false; const dx = t.current.sx - e.changedTouches[0].clientX; if (Math.abs(dx) > 36) go(dx > 0 ? cur + 1 : cur - 1); }}
-            onMouseDown={e => { t.current = { sx: e.clientX, drag: true }; }}
-            onMouseUp={e => { if (!t.current.drag) return; t.current.drag = false; const dx = t.current.sx - e.clientX; if (Math.abs(dx) > 45) go(dx > 0 ? cur + 1 : cur - 1); }}
-            style={{ position: "fixed", inset: 0, overflow: "hidden", cursor: "grab", userSelect: "none" }}
-          >
-            <div style={{
-              display: "flex", width: `${total * 100}vw`, height: "100vh",
-              transform: `translateX(-${cur * 100}vw)`,
-              transition: "transform 0.78s cubic-bezier(0.16,1,0.3,1)",
-              willChange: "transform",
-            }}>
-              {chapters.map((ch, i) => <Slide key={ch.id} ch={ch} active={i === cur} idx={i} total={total} />)}
-              <Finale active={cur === chapters.length} idx={chapters.length} total={total} />
-            </div>
+          <div style={{ position: "fixed", top: "1rem", right: "1rem", z_idx: 50, fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.55rem", color: "#ffffff22", letterSpacing: "2px" }}>{String(cur + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</div>
 
-            <div style={{ position: "fixed", top: "1rem", right: "1rem", zIndex: 50, fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.55rem", color: "#ffffff22", letterSpacing: "2px" }}>{String(cur + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</div>
-
-            {[{ show: cur > 0, s: "left", ic: "‹", fn: () => go(cur - 1) }, { show: cur < total - 1, s: "right", ic: "›", fn: () => go(cur + 1) }].filter(a => a.show).map((a, i) => (
-              <button key={i} onClick={a.fn} 
-                style={{
-                  position: "fixed", [a.s as any]: "0.5rem", top: "50%", transform: "translateY(-50%)",
-                  zIndex: 50, background: "#ffffff05", border: "1px solid #ffffff0a",
-                  borderRadius: "50%", width: "34px", height: "34px",
-                  color: "#ffffff38", cursor: "pointer", fontSize: "1rem",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  backdropFilter: "blur(5px)", transition: "all 0.3s",
-                }}
-                onMouseEnter={e => { (e.target as HTMLButtonElement).style.borderColor = "#ffffff25"; (e.target as HTMLButtonElement).style.color = "#ffffff99"; }}
-                onMouseLeave={e => { (e.target as HTMLButtonElement).style.borderColor = "#ffffff0a"; (e.target as HTMLButtonElement).style.color = "#ffffff38"; }}
-              >{a.ic}</button>
-            ))}
-          </div>
-        )}
-      </div>
+          {[{ show: cur > 0, s: "left", ic: "‹", fn: () => go(cur - 1) }, { show: cur < total - 1, s: "right", ic: "›", fn: () => go(cur + 1) }].filter(a => a.show).map((a, i) => (
+            <button key={i} onClick={a.fn} style={{
+              position: "fixed", [a.s]: "0.5rem", top: "50%", transform: "translateY(-50%)",
+              zIndex: 50, background: "#ffffff05", border: "1px solid #ffffff0a",
+              borderRadius: "50%", width: "34px", height: "34px",
+              color: "#ffffff38", cursor: "pointer", fontSize: "1rem",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              backdropFilter: "blur(5px)", transition: "all 0.3s",
+            }}
+              onMouseEnter={e => { e.target.style.borderColor = "#ffffff25"; e.target.style.color = "#ffffff99"; }}
+              onMouseLeave={e => { e.target.style.borderColor = "#ffffff0a"; e.target.style.color = "#ffffff38"; }}
+            >{a.ic}</button>
+          ))}
+        </div>
+      )}
     </>
   );
 }
-
-export default StorybookPage;
