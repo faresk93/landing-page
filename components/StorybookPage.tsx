@@ -341,13 +341,13 @@ function Slide({ ch, active, idx, total }: SlideProps) {
         </div>
       </div>
 
-      <div style={{ position: "absolute", bottom: "1.1rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", gap: "3px" }}>
+      <div style={{ position: "absolute", bottom: "3rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", gap: "3px" }}>
         {Array.from({ length: total }).map((_, i) => (
           <div key={i} style={{ width: i === idx ? "16px" : "3.5px", height: "3.5px", borderRadius: "99px", background: i === idx ? p.accent : "#ffffff15", transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)", boxShadow: i === idx ? `0 0 5px ${p.accent}55` : "none" }} />
         ))}
       </div>
       {idx === 0 && active && (
-        <div style={{ position: "absolute", bottom: "2.8rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, color: "#ffffff22", fontSize: "0.55rem", letterSpacing: "3px", textTransform: "uppercase", fontFamily: "'IBM Plex Mono',monospace", animation: "fadeSlideUp 1s 2s both, gentlePulse 2.5s 3s ease-in-out infinite" }}>← swipe or scroll →</div>
+        <div style={{ position: "absolute", bottom: "4.5rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, color: "#ffffff22", fontSize: "0.55rem", letterSpacing: "3px", textTransform: "uppercase", fontFamily: "'IBM Plex Mono',monospace", animation: "fadeSlideUp 1s 2s both, gentlePulse 2.5s 3s ease-in-out infinite" }}>← swipe or scroll →</div>
       )}
     </div>
   );
@@ -444,8 +444,8 @@ function Finale({ active, idx, total }: FinaleProps) {
             <span style={{ padding: "3px 13px", borderRadius: "999px", border: `1.5px solid ${accent}55`, color: accent, fontSize: "0.58rem", letterSpacing: "2px", fontFamily: "'IBM Plex Mono',monospace", background: `${accent}08` }}>April 12, 2026</span>
           </div>
           <div style={{ fontSize: "2.4rem", margin: "0.7rem 0 0.4rem", filter: `drop-shadow(0 0 22px ${accent}77)`, animation: active ? "fadeSlideUp 0.7s 0.2s both, gentlePulse 4s 1s ease-in-out infinite" : "none" }}>✨</div>
-          <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(1.1rem,3.2vw,1.5rem)", color: `${accent}bb`, direction: "rtl", marginBottom: "0.1rem", animation: active ? "fadeSlideUp 0.7s 0.26s both" : "none" }}>الفصل الثاني والثلاثون</div>
-          <h2 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(1.5rem,5vw,2.4rem)", fontWeight: 700, fontStyle: "italic", color: "#f0ece6", margin: "0 0 0.25rem", lineHeight: 1.1, textShadow: `0 0 40px ${accent}30`, animation: active ? "fadeSlideUp 0.7s 0.32s both" : "none" }}>Chapter 32</h2>
+          <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(1.1rem,3.2vw,1.5rem)", color: `${accent}bb`, direction: "rtl", marginBottom: "0.1rem", animation: active ? "fadeSlideUp 0.7s 0.26s both" : "none" }}>الفصل الثالث والثلاثون</div>
+          <h2 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(1.5rem,5vw,2.4rem)", fontWeight: 700, fontStyle: "italic", color: "#f0ece6", margin: "0 0 0.25rem", lineHeight: 1.1, textShadow: `0 0 40px ${accent}30`, animation: active ? "fadeSlideUp 0.7s 0.32s both" : "none" }}>Chapter 33</h2>
           <div style={{ fontSize: "0.58rem", color: "#ffffff44", letterSpacing: "2px", fontFamily: "'IBM Plex Mono',monospace", marginBottom: "0.8rem", animation: active ? "fadeSlideUp 0.7s 0.36s both" : "none" }}>The Story Continues · القصة مستمرة</div>
           <div style={{ width: "36px", height: "1.5px", margin: "0 auto 0.8rem", background: `linear-gradient(90deg,transparent,${accent},transparent)`, animation: active ? "fadeSlideUp 0.7s 0.4s both" : "none" }} />
 
@@ -476,7 +476,7 @@ function Finale({ active, idx, total }: FinaleProps) {
         </div>
       </div>
 
-      <div style={{ position: "absolute", bottom: "1.1rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", gap: "3px" }}>
+      <div style={{ position: "absolute", bottom: "3rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", gap: "3px" }}>
         {Array.from({ length: total }).map((_, i) => (
           <div key={i} style={{ width: i === idx ? "16px" : "3.5px", height: "3.5px", borderRadius: "99px", background: i === idx ? accent : "#ffffff15", transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)", boxShadow: i === idx ? `0 0 5px ${accent}55` : "none" }} />
         ))}
