@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
   Code2, Cake, Mail, Linkedin, Instagram, Github, ArrowRight, Settings,
-  MessageSquare, Bot, LogIn, LogOut, User as UserIcon, X, Sun, Moon, Construction, BookOpen
+  MessageSquare, Bot, LogIn, LogOut, User as UserIcon, X, Sun, Moon, Construction, BookOpen, FileText
 } from 'lucide-react';
 
 
@@ -411,6 +411,38 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
                   </div>
                 </motion.button>
               </div>
+
+              {/* Interactive CV Button — premium entry point */}
+              <motion.button
+                onClick={() => navigate('/cv')}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.4 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full relative group rounded-xl md:rounded-2xl bg-gradient-to-r from-sky-500/15 via-indigo-500/15 to-sky-500/15 border border-white/10 hover:border-sky-300/40 backdrop-blur-xl transition-all duration-500 overflow-hidden shadow-lg md:shadow-xl h-11 md:h-14 px-1 md:px-0"
+                aria-label="Open interactive CV"
+              >
+                {/* subtle animated shimmer sweep */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-sky-300/10 to-transparent -translate-x-full pointer-events-none"
+                  animate={{ translateX: ['-100%', '200%'] }}
+                  transition={{ duration: 2.6, repeat: Infinity, repeatDelay: 1.8, ease: 'easeInOut' }}
+                />
+                {/* soft ambient glow */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-sky-400/0 via-indigo-400/10 to-sky-400/0 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-sky-300/40 to-transparent shadow-[0_0_10px_rgba(125,211,252,0.35)]" />
+                <div className={`relative flex items-center justify-center gap-1.5 md:gap-3 h-full ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+                  <FileText className="w-3 h-3 md:w-5 md:h-5 text-sky-200 group-hover:scale-110 transition-transform duration-300 shrink-0" />
+                  <span className="font-orbitron font-bold md:font-black text-[8px] xs:text-[9px] md:text-[11px] tracking-widest md:tracking-[0.2em] text-white uppercase whitespace-nowrap">
+                    Interactive CV
+                  </span>
+                  <span className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-sky-300/20 bg-sky-300/5 text-sky-200/80 font-orbitron text-[8px] font-bold uppercase tracking-[0.2em]">
+                    New
+                  </span>
+                  <ArrowRight className={`w-3 h-3 md:w-4 md:h-4 text-sky-200 group-hover:translate-x-1 transition-transform duration-300 ${i18n.language === 'ar' ? 'rotate-180 group-hover:-translate-x-1' : ''}`} />
+                </div>
+              </motion.button>
 
               {/* Storybook Button */}
               <motion.button
