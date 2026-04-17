@@ -413,60 +413,62 @@ const SectionQuickNav: React.FC<SectionQuickNavProps> = ({ active, onNavigate })
         <div className="h-px w-8 bg-gradient-to-l from-transparent to-white/20" />
       </motion.div>
 
-      {/* Buttons row */}
-      <div className="flex items-stretch justify-center gap-2 overflow-x-auto pb-1 scrollbar-none sm:gap-3">
-        {QUICK_NAV_ITEMS.map(({ id, label, icon: Icon, kicker }, i) => {
-          const isActive = active === id;
-          return (
-            <motion.button
-              key={id}
-              type="button"
-              onClick={() => onNavigate(id)}
-              aria-label={`Go to ${label}`}
-              initial={{ opacity: 0, y: 16, scale: 0.88 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                duration: 0.55,
-                delay: 0.6 + i * 0.07,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              whileHover={reduce ? undefined : { y: -3, scale: 1.04 }}
-              whileTap={reduce ? undefined : { scale: 0.96 }}
-              className={`group relative flex shrink-0 flex-col items-center gap-1.5 rounded-2xl border px-4 py-3.5 transition-all duration-300 sm:px-5 ${
-                isActive
-                  ? 'border-white/20 bg-white/[0.07] text-white shadow-[0_4px_24px_-8px_rgba(255,255,255,0.18)]'
-                  : 'border-white/[0.07] bg-white/[0.02] text-white/45 hover:border-white/15 hover:bg-white/[0.05] hover:text-white/75'
-              }`}
-            >
-              {/* active top bar */}
-              {isActive && (
-                <motion.span
-                  layoutId="quickNavTopBar"
-                  className="absolute inset-x-3 top-0 h-[2px] rounded-full bg-gradient-to-r from-white/20 via-white/50 to-white/20"
-                  transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-                />
-              )}
-
-              <span
-                className={`flex h-8 w-8 items-center justify-center rounded-xl border transition-all duration-300 ${
+      {/* Buttons row — scrollable on mobile */}
+      <div className="overflow-x-auto pb-1 scrollbar-none">
+        <div className="flex items-stretch justify-start gap-2 sm:justify-center sm:gap-3">
+          {QUICK_NAV_ITEMS.map(({ id, label, icon: Icon, kicker }, i) => {
+            const isActive = active === id;
+            return (
+              <motion.button
+                key={id}
+                type="button"
+                onClick={() => onNavigate(id)}
+                aria-label={`Go to ${label}`}
+                initial={{ opacity: 0, y: 16, scale: 0.88 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 0.55,
+                  delay: 0.6 + i * 0.07,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                whileHover={reduce ? undefined : { y: -3, scale: 1.04 }}
+                whileTap={reduce ? undefined : { scale: 0.96 }}
+                className={`group relative flex shrink-0 flex-col items-center gap-1 rounded-2xl border px-3 py-2.5 transition-all duration-300 sm:gap-1.5 sm:px-5 sm:py-3.5 ${
                   isActive
-                    ? 'border-white/20 bg-white/[0.1] text-white'
-                    : 'border-white/[0.08] bg-white/[0.03] text-white/50 group-hover:border-white/15 group-hover:text-white/70'
+                    ? 'border-white/20 bg-white/[0.07] text-white shadow-[0_4px_24px_-8px_rgba(255,255,255,0.18)]'
+                    : 'border-white/[0.07] bg-white/[0.02] text-white/45 hover:border-white/15 hover:bg-white/[0.05] hover:text-white/75'
                 }`}
               >
-                <Icon className="h-3.5 w-3.5" />
-              </span>
+                {/* active top bar */}
+                {isActive && (
+                  <motion.span
+                    layoutId="quickNavTopBar"
+                    className="absolute inset-x-3 top-0 h-[2px] rounded-full bg-gradient-to-r from-white/20 via-white/50 to-white/20"
+                    transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+                  />
+                )}
 
-              <span className="font-orbitron text-[10px] font-bold uppercase tracking-[0.18em]">
-                {label}
-              </span>
+                <span
+                  className={`flex h-7 w-7 items-center justify-center rounded-xl border transition-all duration-300 sm:h-8 sm:w-8 ${
+                    isActive
+                      ? 'border-white/20 bg-white/[0.1] text-white'
+                      : 'border-white/[0.08] bg-white/[0.03] text-white/50 group-hover:border-white/15 group-hover:text-white/70'
+                  }`}
+                >
+                  <Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                </span>
 
-              <span className={`font-inter text-[10px] transition-colors duration-200 ${isActive ? 'text-white/40' : 'text-white/25 group-hover:text-white/35'}`}>
-                {kicker}
-              </span>
-            </motion.button>
-          );
-        })}
+                <span className="font-orbitron text-[9px] font-bold uppercase tracking-[0.15em] sm:text-[10px] sm:tracking-[0.18em]">
+                  {label}
+                </span>
+
+                <span className={`hidden font-inter text-[10px] transition-colors duration-200 sm:block ${isActive ? 'text-white/40' : 'text-white/25 group-hover:text-white/35'}`}>
+                  {kicker}
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Bottom separator */}
@@ -592,22 +594,23 @@ interface TimelineItemProps {
   exp: CVExperience;
   index: number;
   expanded: boolean;
+  shouldScroll: boolean;
   onToggle: (id: string) => void;
 }
 
-const TimelineItem: React.FC<TimelineItemProps> = React.memo(({ exp, index, expanded, onToggle }) => {
+const TimelineItem: React.FC<TimelineItemProps> = React.memo(({ exp, index, expanded, shouldScroll, onToggle }) => {
   const accent = ACCENTS[exp.accent];
   const itemRef = useRef<HTMLLIElement>(null);
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    if (expanded && itemRef.current && !reduce) {
+    if (shouldScroll && itemRef.current && !reduce) {
       const timer = setTimeout(() => {
         itemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }, 200);
       return () => clearTimeout(timer);
     }
-  }, [expanded, reduce]);
+  }, [shouldScroll, reduce]);
 
   return (
     <motion.li
@@ -791,8 +794,10 @@ TimelineItem.displayName = 'TimelineItem';
 
 const Timeline: React.FC = () => {
   const [expandedId, setExpandedId] = useState<string | null>(CV.experiences[0]?.id ?? null);
+  const [lastToggledId, setLastToggledId] = useState<string | null>(null);
 
   const handleToggle = useCallback((id: string) => {
+    setLastToggledId(id);
     setExpandedId((prev) => (prev === id ? null : id));
   }, []);
 
@@ -804,6 +809,7 @@ const Timeline: React.FC = () => {
           exp={exp}
           index={i}
           expanded={expandedId === exp.id}
+          shouldScroll={lastToggledId === exp.id && expandedId === exp.id}
           onToggle={handleToggle}
         />
       ))}
@@ -1003,6 +1009,11 @@ const AdditionalInfo: React.FC = () => (
 const CVPage: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('experience');
   const [navVisible, setNavVisible] = useState(false);
+
+  useEffect(() => {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+  }, []);
 
   const scrollToSection = useCallback((id: string) => {
     const el = document.getElementById(id);
