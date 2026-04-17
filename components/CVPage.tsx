@@ -1095,11 +1095,12 @@ const CVPage: React.FC = () => {
 
           <a
             href="/Fares_KHIARY_EN.pdf"
-            download="Fares_KHIARY_EN.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 font-orbitron text-[10px] font-bold uppercase tracking-[0.25em] text-white/60 transition-all hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
           >
             <Download className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Download CV</span>
+            <span className="hidden sm:inline">View CV</span>
           </a>
         </div>
       </div>
