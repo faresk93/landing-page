@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { Routes, Route } from 'react-router-dom';
 import SalatCounter from './components/SalatCounter';
 import StorybookPage from './components/StorybookPage';
+import CVPage from './components/CVPage';
 
 const App: React.FC = () => {
   const [view, setView] = useState<'profile' | 'solar-system'>('profile');
@@ -47,6 +48,7 @@ const App: React.FC = () => {
     <Routes>
       <Route path="/salat-counter" element={<SalatCounter />} />
       <Route path="/storybook" element={<StorybookPage />} />
+      <Route path="/cv" element={<CVPage />} />
       <Route path="/" element={
         <div className={`min-h-[100dvh] w-full relative flex flex-col md:flex-row items-center justify-start overflow-y-auto overflow-x-hidden ${isLightMode ? 'light-theme' : 'bg-[#020205]'}`}>
 
