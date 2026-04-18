@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
   Code2, Cake, Mail, Linkedin, Instagram, Github, ArrowRight, Settings,
-  MessageSquare, Bot, LogIn, LogOut, User as UserIcon, X, Sun, Moon, Construction, BookOpen, FileText
+  MessageSquare, Bot, LogIn, LogOut, User as UserIcon, X, Sun, Moon, Construction, BookOpen, FileText, Sparkles
 } from 'lucide-react';
 
 
@@ -441,6 +441,30 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ onEnterUniverse, isLig
                     New
                   </span>
                   <ArrowRight className={`w-3 h-3 md:w-4 md:h-4 text-sky-200 group-hover:translate-x-1 transition-transform duration-300 ${i18n.language === 'ar' ? 'rotate-180 group-hover:-translate-x-1' : ''}`} />
+                </div>
+              </motion.button>
+
+              {/* Skills Planet Button */}
+              <motion.button
+                onClick={() => navigate('/skills')}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.12, duration: 0.4 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full relative group rounded-xl md:rounded-2xl bg-gradient-to-r from-fuchsia-500/15 via-neonPurple/15 to-fuchsia-500/15 border border-fuchsia-400/20 hover:border-fuchsia-300/50 transition-all duration-500 overflow-hidden shadow-lg md:shadow-xl h-11 md:h-14 px-1 md:px-0"
+                aria-label="Open skills planetary system"
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-fuchsia-300/10 to-transparent -translate-x-full pointer-events-none"
+                  animate={{ translateX: ['-100%', '200%'] }}
+                  transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 1.6, ease: 'easeInOut' }}
+                />
+                <div className="absolute inset-x-0 bottom-0 h-[2px] bg-fuchsia-400/40 shadow-[0_0_10px_rgba(217,70,239,0.5)]" />
+                <div className={`relative flex items-center justify-center gap-1.5 md:gap-3 h-full ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+                  <Sparkles className="w-3 h-3 md:w-5 md:h-5 text-fuchsia-300 group-hover:scale-110 transition-transform duration-300 shrink-0" />
+                  <span className="font-orbitron font-bold md:font-black text-[8px] xs:text-[9px] md:text-[11px] tracking-widest md:tracking-[0.2em] text-white uppercase whitespace-nowrap">Skills</span>
+                  <ArrowRight className={`w-3 h-3 md:w-4 md:h-4 text-fuchsia-300 group-hover:translate-x-1 transition-transform duration-300 ${i18n.language === 'ar' ? 'rotate-180 group-hover:-translate-x-1' : ''}`} />
                 </div>
               </motion.button>
 
