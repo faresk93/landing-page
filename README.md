@@ -5,7 +5,6 @@ https://www.fares-khiary.com/
 
 A modern, interactive portfolio landing page featuring 3D graphics, AI-powered chat assistant, and a futuristic space theme.
 
-
 ## Features
 
 ### Core Features
