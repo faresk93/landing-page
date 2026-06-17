@@ -11,6 +11,7 @@ import SalatCounter from './components/SalatCounter';
 import StorybookPage from './components/StorybookPage';
 import CVPage from './components/CVPage';
 import SkillsPage from './components/SkillsPage';
+import SalmaPage from './components/SalmaPage';
 
 const App: React.FC = () => {
   const [view, setView] = useState<'profile' | 'solar-system'>('profile');
@@ -51,6 +52,7 @@ const App: React.FC = () => {
       <Route path="/storybook" element={<StorybookPage />} />
       <Route path="/cv" element={<CVPage />} />
       <Route path="/skills" element={<SkillsPage />} />
+      <Route path="/salma" element={<SalmaPage />} />
       <Route path="/" element={
         <div className={`min-h-[100dvh] w-full relative flex flex-col md:flex-row items-center justify-start overflow-y-auto overflow-x-hidden ${isLightMode ? 'light-theme' : 'bg-[#020205]'}`}>
 
