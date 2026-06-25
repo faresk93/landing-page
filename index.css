@@ -7,6 +7,21 @@
     --font-cairo: "Cairo", sans-serif;
     --font-readex: "Readex Pro", sans-serif;
 
+    /* Lovely fonts for the /salma love-letter dashboard */
+    --font-dancing: "Dancing Script", cursive;
+    --font-quicksand: "Quicksand", sans-serif;
+    --font-aref: "Aref Ruqaa", serif;
+    --font-reem: "Reem Kufi", sans-serif;
+    --font-pacifico: "Pacifico", cursive;
+
+    /* SOCOTEC-inspired homage accents (coral + ink) */
+    --color-socotec: #ff5a36;
+    --color-socotecInk: #15233b;
+    /* Romantic rose palette */
+    --color-rose: #ff6fa5;
+    --color-roseDeep: #e84a7f;
+    --color-blush: #fff5f7;
+
     --color-neonBlue: #00f3ff;
     --color-neonPurple: #bc13fe;
     --color-neonOrange: #ff9e00;
@@ -319,4 +334,77 @@ button {
     direction: ltr !important;
     text-align: center !important;
     white-space: nowrap !important;
+}
+
+/* =========================================================
+   /salma  — A lovely dashboard, made with love by Fares 💖
+   ========================================================= */
+
+/* Custom cursor: a red heart pierced by a cupid arrow */
+.salma-root,
+.salma-root button,
+.salma-root a {
+    cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='42'%20height='42'%20viewBox='0%200%2042%2042'%3E%3Cline%20x1='4'%20y1='5'%20x2='38'%20y2='37'%20stroke='%23801225'%20stroke-width='2.6'%20stroke-linecap='round'/%3E%3Cpath%20d='M3%204%20L15%207%20L7%2015%20Z'%20fill='%23801225'/%3E%3Cpath%20d='M33%2031%20L40%2039%20L31%2039%20Z'%20fill='%23e63b5e'/%3E%3Cg%20transform='translate(10,8)'%3E%3Cpath%20d='M12%2021%20C12%2021%203%2014%203%208.5%20C3%205.5%205.4%203.5%208%203.5%20C9.7%203.5%2011.2%204.5%2012%206%20C12.8%204.5%2014.3%203.5%2016%203.5%20C18.6%203.5%2021%205.5%2021%208.5%20C21%2014%2012%2021%2012%2021%20Z'%20fill='%23ff2d55'%20stroke='%23ffffff'%20stroke-width='1.4'/%3E%3C/g%3E%3C/svg%3E") 4 4, auto;
+}
+
+/* Comfortable, conventional cursors where it actually helps usability */
+.salma-root textarea,
+.salma-root input {
+    cursor: text;
+}
+
+.salma-draggable {
+    cursor: grab;
+}
+
+.salma-draggable:active {
+    cursor: grabbing;
+}
+
+/* Arabic calligraphy renders right-to-left */
+.salma-arabic {
+    direction: rtl;
+    font-family: var(--font-aref);
+}
+
+/* Soft floating + twinkle animations (transform/opacity only — GPU friendly) */
+@keyframes salma-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+}
+
+@keyframes salma-twinkle {
+    0%, 100% { opacity: 0.25; transform: scale(0.85); }
+    50%      { opacity: 1;    transform: scale(1.15); }
+}
+
+@keyframes salma-shimmer {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+.salma-gradient-text {
+    background: linear-gradient(110deg, #e84a7f, #ff6fa5, #ff5a36, #e84a7f);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: salma-shimmer 6s linear infinite;
+}
+
+.salma-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.salma-scroll::-webkit-scrollbar-track { background: rgba(255,111,165,0.08); border-radius: 8px; }
+.salma-scroll::-webkit-scrollbar-thumb { background: rgba(232,74,127,0.45); border-radius: 8px; }
+.salma-scroll::-webkit-scrollbar-thumb:hover { background: rgba(232,74,127,0.7); }
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .salma-root *,
+    .salma-root *::before,
+    .salma-root *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+    .salma-gradient-text { animation: none; }
 }

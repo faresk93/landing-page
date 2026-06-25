@@ -1,41 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-import gsap from 'gsap';
-
-/* ═══════════ TYPES ═══════════ */
-
-interface Palette {
-  bg: string;
-  bg2: string;
-  bg3: string;
-  accent: string;
-  glow: string;
-}
-
-interface Chapter {
-  id: string;
-  year: string;
-  title: string;
-  titleAr: string;
-  sub: string;
-  en: string;
-  ar: string;
-  emoji: string;
-  flag: string;
-  bgEmojis: string[];
-  pal: Palette;
-  showTravel?: boolean;
-}
-
-/* ═══════════ DATA ═══════════ */
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const COUNTRIES = [
   "🇴🇲", "🇹🇳", "🇩🇪", "🇫🇷", "🇦🇹", "🇧🇪", "🇸🇦", "🇮🇹", "🇻🇦", "🇨🇭", "🇨🇿",
   "🇱🇺", "🇪🇸", "🇭🇷", "🇲🇨", "🇬🇧", "🇫🇮", "🇪🇪", "🇳🇴", "🇦🇱", "🇬🇷", "🇳🇱"
 ];
 
-const chapters: Chapter[] = [
+const chapters = [
   {
     id: "birth", year: "1993",
     title: "Born Under Arabian Skies", titleAr: "وُلِدَ تحت سماء عُمان",
@@ -78,10 +48,10 @@ const chapters: Chapter[] = [
   },
   {
     id: "primary", year: "1999–2005",
-    title: "Arbi Zarrouk", titleAr: "مدرسة العربي زروق",
+    title: "Arbi Zarrouk Primary School", titleAr: "أيام المدرسة الإبتدائية العربي زروق",
     sub: "Ages 6–12 · Primary School 🇹🇳 · المدرسة الابتدائية",
     en: "Six years of chalk dust and bell rings. Walking to school through narrow streets, the smell of fresh bread, and friendships forged over shared sandwiches. In the quiet of the classroom, math became his secret language of logic and order.",
-    ar: "ست سنوات من غبار الطباشير ورنين الجرس. المشي إلى المدرسة عبر الأزقة، رائحة الخبز الطازج، وصداقات صُنعت فوق ساندويتشات مُقتسمة. في هدوء الفصل، صارت الرياضيات لغته السرية للمنطق والنظام. جزا الله معلّمي خير الجزاء ورحم من توفّي منهم. اللهم ارحم عمي ومعلّمي رضا بومعيزة برحمتك الواسعة",
+    ar: "ست سنوات من غبار الطباشير ورنين الجرس. المشي إلى المدرسة عبر الأزقة، رائحة الخبز الطازج، وصداقات صُنعت فوق ساندويتشات مُقتسمة. في هدوء الفصل، صارت الرياضيات لغته السرية للمنطق والنظام.",
     emoji: "📚", flag: "🇹🇳",
     bgEmojis: ["📖", "✍️", "🏫", "📝", "🎒", "📏"],
     pal: { bg: "#0c1c38", bg2: "#1a3058", bg3: "#284878", accent: "#60a5fa", glow: "#60a5fa44" },
@@ -98,7 +68,7 @@ const chapters: Chapter[] = [
   },
   {
     id: "highschool", year: "2008–12",
-    title: "High School", titleAr: "المرحلة الثانوية - معهد نهج المنزه",
+    title: "Numbers & Glory", titleAr: "الأرقام والمجد",
     sub: "Ages 15–19 · Lycée · Mathematics 🇹🇳 · الباكالوريا رياضيات",
     en: "Four years in the world of integrals and equations. Nahj El Manzeh — where a boy sharpened into a young man. The Baccalauréat came, and he conquered it with honors, opening the doors to a future built on excellence and effort.",
     ar: "أربع سنوات في عالم التكاملات والمعادلات. نهج المنزه — حيث صُقل الفتى رجلاً. جاء الباكالوريا وانتصر عليه بامتياز، ليفتح أبواب المستقبل المبني على التفوق والجهد.",
@@ -108,7 +78,7 @@ const chapters: Chapter[] = [
   },
   {
     id: "insat", year: "2012–18",
-    title: "INSAT Tunis", titleAr: "التعليم العالي",
+    title: "The Engineer", titleAr: "المُهندس",
     sub: "Ages 19–25 · INSAT Tunis 🇹🇳 · الهندسة",
     en: "Five years at INSAT, in the heart of Tunis. Late nights, rigorous exams, and lifelong bonds. Graduation day arrived — a diploma in hand, a testament to years of dedication and the pride in his parents' eyes.",
     ar: "خمس سنوات في المعهد الوطني، في قلب العاصمة. ليالٍ طويلة، امتحانات صارمة، وروابط تدوم. جاء يوم التخرج — الشهادة في اليد، شاهدة على سنوات من التفاني والفخر في عيون الوالدين.",
@@ -128,7 +98,7 @@ const chapters: Chapter[] = [
   },
   {
     id: "dev", year: "2018–21",
-    title: "The Rerouting", titleAr: "إعادة التموضع",
+    title: "The Reinvention", titleAr: "إعادة الاختراع",
     sub: "Tunisia 🇹🇳 · البداية الجديدة",
     en: "He rewired himself. From labs to keyboards, from molecules to code. Three years of relentless learning and becoming, transforming into a architect of digital possibilities, driven by a new passion for creation.",
     ar: "أعاد تشكيل نفسه. من المختبرات إلى لوحات المفاتيح، من الجزيئات إلى البرمجة. ثلاث سنوات من التعلم المستمر، ليتحول إلى مهندس للاحتمالات الرقمية، مدفوعاً بشغف جديد للبناء.",
@@ -138,7 +108,7 @@ const chapters: Chapter[] = [
   },
   {
     id: "paris", year: "2021",
-    title: "City of Lights", titleAr: "مدينة الأنوار",
+    title: "City of Light", titleAr: "مدينة النور",
     sub: "Paris, France 🇫🇷 · باريس، فرنسا",
     en: "A one-way ticket. The City of Light welcomed a new dreamer. Leaving behind the familiar home for the magnificent unknown, carrying with him the values of his past and the ambition for a global future.",
     ar: "تذكرة ذهاب بلا عودة. مدينة النور استقبلت حالماً جديداً. ترك الوطن المألوف نحو المجهول العظيم، حاملاً معه قيم الماضي وطموح المستقبل العالمي.",
@@ -161,19 +131,13 @@ const chapters: Chapter[] = [
 
 /* ═══════════ COMPONENTS ═══════════ */
 
-interface ParticlesProps {
-  color: string;
-  count?: number;
-}
-
-function Particles({ color, count = 45 }: ParticlesProps) {
-  const ref = useRef<HTMLCanvasElement>(null);
-  const raf = useRef<number>(0);
+function Particles({ color, count = 45 }) {
+  const ref = useRef(null), raf = useRef(null);
   useEffect(() => {
     const c = ref.current; if (!c) return;
-    const ctx = c.getContext("2d"); if (!ctx) return;
-    const fit = () => { c.width = window.innerWidth; c.height = window.innerHeight; };
-    fit(); window.addEventListener("resize", fit);
+    const ctx = c.getContext("2d");
+    const fit = () => { c.width = innerWidth; c.height = innerHeight; };
+    fit(); addEventListener("resize", fit);
     const ps = Array.from({ length: count }, () => ({
       x: Math.random() * c.width, y: Math.random() * c.height,
       r: Math.random() * 2 + 0.5, dx: (Math.random() - 0.5) * 0.3,
@@ -194,20 +158,12 @@ function Particles({ color, count = 45 }: ParticlesProps) {
       raf.current = requestAnimationFrame(loop);
     };
     loop();
-    return () => { cancelAnimationFrame(raf.current); window.removeEventListener("resize", fit); };
+    return () => { cancelAnimationFrame(raf.current); removeEventListener("resize", fit); };
   }, [color, count]);
   return <canvas ref={ref} style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 2 }} />;
 }
 
-interface LifeGaugeProps {
-  years?: number;
-  max?: number | string;
-  animate?: boolean;
-  accent?: string;
-  delay?: number;
-}
-
-function LifeGauge({ years = 33, max = 100, animate = true, accent = "#d4a574", delay = 1 }: LifeGaugeProps) {
+function LifeGauge({ years = 33, max = 100, animate = true, accent = "#d4a574", delay = 1 }) {
   const pct = typeof max === 'number' ? (years / max) * 100 : 50;
   return (
     <div style={{ width: "85%", maxWidth: "300px", margin: "0 auto" }}>
@@ -240,12 +196,7 @@ function LifeGauge({ years = 33, max = 100, animate = true, accent = "#d4a574", 
   );
 }
 
-interface AtmosphereProps {
-  icons: string[];
-  accent: string;
-}
-
-function Atmosphere({ icons, accent }: AtmosphereProps) {
+function Atmosphere({ icons, accent }) {
   const spots = [{ left: "6%", top: "10%" }, { right: "7%", top: "14%" }, { left: "14%", bottom: "20%" }, { right: "12%", bottom: "12%" }, { left: "48%", top: "6%" }, { right: "28%", bottom: "30%" }];
   return (
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 1 }}>
@@ -266,11 +217,7 @@ function Atmosphere({ icons, accent }: AtmosphereProps) {
   );
 }
 
-interface TravelGridProps {
-  active: boolean;
-}
-
-function TravelGrid({ active }: TravelGridProps) {
+function TravelGrid({ active }) {
   return (
     <div style={{
       marginTop: "1.1rem", opacity: active ? 1 : 0,
@@ -292,138 +239,8 @@ function TravelGrid({ active }: TravelGridProps) {
   );
 }
 
-/* ─── CINEMATIC LIFE BAR ─── */
-const CinematicLifeBar = ({ onComplete }: { onComplete: () => void }) => {
-  const years = 33;
-  const max = 100;
-  const [activeWord, setActiveWord] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0);
-  const [sparks, setSparks] = useState<{ id: number; left: number; top: number; opacity: number }[]>([]);
-  const fillRef = useRef<HTMLDivElement>(null);
-
-  const milestones = [
-    { year: 5, word: "Oman 🇴🇲" },
-    { year: 12, word: "Tunisia 🇹🇳" },
-    { year: 18, word: "Learning 📚" },
-    { year: 25, word: "Paris 🗼" },
-    { year: 31, word: "Travel 🌍" }
-  ];
-
-  useEffect(() => {
-    const tl = gsap.timeline({
-      delay: 0.8,
-      onComplete: () => {
-        gsap.to(".arrival-glow", { opacity: 1, scale: 3, duration: 1, ease: "power2.out" });
-        onComplete();
-      }
-    });
-
-    tl.to({ val: 0 }, {
-      val: years,
-      duration: 5,
-      ease: "power2.inOut",
-      onUpdate: function () {
-        const current = this.targets()[0].val;
-        setProgress(current);
-        const y = Math.floor(current);
-
-        // Spawn sparks
-        if (Math.random() > 0.7) {
-          const newSpark = {
-            id: Math.random(),
-            left: (current / max) * 100,
-            top: Math.random() * 100,
-            opacity: 1
-          };
-          setSparks(prev => [...prev.slice(-15), newSpark]);
-          setTimeout(() => {
-            setSparks(prev => prev.filter(s => s.id !== newSpark.id));
-          }, 800);
-        }
-
-        const m = milestones.find(ms => ms.year === y);
-        if (m && activeWord !== m.word) {
-          setActiveWord(m.word);
-          setTimeout(() => setActiveWord(null), 1200);
-        }
-      }
-    });
-  }, []);
-
-  const accent = "#d4a574";
-  const pct = (progress / years) * 50;
-  const targetPct = 50;
-
-  return (
-    <div style={{ width: "95%", maxWidth: "360px", margin: "0 auto", position: "relative" }}>
-      <div style={{ position: "absolute", top: "-2.8rem", left: `${pct}%`, transform: "translateX(-50%)", pointerEvents: "none", zIndex: 20 }}>
-        {activeWord && (
-          <div style={{
-            fontFamily: "'Cormorant Garamond',serif", fontStyle: "italic", fontSize: "1.1rem", color: accent,
-            letterSpacing: "4px", textTransform: "uppercase", whiteSpace: "nowrap",
-            animation: "fadeSlideUp 1.2s forwards"
-          }}>
-            {activeWord}
-          </div>
-        )}
-      </div>
-
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-        <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.55rem", color: "#ffffff33", letterSpacing: "3px" }}>LIFE PROGRESS</span>
-        <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.55rem", color: accent, letterSpacing: "1px" }}>{Math.floor(progress)} / X</span>
-      </div>
-
-      <div style={{ width: "100%", height: "8px", borderRadius: "99px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "visible" }}>
-        <div style={{ position: "absolute", inset: 0, left: `${targetPct}%`, background: "rgba(255,255,255,0.015)", animation: "futureFlicker 3s infinite alternate ease-in-out" }} />
-
-        {/* Sparks */}
-        {sparks.map(s => (
-          <div key={s.id} style={{
-            position: "absolute", left: `${s.left}%`, top: `${s.top}%`, width: "2px", height: "2px",
-            background: "#fff", borderRadius: "50%", pointerEvents: "none", zIndex: 10,
-            boxShadow: `0 0 4px #fff`,
-            transition: "all 0.8s ease-out",
-            transform: "translateY(-10px) scale(0)",
-            opacity: 0
-          }} />
-        ))}
-
-        <div ref={fillRef} style={{
-          height: "100%", borderRadius: "99px",
-          background: `linear-gradient(90deg, ${accent}33, ${accent})`,
-          width: `${pct}%`,
-          boxShadow: `0 0 15px ${accent}44`,
-          position: "relative", zIndex: 5
-        }}>
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
-            width: "50%", animation: "shimmerSlide 2s linear infinite"
-          }} />
-          <div style={{ position: "absolute", right: "-2px", top: "50%", transform: "translateY(-50%)", width: "4px", height: "140%", background: "#fff", borderRadius: "2px", boxShadow: `0 0 12px #fff` }} />
-        </div>
-
-        <div className="arrival-glow" style={{ position: "absolute", left: `${targetPct}%`, top: "50%", transform: "translate(-50%, -50%) scale(0)", width: "30px", height: "30px", background: `radial-gradient(circle, ${accent} 0%, transparent 70%)`, opacity: 0, zIndex: 10, filter: "blur(8px)" }} />
-      </div>
-
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "8px", opacity: 0.1 }}>
-        {Array.from({ length: 11 }).map((_, i) => (
-          <div key={i} style={{ width: "1px", height: "3px", background: i * 10 <= progress ? accent : "#fff" }} />
-        ))}
-      </div>
-    </div>
-  );
-};
-
 /* ─── SLIDE ─── */
-interface SlideProps {
-  ch: Chapter;
-  active: boolean;
-  idx: number;
-  total: number;
-}
-
-function Slide({ ch, active, idx, total }: SlideProps) {
+function Slide({ ch, active, idx, total }) {
   const p = ch.pal;
   return (
     <div style={{
@@ -441,7 +258,7 @@ function Slide({ ch, active, idx, total }: SlideProps) {
       <div style={{
         position: "relative", zIndex: 10, display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        height: "100%", padding: "0 1.5rem 4rem",
+        height: "100%", padding: "2.2rem 1.5rem 4rem",
         overflowY: "auto", WebkitOverflowScrolling: "touch",
       }}>
         <div style={{
@@ -465,7 +282,7 @@ function Slide({ ch, active, idx, total }: SlideProps) {
         </div>
       </div>
 
-      <div style={{ position: "absolute", bottom: "4rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", gap: "3px" }}>
+      <div style={{ position: "absolute", bottom: "3rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", gap: "3px" }}>
         {Array.from({ length: total }).map((_, i) => (
           <div key={i} style={{ width: i === idx ? "16px" : "3.5px", height: "3.5px", borderRadius: "99px", background: i === idx ? p.accent : "#ffffff15", transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)", boxShadow: i === idx ? `0 0 5px ${p.accent}55` : "none" }} />
         ))}
@@ -478,95 +295,55 @@ function Slide({ ch, active, idx, total }: SlideProps) {
 }
 
 /* ─── INTRO ─── */
-interface IntroProps {
-  onEnter: () => void;
-}
-
-function Intro({ onEnter }: IntroProps) {
-  const [complete, setComplete] = useState(false);
+function Intro({ onEnter }) {
+  const [h, setH] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  useEffect(() => { setTimeout(() => setLoaded(true), 200); }, []);
-
+  useEffect(() => { setTimeout(() => setLoaded(true), 300); }, []);
   return (
     <div style={{
       position: "fixed", inset: 0, zIndex: 100,
-      background: "#030308",
+      background: "linear-gradient(160deg,#030308 0%,#080614 20%,#0e0a1e 45%,#080614 70%,#030308 100%)",
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", overflow: "hidden",
     }}>
-      {/* Cinematic Background Layer */}
-      <div style={{
-        position: "absolute", inset: 0,
-        background: "linear-gradient(145deg, #030308 0%, #0d122b 30%, #1a0b2e 70%, #030308 100%)",
-        backgroundSize: "200% 200%", animation: "gradientFlow 20s ease infinite"
-      }} />
-      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at center, transparent 0%, #030308 90%)" }} />
+      <Particles color="#d4a574" count={65} />
+      {[440, 320, 210, 530].map((s, i) => (
+        <div key={i} style={{ position: "absolute", width: `min(${s * 0.2}vw,${s}px)`, height: `min(${s * 0.2}vw,${s}px)`, borderRadius: "50%", border: `1px solid #d4a574${i < 2 ? "10" : "08"}`, top: "50%", left: "50%", transform: "translate(-50%,-50%)", animation: `orbitSpin ${20 + i * 11}s linear infinite ${i % 2 ? "reverse" : ""}` }} />
+      ))}
+      {["📖", "🕯️", "🌙", "🖋️", "📜", "🌟", "🕰️", "🗝️"].map((ic, i) => (
+        <div key={i} style={{ position: "absolute", fontSize: `${26 + Math.random() * 28}px`, opacity: 0.028, filter: "blur(3px)", left: `${5 + (i * 12) % 88}%`, top: `${8 + (i * 15) % 78}%`, animation: `floatGentle ${5 + i * 1.3}s ease-in-out ${-i}s infinite alternate` }}>{ic}</div>
+      ))}
 
-      <Particles color="#d4a574" count={80} />
-
-      <div style={{ position: "relative", zIndex: 10, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "2.5rem", width: "100%", maxWidth: "450px", padding: "0 1.5rem" }}>
-        <div style={{ position: "relative", animation: "fadeSlideUp 1s both" }}>
-          {/* Artistic Background Number */}
-          <div style={{
-            position: "absolute", top: "0", right: "0", transform: "translateX(120%)",
-            fontSize: "clamp(6rem, 20vw, 12rem)", fontFamily: "'Cormorant Garamond',serif", fontWeight: 700, fontStyle: "italic",
-            color: "rgba(212, 165, 116, 0.03)", WebkitTextStroke: "1px rgba(212, 165, 116, 0.06)",
-            zIndex: -1, pointerEvents: "none",
-            opacity: complete ? 1 : 0, transition: "all 3s cubic-bezier(0.16,1,0.3,1)",
-            filter: complete ? "blur(1px)" : "blur(40px)",
-            lineHeight: 0.8
-          }}>33</div>
-          <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(0.8rem,2vw,0.95rem)", color: "#d4a57466", direction: "rtl", marginBottom: "1rem" }}>بسم الله الرحمن الرحيم</div>
-          <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(2.4rem, 8vw, 3.8rem)", color: "#d4a574", direction: "rtl", textShadow: "0 0 25px rgba(212,165,116,0.25)", marginBottom: "-0.5rem" }}>فارس الخياري</div>
-          <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(2rem, 6vw, 3rem)", fontWeight: 300, fontStyle: "italic", color: "#f0ece6", letterSpacing: "1px", textShadow: "0 0 15px rgba(255, 255, 255, 0.15)" }}>Fares Khiary</h1>
+      <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "0 1.5rem", maxWidth: "420px" }}>
+        <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(0.8rem,2vw,0.95rem)", color: "#d4a57438", direction: "rtl", marginBottom: "0.5rem", animation: "fadeSlideUp 1s 0.2s both" }}>بسم الله الرحمن الرحيم</div>
+        <div style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.55rem", color: "#d4a574aa", letterSpacing: "4px", marginBottom: "1.2rem", animation: "fadeSlideUp 1s 0.3s both" }}>CHAPTER 33: THE MILESTONE · الليلة أتممتُ ثلاثاً وثلاثين</div>
+        <div style={{ fontFamily: "'Aref Ruqaa',serif", fontSize: "clamp(2.8rem,8.5vw,4.8rem)", fontWeight: 700, color: "#d4a574", direction: "rtl", lineHeight: 1.15, textShadow: "0 0 45px #d4a57430, 0 3px 18px #00000050", marginBottom: "0.1rem", animation: "fadeSlideUp 1s 0.4s both" }}>فارس الخياري</div>
+        <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(2.4rem,8.5vw,4.8rem)", fontWeight: 300, fontStyle: "italic", color: "#f0ece6", margin: "0 0 0.7rem", lineHeight: 1, letterSpacing: "-1.5px", textShadow: "0 0 55px #d4a57412", animation: "fadeSlideUp 1s 0.6s both" }}>Fares Khiary</h1>
+        <p style={{ fontFamily: "'IBM Plex Sans Arabic',sans-serif", fontSize: "clamp(0.7rem,1.8vw,0.82rem)", fontWeight: 300, lineHeight: 1.8, color: "#d4a57466", direction: "rtl", marginBottom: "0.4rem", animation: "fadeSlideUp 1s 0.8s both" }}>
+          الليلة، في الثالثة والثلاثين، تجتمع الذكريات. من رمال عُمان، إلى ياسمين تونس، وصولاً إلى أنوار فرنسا. من المختبرات إلى عالم الكود — قصة إيمان ونمو، ما زالت فصولها تروى.
+        </p>
+        <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.82rem,2.1vw,0.95rem)", lineHeight: 1.8, color: "#ffffff44", fontStyle: "italic", marginBottom: "1.6rem", animation: "fadeSlideUp 1s 0.95s both" }}>
+          Tonight, at 33, memories converge. From the sands of Oman, to the jasmine of Tunisia, and finally the lights of France. From science labs to digital craft—a journey of faith and growth, still unfolding.
+        </p>
+        <div style={{ marginBottom: "1.8rem", animation: "fadeSlideUp 1s 1.1s both" }}>
+          <LifeGauge years={33} max={"X"} animate={loaded} accent="#d4a574" delay={1.5} />
         </div>
-
-        <CinematicLifeBar onComplete={() => setComplete(true)} />
-
-        <div style={{ marginTop: "1rem", animation: "fadeSlideUp 1s 2s both" }}>
-          <p style={{ fontFamily: "'IBM Plex Sans Arabic',sans-serif", fontSize: "clamp(0.7rem,1.8vw,0.82rem)", fontWeight: 300, lineHeight: 1.8, color: "#d4a57466", direction: "rtl", marginBottom: "0.4rem" }}>
-            الليلة، في الثالثة والثلاثين، تجتمع الذكريات. من رمال عُمان، إلى ياسمين تونس، وصولاً إلى أنوار فرنسا. من المختبرات إلى عالم الكود — قصة إيمان ونمو، ما زالت فصولها تروى.
-          </p>
-          <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.82rem,2.1vw,0.95rem)", lineHeight: 1.8, color: "#ffffff44", fontStyle: "italic", marginBottom: "0.5rem" }}>
-            Tonight, at 33, memories converge. From the sands of Oman, to the jasmine of Tunisia, and finally the lights of France. From science labs to digital craft—a journey of faith and growth, still unfolding.
-          </p>
-        </div>
-
-        <div style={{
-          opacity: complete ? 1 : 0,
-          transform: complete ? "translateY(0)" : "translateY(20px)",
-          transition: "all 1s cubic-bezier(0.16,1,0.3,1)",
-          marginTop: "1.5rem"
-        }}>
-          <button
-            onClick={onEnter}
-            style={{
-              fontFamily: "'Cormorant Garamond',serif", fontSize: "1.1rem", fontStyle: "italic",
-              padding: "14px 45px", borderRadius: "999px", border: "1px solid #d4a57440",
-              background: "rgba(212, 165, 116, 0.05)", color: "#d4a574",
-              cursor: "pointer", letterSpacing: "3px",
-              transition: "all 0.5s cubic-bezier(0.16,1,0.3,1)",
-              boxShadow: "0 0 25px rgba(212, 165, 116, 0.15)",
-              position: "relative", overflow: "hidden"
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = "#d4a574"; e.currentTarget.style.color = "#0a0a0a"; e.currentTarget.style.boxShadow = "0 0 40px rgba(212, 165, 116, 0.5)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "rgba(212, 165, 116, 0.05)"; e.currentTarget.style.color = "#d4a574"; e.currentTarget.style.boxShadow = "0 0 25px rgba(212, 165, 116, 0.15)"; }}
-          >
-            Enter My Story · ادخل قصتي
-          </button>
-        </div>
+        <button onClick={onEnter} onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)} style={{
+          fontFamily: "'Cormorant Garamond',serif", fontSize: "0.9rem", fontStyle: "italic",
+          padding: "11px 36px", borderRadius: "999px", border: "1px solid #d4a57440",
+          background: h ? "#d4a574" : "transparent", color: h ? "#0a0a0a" : "#d4a574",
+          cursor: "pointer", letterSpacing: "2px",
+          transition: "all 0.5s cubic-bezier(0.16,1,0.3,1)",
+          boxShadow: h ? "0 0 38px #d4a57440" : "0 0 15px #d4a57412",
+          transform: h ? "scale(1.05)" : "scale(1)",
+          animation: "fadeSlideUp 1s 1.3s both",
+        }}>Enter My Story · ادخل قصتي</button>
       </div>
     </div>
   );
 }
 
 /* ─── FINALE ─── */
-interface FinaleProps {
-  active: boolean;
-  idx: number;
-  total: number;
-}
-
-function Finale({ active, idx, total }: FinaleProps) {
+function Finale({ active, idx, total }) {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { if (active) setTimeout(() => setLoaded(true), 400); }, [active]);
   const accent = "#fbbf24";
@@ -585,7 +362,7 @@ function Finale({ active, idx, total }: FinaleProps) {
       <div style={{
         position: "relative", zIndex: 10, display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        height: "100%", padding: "0 1.5rem 4rem",
+        height: "100%", padding: "2.2rem 1.5rem 4rem",
         overflowY: "auto", WebkitOverflowScrolling: "touch",
       }}>
         <div style={{
@@ -611,10 +388,10 @@ function Finale({ active, idx, total }: FinaleProps) {
           </p>
 
           <p style={{ fontFamily: "'IBM Plex Sans Arabic',sans-serif", fontSize: "clamp(0.75rem,1.8vw,0.85rem)", fontWeight: 300, lineHeight: 1.8, color: `${accent}88`, direction: "rtl", margin: "0 0 0.4rem", animation: active ? "fadeSlideUp 0.7s 0.64s both" : "none" }}>
-            أجمل الفصول لم تُكتب بعد. آفاق جديدة تلوح في أفق الغد.
+            أجمل الفصول لم تُكتب بعد. مكة تنتظر. المدينة تنادي. آفاق جديدة تلوح في أفق الغد.
           </p>
           <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(0.82rem,2vw,0.92rem)", lineHeight: 1.8, color: "#ffffff55", fontStyle: "italic", margin: "0 0 1.2rem", animation: active ? "fadeSlideUp 0.7s 0.72s both" : "none" }}>
-            The best chapters haven't been written yet. New horizons are emerging on the silhouette of tomorrow.
+            The best chapters haven't been written yet. Mecca awaits. Medina calls. New horizons are emerging on the silhouette of tomorrow.
           </p>
 
           <div style={{ fontSize: "1.8rem", marginBottom: "0.4rem", animation: active ? "fadeSlideUp 0.7s 0.8s both" : "none" }}>🤲</div>
@@ -630,7 +407,7 @@ function Finale({ active, idx, total }: FinaleProps) {
         </div>
       </div>
 
-      <div style={{ position: "absolute", bottom: "4rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", gap: "3px" }}>
+      <div style={{ position: "absolute", bottom: "3rem", left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", gap: "3px" }}>
         {Array.from({ length: total }).map((_, i) => (
           <div key={i} style={{ width: i === idx ? "16px" : "3.5px", height: "3.5px", borderRadius: "99px", background: i === idx ? accent : "#ffffff15", transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)", boxShadow: i === idx ? `0 0 5px ${accent}55` : "none" }} />
         ))}
@@ -639,8 +416,8 @@ function Finale({ active, idx, total }: FinaleProps) {
   );
 }
 
-/* ═══════════ APP ═══════════ */
-const StorybookPage: React.FC = () => {
+/* ─── APP ─── */
+export default function App() {
   const [intro, setIntro] = useState(true);
   const [exit, setExit] = useState(false);
   const [cur, setCur] = useState(0);
@@ -648,7 +425,7 @@ const StorybookPage: React.FC = () => {
   const lock = useRef(false);
   const total = chapters.length + 1;
 
-  const go = useCallback((i: number) => {
+  const go = useCallback((i) => {
     if (i < 0 || i >= total || lock.current) return;
     lock.current = true; setCur(i);
     setTimeout(() => { lock.current = false; }, 780);
@@ -656,22 +433,22 @@ const StorybookPage: React.FC = () => {
 
   useEffect(() => {
     if (intro) return;
-    const h = (e: KeyboardEvent) => {
+    const h = e => {
       if (e.key === "ArrowRight" || e.key === "ArrowDown") go(cur + 1);
       if (e.key === "ArrowLeft" || e.key === "ArrowUp") go(cur - 1);
     };
-    window.addEventListener("keydown", h); return () => window.removeEventListener("keydown", h);
+    addEventListener("keydown", h); return () => removeEventListener("keydown", h);
   }, [cur, intro, go]);
 
   useEffect(() => {
     if (intro) return;
-    let wt: any = null;
-    const h = (e: WheelEvent) => {
+    let wt = null;
+    const h = e => {
       e.preventDefault(); if (wt) return;
       const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
       if (Math.abs(d) > 22) { go(d > 0 ? cur + 1 : cur - 1); wt = setTimeout(() => { wt = null; }, 880); }
     };
-    window.addEventListener("wheel", h, { passive: false }); return () => window.removeEventListener("wheel", h);
+    addEventListener("wheel", h, { passive: false }); return () => removeEventListener("wheel", h);
   }, [cur, intro, go]);
 
   return (
@@ -679,7 +456,7 @@ const StorybookPage: React.FC = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,700&family=IBM+Plex+Mono:wght@300;400&family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap');
         *{margin:0;padding:0;box-sizing:border-box}
-        .storybook-container { overflow:hidden; background:#030308; -webkit-font-smoothing:antialiased; height: 100vh; width: 100vw; position: fixed; inset: 0; }
+        html,body{overflow:hidden;background:#030308;-webkit-font-smoothing:antialiased}
         ::selection{background:#d4a57444;color:#fff}
         ::-webkit-scrollbar{width:0;height:0}
         @keyframes fadeSlideUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
@@ -689,66 +466,51 @@ const StorybookPage: React.FC = () => {
         @keyframes introExit{to{opacity:0;transform:scale(1.1);filter:blur(25px)}}
         @keyframes grain{0%,100%{opacity:0.022}50%{opacity:0.045}}
         @keyframes shimmerSlide{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
-        @keyframes futureFlicker{0%{opacity:0.2;filter:blur(1px)}100%{opacity:0.6;filter:blur(2px)}}
-        @keyframes gradientFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
       `}</style>
 
-      <div className="storybook-container">
-        <div style={{ position: "fixed", inset: 0, zIndex: 9999, pointerEvents: "none", background: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`, opacity: 0.028, mixBlendMode: "overlay", animation: "grain 0.4s steps(1) infinite" }} />
+      <div style={{ position: "fixed", inset: 0, zIndex: 9999, pointerEvents: "none", background: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`, opacity: 0.028, mixBlendMode: "overlay", animation: "grain 0.4s steps(1) infinite" }} />
 
-        <Link
-          to="/"
-          className="fixed top-8 left-8 inline-flex items-center gap-2 text-white/40 hover:text-white transition-colors group z-[10000]"
+      {intro && (
+        <div style={{ animation: exit ? "introExit 0.9s cubic-bezier(0.16,1,0.3,1) forwards" : "none" }}>
+          <Intro onEnter={() => { setExit(true); setTimeout(() => setIntro(false), 900); }} />
+        </div>
+      )}
+
+      {!intro && (
+        <div
+          onTouchStart={e => { t.current = { sx: e.touches[0].clientX, drag: true }; }}
+          onTouchEnd={e => { if (!t.current.drag) return; t.current.drag = false; const dx = t.current.sx - e.changedTouches[0].clientX; if (Math.abs(dx) > 36) go(dx > 0 ? cur + 1 : cur - 1); }}
+          onMouseDown={e => { t.current = { sx: e.clientX, drag: true }; }}
+          onMouseUp={e => { if (!t.current.drag) return; t.current.drag = false; const dx = t.current.sx - e.clientX; if (Math.abs(dx) > 45) go(dx > 0 ? cur + 1 : cur - 1); }}
+          style={{ position: "fixed", inset: 0, overflow: "hidden", cursor: "grab", userSelect: "none" }}
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span className="font-orbitron text-[10px] tracking-widest uppercase font-bold">Back</span>
-        </Link>
-
-        {intro && (
-          <div style={{ animation: exit ? "introExit 0.9s cubic-bezier(0.16,1,0.3,1) forwards" : "none" }}>
-            <Intro onEnter={() => { setExit(true); setTimeout(() => setIntro(false), 900); }} />
+          <div style={{
+            display: "flex", width: `${total * 100}vw`, height: "100vh",
+            transform: `translateX(-${cur * 100}vw)`,
+            transition: "transform 0.78s cubic-bezier(0.16,1,0.3,1)",
+            willChange: "transform",
+          }}>
+            {chapters.map((ch, i) => <Slide key={ch.id} ch={ch} active={i === cur} idx={i} total={total} />)}
+            <Finale active={cur === chapters.length} idx={chapters.length} total={total} />
           </div>
-        )}
 
-        {!intro && (
-          <div
-            onTouchStart={e => { t.current = { sx: e.touches[0].clientX, drag: true }; }}
-            onTouchEnd={e => { if (!t.current.drag) return; t.current.drag = false; const dx = t.current.sx - e.changedTouches[0].clientX; if (Math.abs(dx) > 36) go(dx > 0 ? cur + 1 : cur - 1); }}
-            onMouseDown={e => { t.current = { sx: e.clientX, drag: true }; }}
-            onMouseUp={e => { if (!t.current.drag) return; t.current.drag = false; const dx = t.current.sx - e.clientX; if (Math.abs(dx) > 45) go(dx > 0 ? cur + 1 : cur - 1); }}
-            style={{ position: "fixed", inset: 0, overflow: "hidden", cursor: "grab", userSelect: "none" }}
-          >
-            <div style={{
-              display: "flex", width: `${total * 100}vw`, height: "100vh",
-              transform: `translateX(-${cur * 100}vw)`,
-              transition: "transform 0.78s cubic-bezier(0.16,1,0.3,1)",
-              willChange: "transform",
-            }}>
-              {chapters.map((ch, i) => <Slide key={ch.id} ch={ch} active={i === cur} idx={i} total={total} />)}
-              <Finale active={cur === chapters.length} idx={chapters.length} total={total} />
-            </div>
+          <div style={{ position: "fixed", top: "1rem", right: "1rem", z_idx: 50, fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.55rem", color: "#ffffff22", letterSpacing: "2px" }}>{String(cur + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</div>
 
-            <div style={{ position: "fixed", top: "1rem", right: "1rem", zIndex: 50, fontFamily: "'IBM Plex Mono',monospace", fontSize: "0.55rem", color: "#ffffff22", letterSpacing: "2px" }}>{String(cur + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</div>
-
-            {[{ show: cur > 0, s: "left", ic: "‹", fn: () => go(cur - 1) }, { show: cur < total - 1, s: "right", ic: "›", fn: () => go(cur + 1) }].filter(a => a.show).map((a, i) => (
-              <button key={i} onClick={a.fn}
-                style={{
-                  position: "fixed", [a.s as any]: "0.5rem", top: "50%", transform: "translateY(-50%)",
-                  zIndex: 50, background: "#ffffff05", border: "1px solid #ffffff0a",
-                  borderRadius: "50%", width: "34px", height: "34px",
-                  color: "#ffffff38", cursor: "pointer", fontSize: "1rem",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  backdropFilter: "blur(5px)", transition: "all 0.3s",
-                }}
-                onMouseEnter={e => { (e.target as HTMLButtonElement).style.borderColor = "#ffffff25"; (e.target as HTMLButtonElement).style.color = "#ffffff99"; }}
-                onMouseLeave={e => { (e.target as HTMLButtonElement).style.borderColor = "#ffffff0a"; (e.target as HTMLButtonElement).style.color = "#ffffff38"; }}
-              >{a.ic}</button>
-            ))}
-          </div>
-        )}
-      </div>
+          {[{ show: cur > 0, s: "left", ic: "‹", fn: () => go(cur - 1) }, { show: cur < total - 1, s: "right", ic: "›", fn: () => go(cur + 1) }].filter(a => a.show).map((a, i) => (
+            <button key={i} onClick={a.fn} style={{
+              position: "fixed", [a.s]: "0.5rem", top: "50%", transform: "translateY(-50%)",
+              zIndex: 50, background: "#ffffff05", border: "1px solid #ffffff0a",
+              borderRadius: "50%", width: "34px", height: "34px",
+              color: "#ffffff38", cursor: "pointer", fontSize: "1rem",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              backdropFilter: "blur(5px)", transition: "all 0.3s",
+            }}
+              onMouseEnter={e => { e.target.style.borderColor = "#ffffff25"; e.target.style.color = "#ffffff99"; }}
+              onMouseLeave={e => { e.target.style.borderColor = "#ffffff0a"; e.target.style.color = "#ffffff38"; }}
+            >{a.ic}</button>
+          ))}
+        </div>
+      )}
     </>
   );
 }
-
-export default StorybookPage;
