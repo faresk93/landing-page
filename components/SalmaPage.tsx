@@ -5,6 +5,8 @@ import { Home } from 'lucide-react';
 
 import HeartCursor from './salma/HeartCursor';
 import { LiveClock, WeatherWidget, EncouragementCard, PomodoroTimer } from './salma/widgets';
+import { DailyChecklist, HydrationTracker, MoodCheckIn, BreathingBubble } from './salma/dailyHelpers';
+import HabibiBot from './salma/HabibiBot';
 import StickyNotes from './salma/StickyNotes';
 import FranceHeatMap from './salma/FranceHeatMap';
 import Morpion from './salma/Morpion';
@@ -200,11 +202,19 @@ const SalmaPage: React.FC = () => {
         </div>
 
         <div className="lg:col-span-7">
-          <StickyNotes />
+          <DailyChecklist />
         </div>
         <div className="flex flex-col gap-5 lg:col-span-5">
           <LiveClock />
           <WeatherWidget delay={0.05} />
+        </div>
+
+        <div className="lg:col-span-7">
+          <StickyNotes />
+        </div>
+        <div className="flex flex-col gap-5 lg:col-span-5">
+          <MoodCheckIn />
+          <HydrationTracker delay={0.05} />
         </div>
 
         <div className="lg:col-span-7">
@@ -213,8 +223,12 @@ const SalmaPage: React.FC = () => {
         <div className="flex flex-col gap-5 lg:col-span-5">
           <Morpion />
           <PomodoroTimer delay={0.05} />
+          <BreathingBubble delay={0.1} />
         </div>
       </main>
+
+      {/* Habibi — Salma's loving AI companion (ChatGPT via n8n) */}
+      <HabibiBot />
 
       {/* Signature */}
       <footer className="relative z-10 mx-auto max-w-3xl px-4 pb-16 pt-8 text-center">
