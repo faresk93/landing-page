@@ -7,6 +7,7 @@ A modern, interactive portfolio landing page featuring 3D graphics, AI-powered c
 
 ## Features
 
+
 ### Core Features
 - **Interactive 3D Background** - Immersive space-themed visuals using Three.js with React Three Fiber
 - **Solar System View** - Interactive 3D solar system exploration mode
@@ -884,3 +885,4 @@ Private project - All rights reserved.
 - Website: [fares-khiary.com](https://fares-khiary.com)
 - LinkedIn: [fares-khiary](https://www.linkedin.com/in/fares-khiary)
 - GitHub: [faresk93](https://github.com/faresk93)
+
